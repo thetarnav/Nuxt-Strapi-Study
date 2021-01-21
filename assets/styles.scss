@@ -1,6 +1,7 @@
 @import 'variables/mixins', 'variables/variables';
 
 .page {
+	// position: relative;
 	// position: absolute;
 	// top: 0;
 	// left: 0;
@@ -18,27 +19,27 @@
 // 	opacity: 0;
 
 // 	$translate: 10rem;
-// 	&.transition {
-// 		&-top {
-// 			transform: translateY($translate);
-// 		}
-// 		&-bottom {
-// 			transform: translateY(-$translate);
-// 		}
-// 		&-right {
-// 			transform: translateX($translate);
-// 		}
-// 		&-left {
-// 			transform: translateX(-$translate);
-// 		}
-// 	}
+// 	transform: translateY($translate);
+// 	// &.transition {
+// 	// 	&-top {
+// 	// 	}
+// 	// 	&-bottom {
+// 	// 		transform: translateY(-$translate);
+// 	// 	}
+// 	// 	&-right {
+// 	// 		transform: translateX($translate);
+// 	// 	}
+// 	// 	&-left {
+// 	// 		transform: translateX(-$translate);
+// 	// 	}
+// 	// }
 // }
 $translate: 10rem;
 .slide-top,
 .slide-bottom {
 	&-leave-active,
 	&-enter-active {
-		transition: opacity 0.4s, transform 0.4s;
+		transition: opacity 0.3s, transform 0.3s;
 	}
 }
 

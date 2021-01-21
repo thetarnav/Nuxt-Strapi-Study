@@ -29,8 +29,21 @@ import Vue from 'vue'
 
 export default Vue.extend({
 	name: 'Home',
+	beforeRouteEnter(to, from, next) {
+		if (from.name === 'gallery') to.params.scrollToBottom = 'scroll'
+		next()
+	},
+	scrollToTop: false,
+	data() {
+		return {
+			scroll: false,
+		}
+	},
 	mounted() {
-		this.$route.params.index = '0'
+		if (this.$route.params.scrollToBottom === 'scroll') {
+			window.scrollTo({ top: 99999 })
+			this.$route.params.scrollToBottom = ''
+		}
 	},
 	methods: {
 		swipe(event: Event) {

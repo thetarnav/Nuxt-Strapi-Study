@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts">
-//v-hammer:swipe.down="swipe"
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -14,7 +13,8 @@ export default Vue.extend({
 	transition(to) {
 		return {
 			name: to.name !== 'gallery' ? 'slide-top' : 'slide-bottom',
-			mode: '',
+			// name: 'page',
+			// mode: '',
 		}
 	},
 	mounted() {
@@ -23,11 +23,7 @@ export default Vue.extend({
 		// const hammer = new Hammer(this.$el)
 		// console.log(hammer)
 	},
-	methods: {
-		swipe() {
-			this.$router.push({ name: 'index', params: { swipe: 'down' } })
-		},
-	},
+	methods: {},
 })
 </script>
 

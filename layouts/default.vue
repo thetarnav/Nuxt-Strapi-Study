@@ -1,26 +1,41 @@
 <template>
-	<div class="wrapper">
+	<SwipeAndScroll @swipe="swipe">
 		<Nuxt />
-	</div>
+	</SwipeAndScroll>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-//v-hammer:swipe.up.left.right="swipe"
 
 export default Vue.extend({
 	methods: {
-		swipe(event: Event) {
-			switch (event.type) {
-				case 'swipeup':
-					console.log('swipeup')
-					break
-				case 'swipeleft':
-					console.log('swipeleft')
+		swipe(direction: SwipeDirection) {
+			const page = this.$route.name
 
+			switch (direction) {
+				case 'up':
+					if (page === 'index')
+						this.$router.push({
+							name: 'gallery',
+							query: { prevRoute: 'index' },
+						})
+					console.log('swipe up')
 					break
-				case 'swiperight':
-					console.log('swiperight')
+
+				case 'down':
+					if (page === 'gallery') {
+						const { prevRoute } = this.$route.query,
+							name = typeof prevRoute === 'string' ? prevRoute : 'index'
+						this.$router.push({ name })
+					}
+					break
+
+				case 'left':
+					console.log('swipe left')
+					break
+
+				case 'right':
+					console.log('swipe right')
 					break
 
 				default:
@@ -31,9 +46,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.wrapper {
-	overflow-y: auto;
-	touch-action: pan-y;
-}
-</style>
+<style lang="scss"></style>
