@@ -11,14 +11,15 @@
 		</p>
 		<p>Znajdź coś dla siebie!</p>
 		<nuxt-link
-			:to="{ name: 'gallery', params: { aaa: 'aaa' } }"
+			:to="{ name: 'gallery' }"
 			class="btn btn-primary btn-large u-center"
 			>Dostępne produkty</nuxt-link
 		>
 		<img
-			src="https://source.unsplash.com/800x1000/?lamp,interior,design"
+			srcX="https://source.unsplash.com/800x1000/?lamp,interior,design"
+			src="img/widok na komin-8.jpg"
 			alt="zdjęcie wystawy przykładowej lampy"
-			class="mt-20"
+			class="promo-photo mt-20 cover-img"
 		/>
 		<!-- <div class="swipe-check"></div> -->
 	</div>
@@ -30,8 +31,20 @@ import Vue from 'vue'
 export default Vue.extend({
 	name: 'Home',
 	beforeRouteEnter(to, from, next) {
-		if (from.name === 'gallery') to.params.scrollToBottom = 'scroll'
+		if (from.name === 'gallery' && typeof from.query.scroll === 'string')
+			to.params.scroll = from.query.scroll
 		next()
+	},
+	beforeRouteLeave(to, from, next) {
+		if (to.name === 'gallery' && to.query.prevRoute !== from.name)
+			next({
+				name: 'gallery',
+				query: {
+					prevRoute: from.name || 'index',
+					scroll: Math.round(window.scrollY).toString(),
+				},
+			})
+		else next()
 	},
 	scrollToTop: false,
 	data() {
@@ -40,33 +53,16 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		if (this.$route.params.scrollToBottom === 'scroll') {
-			window.scrollTo({ top: 99999 })
-			this.$route.params.scrollToBottom = ''
-		}
+		this.scrollToPrevious()
 	},
 	methods: {
-		swipe(event: Event) {
-			switch (event.type) {
-				case 'swipeup':
-					if (
-						window.innerHeight + window.scrollY !==
-						this.$el.scrollHeight
-					)
-						return
+		scrollToPrevious() {
+			const { params } = this.$route
+			if (params.scroll) {
+				window.scrollTo({ top: parseInt(params.scroll) })
+				console.log('scroll to', parseInt(params.scroll))
 
-					this.$router.push({ name: 'gallery', params: { swipe: 'up' } })
-					break
-				case 'swipeleft':
-					console.log('swipeleft')
-
-					break
-				case 'swiperight':
-					console.log('swiperight')
-					break
-
-				default:
-					break
+				params.scroll = ''
 			}
 		},
 	},
@@ -106,5 +102,9 @@ export default Vue.extend({
 	// @include full-absolute;
 	// position: fixed;
 	// z-index: -10;
+}
+.promo-photo {
+	width: 100%;
+	height: calc(100vw / 4 * 5 - var(--space-size) * 6 * 2);
 }
 </style>

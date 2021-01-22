@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { SwipeDirection } from '~/plugins/types'
 
 export default Vue.extend({
 	methods: {
@@ -17,7 +18,7 @@ export default Vue.extend({
 					if (page === 'index')
 						this.$router.push({
 							name: 'gallery',
-							query: { prevRoute: 'index' },
+							// query: { prevRoute: 'index' },
 						})
 					console.log('swipe up')
 					break

@@ -4,6 +4,7 @@
 		@touchstart="touchStart"
 		@touchmove="touchmove"
 		@touchend="resetSwipe"
+		@wheel="wheel"
 	>
 		<slot></slot>
 		<GlobalEvents @scroll="scroll"></GlobalEvents>
@@ -12,11 +13,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { SwipeDirection } from '~/plugins/types'
 
 interface SwipeStart {
 	timestamp: number
 	x: number
 	y: number
+}
+
+let deltaTotal = {
+	x: 0,
+	y: 0,
 }
 
 export default Vue.extend({
@@ -62,6 +69,23 @@ export default Vue.extend({
 			const { timeStamp } = e,
 				{ clientX, clientY } = e.touches[0] || [0, 0]
 			this.checkMovement(clientX, clientY, timeStamp)
+		},
+		wheel(e: WheelEvent) {
+			const { timeStamp: timestamp } = e
+			if (!this.swipeStart) {
+				this.swipeStart = { timestamp, x: 0, y: 0 }
+				deltaTotal = {
+					x: 0,
+					y: 0,
+				}
+				setTimeout(this.resetSwipe, this.timeLimit)
+			} else {
+				const { deltaX: x, deltaY: y } = e
+				deltaTotal.x -= x
+				deltaTotal.y -= y
+
+				this.checkMovement(deltaTotal.x, deltaTotal.y, timestamp)
+			}
 		},
 		resetSwipe() {
 			this.swipeStart = null

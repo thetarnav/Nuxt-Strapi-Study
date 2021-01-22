@@ -8,6 +8,7 @@
 	// right: 0;
 	min-height: 100vh;
 	overflow: hidden;
+	--page-margin: calc(var(--space-size) * 6);
 }
 
 // .page-enter-active,
@@ -61,4 +62,8 @@ $translate: 10rem;
 .slide-bottom-leave-to {
 	opacity: 0;
 	transform: translateY(-$translate);
+}
+
+.cover-img {
+	background: $gray6;
 }
