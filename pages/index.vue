@@ -21,7 +21,6 @@
 			alt="zdjęcie wystawy przykładowej lampy"
 			class="promo-photo mt-20 cover-img"
 		/>
-		<!-- <div class="swipe-check"></div> -->
 	</div>
 </template>
 
@@ -46,11 +45,10 @@ export default Vue.extend({
 			})
 		else next()
 	},
+	layout: 'main',
 	scrollToTop: false,
 	data() {
-		return {
-			scroll: false,
-		}
+		return {}
 	},
 	mounted() {
 		this.scrollToPrevious()
@@ -59,8 +57,23 @@ export default Vue.extend({
 		scrollToPrevious() {
 			const { params } = this.$route
 			if (params.scroll) {
-				window.scrollTo({ top: parseInt(params.scroll) })
+				const scrollToY = Math.min(
+					parseInt(params.scroll),
+					this.$el.scrollHeight - window.innerHeight,
+				)
+				window.scrollTo({
+					top: scrollToY,
+				})
 				console.log('scroll to', parseInt(params.scroll))
+				console.log(
+					'scroll to - padd',
+					parseInt(params.scroll) -
+						this.$store.state.application.swipeVerticalPadding,
+				)
+				console.log('scroll to y', scrollToY)
+				console.log('wh', window.innerHeight)
+				console.log('sh', this.$el.scrollHeight)
+				console.log('sh - wh', this.$el.scrollHeight - window.innerHeight)
 
 				params.scroll = ''
 			}
@@ -78,7 +91,8 @@ export default Vue.extend({
 	width: 100%;
 	height: 30rem;
 
-	background: url('https://source.unsplash.com/featured/?workshop,artist,carpenter');
+	// background: url('https://source.unsplash.com/featured/?workshop,artist,carpenter');
+	background: url('/img/picek.jpg');
 	background-size: cover;
 	background-position-x: center;
 
@@ -97,11 +111,6 @@ export default Vue.extend({
 
 	color: $black;
 	text-align: center;
-}
-.swipe-check {
-	// @include full-absolute;
-	// position: fixed;
-	// z-index: -10;
 }
 .promo-photo {
 	width: 100%;

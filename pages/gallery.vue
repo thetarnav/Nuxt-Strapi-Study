@@ -10,6 +10,8 @@ import Vue from 'vue'
 
 export default Vue.extend({
 	name: 'Gallery',
+	scrollToTop: false,
+	layout: 'galleryLayout',
 	transition(to) {
 		return {
 			name: to.name !== 'gallery' ? 'slide-top' : 'slide-bottom',
@@ -18,13 +20,14 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		// if (!document || !window) return
-		// console.log(this.$el)
-		// const hammer = new Hammer(this.$el)
-		// console.log(hammer)
+		this.$nextTick(() => window.scrollTo({ top: 120 }))
 	},
 	methods: {},
 })
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+// .gallery {
+// 	min-height: calc(100vh + 10px);
+// }
+</style>

@@ -1,136 +1,191 @@
 <template>
 	<div
-		class="swipe-and-scroll"
+		class="swipe-and-scroll outer-wrapper"
+		:class="directions"
 		@touchstart="touchStart"
-		@touchmove="touchmove"
-		@touchend="resetSwipe"
+		@touchmove="debouncedHandleTouchMove"
+		@touchend="touchend"
 		@wheel="wheel"
 	>
-		<slot></slot>
-		<GlobalEvents @scroll="scroll"></GlobalEvents>
+		<div class="inner-wrapper">
+			<slot></slot>
+		</div>
+		<div
+			v-if="directions.includes('down')"
+			class="swipe-space swipe-space--top"
+		>
+			<p>
+				{{ $route.params.prevIndex || 'Home' }}
+			</p>
+		</div>
+		<div
+			v-if="directions.includes('up')"
+			class="swipe-space swipe-space--bottom"
+		>
+			<p>Gallery</p>
+		</div>
+		<GlobalEvents @scroll="debouncedHandleScroll"></GlobalEvents>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import debounce from 'lodash.debounce'
 import { SwipeDirection } from '~/plugins/types'
 
 interface SwipeStart {
 	timestamp: number
 	x: number
-	y: number
-}
-
-let deltaTotal = {
-	x: 0,
-	y: 0,
 }
 
 export default Vue.extend({
 	name: 'SwipeAndScroll',
+	props: {
+		directions: {
+			type: Array,
+			default: () => ['up', 'down', 'left', 'right'],
+		},
+	},
 	data() {
 		return {
 			timeLimit: 700,
 			distanceThreshold: 150,
-			hugging: {
-				top: false,
-				left: false,
-				right: false,
-				bottom: false,
-			},
+			// swipeStart - Object that holds the information about when and where touch happend.
 			swipeStart: null as SwipeStart | null,
-			swiped: false,
+			// allowSwipe is a boolean-contition for the VERTICAL scroll to happen. So that the swiping will not happen immediately when scrolled down too quickly.
+			allowSwipe: false,
+			// a Placeholder for lodash debounced scroll handler.
+			debouncedHandleScroll: () => {},
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			debouncedHandleTouchMove: (e: TouchEvent) => {},
 		}
 	},
 	mounted() {
-		this.$nextTick(this.checkIfHugging)
-		// this.checkIfHugging()
+		this.debouncedHandleScroll = debounce(this.handleScrollingEnd, 100)
+		this.debouncedHandleTouchMove = debounce(this.touchmove, 70, {
+			maxWait: 70,
+		})
 	},
 	methods: {
-		swipe(direction: SwipeDirection) {
-			this.swiped = true
-			this.resetSwipe()
+		triggerSwipe(direction: SwipeDirection) {
+			// Function that Ends an user swipe interaction.
+			this.swipeStart = null
 			this.$emit('swipe', direction)
 		},
-		scroll() {
-			this.checkIfHugging()
-			this.resetSwipe()
+		handleScrollingEnd() {
+			/*
+			It is a DEBOUNCED scroll handler.
+			Used to scroll away from swipe padding OR trigger the Swipe.
+			*/
+			this.swipeStart = null
+			this.checkVerticalSwipe()
+			this.allowSwipe = false
 		},
 		touchStart(e: TouchEvent) {
+			/**
+			 * Touch Start Event Handler
+			 * Used to set the swipe starting point
+			 * and allow vertical swipe for the current 'user swipe'
+			 */
+			this.allowSwipe = true
 			const { timeStamp: timestamp, touches } = e,
-				{ clientX: x, clientY: y } = touches[0] || [0, 0]
+				{ clientX: x } = touches[0] || [0, 0]
+
 			this.swipeStart = {
 				timestamp,
 				x,
-				y,
 			}
+			setTimeout(() => (this.swipeStart = null), this.timeLimit)
 		},
 		touchmove(e: TouchEvent) {
+			/**
+			 * Triggers Swipe Check
+			 */
+			if (!this.swipeStart) return
+
 			const { timeStamp } = e,
-				{ clientX, clientY } = e.touches[0] || [0, 0]
-			this.checkMovement(clientX, clientY, timeStamp)
-		},
-		wheel(e: WheelEvent) {
-			const { timeStamp: timestamp } = e
-			if (!this.swipeStart) {
-				this.swipeStart = { timestamp, x: 0, y: 0 }
-				deltaTotal = {
-					x: 0,
-					y: 0,
-				}
-				setTimeout(this.resetSwipe, this.timeLimit)
-			} else {
-				const { deltaX: x, deltaY: y } = e
-				deltaTotal.x -= x
-				deltaTotal.y -= y
+				{ clientX } = e.touches[0] || [0, 0]
 
-				this.checkMovement(deltaTotal.x, deltaTotal.y, timestamp)
-			}
+			this.checkMovement(clientX, timeStamp)
 		},
-		resetSwipe() {
+		touchend() {
 			this.swipeStart = null
-			this.swiped = false
+			setTimeout(() => (this.allowSwipe = false), 100)
 		},
-		checkMovement(x: number, y: number, timestamp: number) {
-			if (this.swiped) return
+		wheel() {
+			this.allowSwipe = true
+		},
+		checkMovement(x: number, timestamp: number) {
+			if (!this.swipeStart) return
 
-			const {
-				swipeStart,
-				hugging,
-				timeLimit,
-				distanceThreshold,
-				swipe,
-			} = this
+			const { swipeStart, timeLimit, distanceThreshold, triggerSwipe } = this
 
 			if (swipeStart && timestamp - swipeStart.timestamp < timeLimit) {
-				if (hugging.top && y - swipeStart.y > distanceThreshold)
-					swipe('down')
-				else if (hugging.bottom && swipeStart.y - y > distanceThreshold)
-					swipe('up')
-				else if (hugging.left && x - swipeStart.x > distanceThreshold)
-					swipe('right')
-				else if (hugging.right && swipeStart.x - x > distanceThreshold)
-					swipe('left')
+				if (x - swipeStart.x > distanceThreshold) triggerSwipe('right')
+				else if (swipeStart.x - x > distanceThreshold) triggerSwipe('left')
 			}
 		},
-		checkIfHugging(): void {
-			const {
-					innerHeight: height,
-					innerWidth: width,
-					scrollY: scrollTop,
-					scrollX: scrollLeft,
-				} = window,
-				{ scrollHeight, scrollWidth } = this.$el
+		checkVerticalSwipe() {
+			const { directions, allowSwipe } = this,
+				verticalPadding = this.$store.state.application
+					.swipeVerticalPadding,
+				{ innerHeight: windowHeight } = window,
+				{ scrollHeight } = this.$el,
+				fromTop = window.scrollY,
+				fromBottom = scrollHeight - fromTop - windowHeight
 
-			this.hugging = {
-				top: Math.floor(scrollTop) === 0,
-				left: Math.floor(scrollLeft) === 0,
-				bottom: scrollHeight - scrollTop - height < 1,
-				right: scrollWidth - scrollLeft - width < 1,
+			if (allowSwipe && directions.includes('down') && fromTop < 5)
+				this.triggerSwipe('down')
+			else if (allowSwipe && directions.includes('up') && fromBottom < 5)
+				this.triggerSwipe('up')
+			else {
+				let scrollToY = -1
+				if (directions.includes('down') && fromTop < verticalPadding)
+					scrollToY = verticalPadding
+				else if (directions.includes('up') && fromBottom < verticalPadding)
+					scrollToY = scrollHeight - windowHeight - verticalPadding - 1
+
+				if (scrollToY !== -1)
+					window.scrollTo({
+						top: scrollToY,
+						behavior: 'smooth',
+					})
 			}
 		},
 	},
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+$vertical-swipe-space: 90px;
+.outer-wrapper {
+	position: relative;
+	// background-color: $secondary;
+	&.down {
+		padding-top: $vertical-swipe-space;
+	}
+	&.up {
+		padding-bottom: $vertical-swipe-space;
+	}
+}
+.swipe-space {
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: $vertical-swipe-space;
+	display: flex;
+
+	&--top {
+		top: 0;
+		background: linear-gradient($gray7, transparent);
+	}
+	&--bottom {
+		bottom: 0;
+		background: linear-gradient(transparent, $gray7);
+	}
+
+	p {
+		margin: auto;
+	}
+}
+</style>
