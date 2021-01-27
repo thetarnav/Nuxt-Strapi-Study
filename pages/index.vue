@@ -29,6 +29,11 @@ import MainPageMixin from '~/plugins/mainPageMixin'
 
 export default MainPageMixin.extend({
 	name: 'Home',
+	head() {
+		return {
+			title: 'Renkidzieło',
+		}
+	},
 })
 </script>
 

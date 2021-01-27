@@ -1,16 +1,11 @@
 @import 'variables/mixins', 'variables/variables';
 
 .page {
-	// position: relative;
-	// position: absolute;
-	// top: 0;
-	// left: 0;
-	// right: 0;
 	min-height: 100vh;
 	overflow: hidden;
-	// background-color: $white;
-	padding-bottom: 30px;
 	--page-margin: calc(var(--space-size) * 6);
+	padding: 0 var(--page-margin);
+	padding-bottom: calc(var(--page-margin) + #{$mobile-nav-height});
 }
 
 $page-translate: 4rem;
@@ -80,5 +75,16 @@ $page-translate: 4rem;
 		&.gallery {
 			transform: translateY($page-translate);
 		}
+	}
+}
+
+.fade {
+	&-enter,
+	&-leave-to {
+		opacity: 0;
+	}
+	&-enter-active,
+	&-leave-active {
+		transition: opacity 0.3s;
 	}
 }

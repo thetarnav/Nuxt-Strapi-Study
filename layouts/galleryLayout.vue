@@ -1,7 +1,10 @@
 <template>
-	<SwipeAndScroll :directions="['down']" @swipe="swipe">
-		<Nuxt class="page" />
-	</SwipeAndScroll>
+	<div>
+		<SwipeAndScroll :directions="['down']" @swipe="swipe">
+			<Nuxt class="page" />
+		</SwipeAndScroll>
+		<MainNav />
+	</div>
 </template>
 
 <script lang="ts">

@@ -41,5 +41,10 @@ import MainPageMixin from '~/plugins/mainPageMixin'
 
 export default MainPageMixin.extend({
 	name: 'Paintings',
+	head() {
+		return {
+			title: 'Renkidzieło - Obrazy',
+		}
+	},
 })
 </script>

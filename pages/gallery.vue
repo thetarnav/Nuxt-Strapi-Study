@@ -12,6 +12,11 @@ export default Vue.extend({
 	name: 'Gallery',
 	layout: 'galleryLayout',
 	scrollToTop: false,
+	head() {
+		return {
+			title: 'Renkidzieło - Galeria',
+		}
+	},
 	mounted() {
 		this.$nextTick(() => window.scrollTo({ top: 120 }))
 	},

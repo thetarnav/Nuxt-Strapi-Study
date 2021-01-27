@@ -1,7 +1,10 @@
 <template>
-	<SwipeAndScroll :directions="['up', 'left', 'right']" @swipe="swipe">
-		<Nuxt class="page" />
-	</SwipeAndScroll>
+	<div class="layout">
+		<MainNav />
+		<SwipeAndScroll :directions="['up', 'left', 'right']" @swipe="swipe">
+			<Nuxt class="page" />
+		</SwipeAndScroll>
+	</div>
 </template>
 
 <script lang="ts">
@@ -56,4 +59,10 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.layout {
+	// important for navigation and swiping:
+	height: 100vh;
+	overflow-y: auto;
+}
+</style>

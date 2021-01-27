@@ -32,7 +32,6 @@
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
 import { SwipeDirection } from '~/plugins/types'
-import { State } from '~/store/application'
 
 interface SwipeStart {
 	timestamp: number
@@ -62,6 +61,9 @@ export default Vue.extend({
 		}
 	},
 	computed: {
+		parent() {
+			return this.$parent.$el
+		},
 		prevRouteName() {
 			const prevRoute = this.$route.query.prevRoute || 'index'
 			return this.$store.getters['application/pageName'](prevRoute) || 'Home'
@@ -72,6 +74,10 @@ export default Vue.extend({
 		this.debouncedHandleTouchMove = debounce(this.touchmove, 70, {
 			maxWait: 70,
 		})
+		this.parent.addEventListener('scroll', this.debouncedHandleScroll)
+	},
+	beforeDestroy() {
+		this.parent.removeEventListener('scroll', this.debouncedHandleScroll)
 	},
 	methods: {
 		triggerSwipe(direction: SwipeDirection) {
@@ -138,7 +144,7 @@ export default Vue.extend({
 					.swipeVerticalPadding,
 				{ innerHeight: windowHeight } = window,
 				{ scrollHeight } = this.$el,
-				fromTop = window.scrollY,
+				fromTop = this.parent.scrollTop,
 				fromBottom = scrollHeight - fromTop - windowHeight
 
 			if (allowSwipe && directions.includes('down') && fromTop < 5)
@@ -153,7 +159,7 @@ export default Vue.extend({
 					scrollToY = scrollHeight - windowHeight - verticalPadding - 1
 
 				if (scrollToY !== -1)
-					window.scrollTo({
+					this.parent.scrollTo({
 						top: scrollToY,
 						behavior: 'smooth',
 					})

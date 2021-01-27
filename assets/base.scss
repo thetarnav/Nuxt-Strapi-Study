@@ -5,10 +5,14 @@ html {
 	font-style: normal;
 	color: $black;
 	font-size: 13px;
+
+	width: 100%;
+	// important for navigation and swiping:
+	overflow: auto;
 }
 body,
 html {
-	width: 100%;
+	// important for navigation and swiping:
 	height: 100%;
 }
 body {

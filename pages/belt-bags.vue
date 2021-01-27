@@ -41,5 +41,10 @@ import MainPageMixin from '~/plugins/mainPageMixin'
 
 export default MainPageMixin.extend({
 	name: 'Belt-bags',
+	head() {
+		return {
+			title: 'Renkidzieło - Saszetki',
+		}
+	},
 })
 </script>

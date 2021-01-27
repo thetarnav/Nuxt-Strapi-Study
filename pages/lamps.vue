@@ -41,5 +41,10 @@ import MainPageMixin from '~/plugins/mainPageMixin'
 
 export default MainPageMixin.extend({
 	name: 'Lamps',
+	head() {
+		return {
+			title: 'Renkidzieło - Lampy',
+		}
+	},
 })
 </script>
