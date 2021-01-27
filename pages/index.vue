@@ -25,60 +25,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import MainPageMixin from '~/plugins/mainPageMixin'
 
-export default Vue.extend({
+export default MainPageMixin.extend({
 	name: 'Home',
-	beforeRouteEnter(to, from, next) {
-		if (from.name === 'gallery' && typeof from.query.scroll === 'string')
-			to.params.scroll = from.query.scroll
-		next()
-	},
-	beforeRouteLeave(to, from, next) {
-		if (to.name === 'gallery' && to.query.prevRoute !== from.name)
-			next({
-				name: 'gallery',
-				query: {
-					prevRoute: from.name || 'index',
-					scroll: Math.round(window.scrollY).toString(),
-				},
-			})
-		else next()
-	},
-	layout: 'main',
-	scrollToTop: false,
-	data() {
-		return {}
-	},
-	mounted() {
-		this.scrollToPrevious()
-	},
-	methods: {
-		scrollToPrevious() {
-			const { params } = this.$route
-			if (params.scroll) {
-				const scrollToY = Math.min(
-					parseInt(params.scroll),
-					this.$el.scrollHeight - window.innerHeight,
-				)
-				window.scrollTo({
-					top: scrollToY,
-				})
-				console.log('scroll to', parseInt(params.scroll))
-				console.log(
-					'scroll to - padd',
-					parseInt(params.scroll) -
-						this.$store.state.application.swipeVerticalPadding,
-				)
-				console.log('scroll to y', scrollToY)
-				console.log('wh', window.innerHeight)
-				console.log('sh', this.$el.scrollHeight)
-				console.log('sh - wh', this.$el.scrollHeight - window.innerHeight)
-
-				params.scroll = ''
-			}
-		},
-	},
 })
 </script>
 

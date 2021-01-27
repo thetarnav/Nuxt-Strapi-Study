@@ -15,7 +15,7 @@
 			class="swipe-space swipe-space--top"
 		>
 			<p>
-				{{ $route.params.prevIndex || 'Home' }}
+				{{ prevRouteName }}
 			</p>
 		</div>
 		<div
@@ -32,6 +32,7 @@
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
 import { SwipeDirection } from '~/plugins/types'
+import { State } from '~/store/application'
 
 interface SwipeStart {
 	timestamp: number
@@ -48,8 +49,8 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			timeLimit: 700,
-			distanceThreshold: 150,
+			timeLimit: 800,
+			distanceThreshold: 100,
 			// swipeStart - Object that holds the information about when and where touch happend.
 			swipeStart: null as SwipeStart | null,
 			// allowSwipe is a boolean-contition for the VERTICAL scroll to happen. So that the swiping will not happen immediately when scrolled down too quickly.
@@ -59,6 +60,12 @@ export default Vue.extend({
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			debouncedHandleTouchMove: (e: TouchEvent) => {},
 		}
+	},
+	computed: {
+		prevRouteName() {
+			const prevRoute = this.$route.query.prevRoute || 'index'
+			return this.$store.getters['application/pageName'](prevRoute) || 'Home'
+		},
 	},
 	mounted() {
 		this.debouncedHandleScroll = debounce(this.handleScrollingEnd, 100)

@@ -23,15 +23,13 @@
     "core-js": "^3.8.3",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^2.14.12",
-    "vue-global-events": "^1.2.1",
-    "vue2-hammer": "^2.1.2"
+    "vue-global-events": "^1.2.1"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.12",
     "@nuxt/typescript-build": "^2.0.4",
     "@nuxtjs/eslint-config-typescript": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
-    "@types/hammerjs": "^2.0.36",
     "@types/lodash.debounce": "^4.0.6",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.18.0",
