@@ -10,15 +10,8 @@ import Vue from 'vue'
 
 export default Vue.extend({
 	name: 'Gallery',
-	scrollToTop: false,
 	layout: 'galleryLayout',
-	transition(to) {
-		return {
-			name: to.name !== 'gallery' ? 'slide-top' : 'slide-bottom',
-			// name: 'page',
-			// mode: '',
-		}
-	},
+	scrollToTop: false,
 	mounted() {
 		this.$nextTick(() => window.scrollTo({ top: 120 }))
 	},
