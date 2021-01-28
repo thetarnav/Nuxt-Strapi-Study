@@ -1,5 +1,9 @@
 @import 'variables/mixins', 'variables/variables';
 
+:root {
+	--nav-height: 70px;
+}
+
 .page {
 	min-height: 100vh;
 	overflow: hidden;

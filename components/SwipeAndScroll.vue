@@ -48,8 +48,8 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			timeLimit: 700,
-			distanceThreshold: 90,
+			timeLimit: 600,
+			distanceThreshold: 70,
 			// swipeStart - Object that holds the information about when and where touch happend.
 			swipeStart: null as SwipeStart | null,
 			// allowSwipe is a boolean-contition for the VERTICAL scroll to happen. So that the swiping will not happen immediately when scrolled down too quickly.

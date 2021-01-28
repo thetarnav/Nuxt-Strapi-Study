@@ -4,14 +4,16 @@
 			<button>kontakt</button>
 		</div>
 		<NavLink key="home" name="home" to="/" icon="home">Home</NavLink>
-		<NavLink key="lamps" name="lamps" to="lamps" icon="home">Lampy</NavLink>
-		<NavLink key="belt-bags" name="belt-bags" to="belt-bags" icon="home"
+		<NavLink key="lamps" name="lamps" to="lamps" icon="lightbulb"
+			>Lampy</NavLink
+		>
+		<NavLink key="belt-bags" name="belt-bags" to="belt-bags" icon="image"
 			>Saszetki</NavLink
 		>
 		<NavLink key="paintings" name="paintings" to="paintings" icon="image"
 			>Obrazy</NavLink
 		>
-		<NavLink key="gallery" name="gallery" to="gallery" icon="image"
+		<NavLink key="gallery" name="gallery" to="gallery" icon="list"
 			>Galeria</NavLink
 		>
 	</nav>
@@ -32,21 +34,23 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .main-nav {
+	--link-width: 20vw;
 	position: fixed;
 	z-index: 2000;
-	// top: calc(100% - #{$mobile-nav-height});
 	left: 0;
 	right: 0;
 	bottom: 0;
-	height: $mobile-nav-height;
+	height: var(--nav-height);
 	background: $gray9;
 
-	// display: grid;
-	// grid-template-columns: repeat(5, 20%);
+	> * {
+		width: var(--link-width);
+		height: var(--nav-height);
+	}
 }
 
 @mixin out {
-	transform: translateX(calc(var(--link-width) * -1));
+	// transform: translateX(calc(var(--link-width) * -1));
 	opacity: 0;
 	pointer-events: none;
 }
@@ -67,16 +71,15 @@ export default Vue.extend({
 }
 
 .nav-link {
-	--link-width: 20vw;
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: var(--link-width);
-	height: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
+	transition: opacity 0.2s transform 0.4s;
 
 	&.home {
 		@include out;
@@ -102,6 +105,54 @@ export default Vue.extend({
 		&.lamps {
 			@include out;
 		}
+	}
+	&.belt-bags .nav-link {
+		&.home {
+			@include one;
+		}
+		&.belt-bags {
+			@include out;
+		}
+		&.lamps {
+			@include two;
+		}
+	}
+	&.paintings .nav-link {
+		&.home {
+			@include one;
+		}
+		&.lamps {
+			@include two;
+		}
+		&.belt-bags {
+			@include three;
+		}
+		&.paintings {
+			@include out;
+		}
+	}
+}
+
+.middle-button {
+	position: fixed;
+	z-index: 2010;
+	right: 0;
+	bottom: 0;
+	transform: translateX(calc(var(--link-width) * -2))
+		translateY(calc(var(--nav-height) / -2));
+	button {
+		$button-size: 80px;
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-left: -$button-size/2;
+		margin-top: -$button-size/2;
+		width: $button-size;
+		height: $button-size;
+		border-radius: 50%;
+		background: $primary;
+		color: $white;
 	}
 }
 </style>
