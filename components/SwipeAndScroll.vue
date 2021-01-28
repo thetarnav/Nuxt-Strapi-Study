@@ -18,24 +18,23 @@
 				{{ prevRouteName }}
 			</p>
 		</div>
-		<div
-			v-if="directions.includes('up')"
-			class="swipe-space swipe-space--bottom"
-		>
-			<p>Gallery</p>
-		</div>
 		<GlobalEvents @scroll="debouncedHandleScroll"></GlobalEvents>
+
+		<!-- <div class="log">
+		</div> -->
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
+import { searchForSuitableParent } from '~/plugins/helpers'
 import { SwipeDirection } from '~/plugins/types'
 
-interface SwipeStart {
-	timestamp: number
-	x: number
+let lastTouchMove = {
+	x: 0,
+	y: 0,
+	timestamp: 0,
 }
 
 export default Vue.extend({
@@ -48,12 +47,9 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			timeLimit: 600,
-			distanceThreshold: 70,
-			// swipeStart - Object that holds the information about when and where touch happend.
-			swipeStart: null as SwipeStart | null,
-			// allowSwipe is a boolean-contition for the VERTICAL scroll to happen. So that the swiping will not happen immediately when scrolled down too quickly.
-			allowSwipe: false,
+			// Boolean-conditions for the VERTICAL scroll to happen. So that the swiping will not happen immediately when scrolled down too quickly.
+			isAllowedDown: false,
+			isAllowedUp: false,
 			// a Placeholder for lodash debounced scroll handler.
 			debouncedHandleScroll: () => {},
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -62,27 +58,60 @@ export default Vue.extend({
 	},
 	computed: {
 		parent() {
-			return this.$parent.$el
+			return searchForSuitableParent(this.$el as HTMLElement, {
+				overflowY: ['scroll', 'auto'],
+			})
 		},
 		prevRouteName() {
 			const prevRoute = this.$route.query.prevRoute || 'index'
 			return this.$store.getters['application/pageName'](prevRoute) || 'Home'
 		},
+		verticalPadding() {
+			return this.$store.state.application.swipeVerticalPadding
+		},
 	},
 	mounted() {
 		this.debouncedHandleScroll = debounce(this.handleScrollingEnd, 100)
-		this.debouncedHandleTouchMove = debounce(this.touchmove, 70, {
-			maxWait: 70,
+		this.debouncedHandleTouchMove = debounce(this.touchmove, 50, {
+			maxWait: 50,
 		})
-		this.parent.addEventListener('scroll', this.debouncedHandleScroll)
+		;(this.parent ?? window).addEventListener(
+			'scroll',
+			this.debouncedHandleScroll,
+		)
 	},
 	beforeDestroy() {
-		this.parent.removeEventListener('scroll', this.debouncedHandleScroll)
+		;(this.parent ?? window).removeEventListener(
+			'scroll',
+			this.debouncedHandleScroll,
+		)
 	},
 	methods: {
+		getFromTop(): number {
+			const { parent } = this,
+				fromTop = (parent?.scrollTop as number) ?? window.scrollY
+
+			return fromTop
+		},
+		getFromBottom(): number {
+			const scrollHeight = this.getScrollHeight(),
+				fromTop = this.getFromTop(),
+				frameHeight = this.getFrameHeight()
+
+			return scrollHeight - fromTop - frameHeight
+		},
+		getScrollHeight(): number {
+			const { parent, $el } = this
+
+			return parent?.scrollHeight ?? $el.clientHeight
+		},
+		getFrameHeight(): number {
+			const { parent } = this
+
+			return parent?.clientHeight ?? window.innerHeight
+		},
 		triggerSwipe(direction: SwipeDirection) {
 			// Function that Ends an user swipe interaction.
-			this.swipeStart = null
 			this.$emit('swipe', direction)
 		},
 		handleScrollingEnd() {
@@ -90,9 +119,9 @@ export default Vue.extend({
 			It is a DEBOUNCED scroll handler.
 			Used to scroll away from swipe padding OR trigger the Swipe.
 			*/
-			this.swipeStart = null
 			this.checkVerticalSwipe()
-			this.allowSwipe = false
+			this.isAllowedDown = false
+			this.isAllowedUp = false
 		},
 		touchStart(e: TouchEvent) {
 			/**
@@ -100,66 +129,78 @@ export default Vue.extend({
 			 * Used to set the swipe starting point
 			 * and allow vertical swipe for the current 'user swipe'
 			 */
-			this.allowSwipe = true
+			this.isAllowedDown = true
 			const { timeStamp: timestamp, touches } = e,
-				{ clientX: x } = touches[0] || [0, 0]
+				{ clientX: x, clientY: y } = touches[0] || [0, 0]
 
-			this.swipeStart = {
-				timestamp,
+			lastTouchMove = {
 				x,
+				y,
+				timestamp,
 			}
-			setTimeout(() => (this.swipeStart = null), this.timeLimit)
+
+			this.isAllowedDownUp()
+		},
+		isAllowedDownUp() {
+			if (this.getFromBottom() < 5) this.isAllowedUp = true
 		},
 		touchmove(e: TouchEvent) {
 			/**
 			 * Triggers Swipe Check
 			 */
-			if (!this.swipeStart) return
 
-			const { timeStamp } = e,
-				{ clientX } = e.touches[0] || [0, 0]
+			const { triggerSwipe } = this,
+				{ timeStamp: timestamp } = e,
+				{ clientX: x, clientY: y } = e.touches[0] || [0, 0],
+				xVel =
+					(x - lastTouchMove.x) / (timestamp - lastTouchMove.timestamp),
+				yVel = (y - lastTouchMove.y) / (timestamp - lastTouchMove.timestamp)
 
-			this.checkMovement(clientX, timeStamp)
-		},
-		touchend() {
-			this.swipeStart = null
-			setTimeout(() => (this.allowSwipe = false), 100)
-		},
-		wheel() {
-			this.allowSwipe = true
-		},
-		checkMovement(x: number, timestamp: number) {
-			if (!this.swipeStart) return
+			lastTouchMove = {
+				x,
+				y,
+				timestamp,
+			}
 
-			const { swipeStart, timeLimit, distanceThreshold, triggerSwipe } = this
-
-			if (swipeStart && timestamp - swipeStart.timestamp < timeLimit) {
-				if (x - swipeStart.x > distanceThreshold) triggerSwipe('right')
-				else if (swipeStart.x - x > distanceThreshold) triggerSwipe('left')
+			// Is it fast?
+			if (Math.abs(xVel) > 1 || Math.abs(yVel) > 1) {
+				// Is it HORIZONTAL:
+				if (Math.abs(xVel) / Math.abs(yVel) >= 2) {
+					// Left or Right?
+					if (xVel < 0) triggerSwipe('left')
+					else triggerSwipe('right')
+				}
+				// Then it is VERTICAL
+				else if (
+					this.isAllowedUp &&
+					yVel < -2 &&
+					Math.abs(yVel) / Math.abs(xVel) >= 2
+				)
+					triggerSwipe('up')
 			}
 		},
+		touchend() {
+			setTimeout(() => {
+				this.isAllowedDown = false
+				this.isAllowedUp = false
+			}, 100)
+		},
+		wheel() {
+			this.isAllowedDown = true
+		},
 		checkVerticalSwipe() {
-			const { directions, allowSwipe } = this,
-				verticalPadding = this.$store.state.application
-					.swipeVerticalPadding,
-				{ innerHeight: windowHeight } = window,
-				{ scrollHeight } = this.$el,
-				fromTop = this.parent.scrollTop,
-				fromBottom = scrollHeight - fromTop - windowHeight
+			const { directions, isAllowedDown, parent, verticalPadding } = this,
+				fromTop = this.getFromTop()
 
-			if (allowSwipe && directions.includes('down') && fromTop < 5)
+			if (isAllowedDown && directions.includes('down') && fromTop < 5)
 				this.triggerSwipe('down')
-			else if (allowSwipe && directions.includes('up') && fromBottom < 5)
-				this.triggerSwipe('up')
 			else {
 				let scrollToY = -1
 				if (directions.includes('down') && fromTop < verticalPadding)
 					scrollToY = verticalPadding
-				else if (directions.includes('up') && fromBottom < verticalPadding)
-					scrollToY = scrollHeight - windowHeight - verticalPadding - 1
 
 				if (scrollToY !== -1)
-					this.parent.scrollTo({
+					(parent ?? window).scrollTo({
 						top: scrollToY,
 						behavior: 'smooth',
 					})
@@ -177,9 +218,9 @@ $vertical-swipe-space: 90px;
 	&.down {
 		padding-top: $vertical-swipe-space;
 	}
-	&.up {
-		padding-bottom: $vertical-swipe-space;
-	}
+	// &.up {
+	// 	padding-bottom: $vertical-swipe-space;
+	// }
 }
 .swipe-space {
 	position: absolute;
@@ -200,5 +241,15 @@ $vertical-swipe-space: 90px;
 	p {
 		margin: auto;
 	}
+}
+
+.log {
+	pointer-events: none;
+	position: fixed;
+	bottom: 50%;
+	color: $orange;
+	font-size: 1.5rem;
+	left: 10px;
+	background-color: $white;
 }
 </style>
