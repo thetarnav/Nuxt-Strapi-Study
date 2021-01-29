@@ -54,6 +54,8 @@ export default Vue.extend({
 			debouncedHandleScroll: () => {},
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			debouncedHandleTouchMove: (e: TouchEvent) => {},
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			debouncedTriggerSwipe: (direction: SwipeDirection) => {},
 		}
 	},
 	computed: {
@@ -74,6 +76,10 @@ export default Vue.extend({
 		this.debouncedHandleScroll = debounce(this.handleScrollingEnd, 100)
 		this.debouncedHandleTouchMove = debounce(this.touchmove, 50, {
 			maxWait: 50,
+		})
+		this.debouncedTriggerSwipe = debounce(this.triggerSwipe, 500, {
+			leading: true,
+			trailing: false,
 		})
 		;(this.parent ?? window).addEventListener(
 			'scroll',
@@ -139,9 +145,9 @@ export default Vue.extend({
 				timestamp,
 			}
 
-			this.isAllowedDownUp()
+			this.allowUp()
 		},
-		isAllowedDownUp() {
+		allowUp() {
 			if (this.getFromBottom() < 5) this.isAllowedUp = true
 		},
 		touchmove(e: TouchEvent) {
@@ -149,7 +155,7 @@ export default Vue.extend({
 			 * Triggers Swipe Check
 			 */
 
-			const { triggerSwipe } = this,
+			const { debouncedTriggerSwipe: triggerSwipe } = this,
 				{ timeStamp: timestamp } = e,
 				{ clientX: x, clientY: y } = e.touches[0] || [0, 0],
 				xVel =
@@ -193,7 +199,7 @@ export default Vue.extend({
 				fromTop = this.getFromTop()
 
 			if (isAllowedDown && directions.includes('down') && fromTop < 5)
-				this.triggerSwipe('down')
+				this.debouncedTriggerSwipe('down')
 			else {
 				let scrollToY = -1
 				if (directions.includes('down') && fromTop < verticalPadding)

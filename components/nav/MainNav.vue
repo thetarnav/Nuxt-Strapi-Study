@@ -69,6 +69,11 @@ export default Vue.extend({
 	opacity: 1;
 	pointer-events: all;
 }
+@mixin four {
+	transform: translateX(calc(var(--link-width) * 4));
+	opacity: 1;
+	pointer-events: all;
+}
 
 .nav-link {
 	position: absolute;
@@ -94,7 +99,7 @@ export default Vue.extend({
 		@include three;
 	}
 	&.gallery {
-		transform: translateX(calc(var(--link-width) * 4));
+		@include four;
 	}
 }
 .main-nav {
@@ -128,6 +133,23 @@ export default Vue.extend({
 			@include three;
 		}
 		&.paintings {
+			@include out;
+		}
+	}
+	&.gallery .nav-link {
+		&.home {
+			@include one;
+		}
+		&.lamps {
+			@include two;
+		}
+		&.belt-bags {
+			@include three;
+		}
+		&.paintings {
+			@include four;
+		}
+		&.gallery {
 			@include out;
 		}
 	}

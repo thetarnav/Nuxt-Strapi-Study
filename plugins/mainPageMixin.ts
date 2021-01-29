@@ -3,8 +3,13 @@ import { searchForSuitableParent } from '~/plugins/helpers'
 
 export default Vue.extend({
 	beforeRouteEnter(to, from, next) {
-		if (from.name === 'gallery' && typeof from.query.scroll === 'string')
+		if (
+			from.name === 'gallery' &&
+			from.query.prevRoute === to.name &&
+			typeof from.query.scroll === 'string'
+		)
 			to.params.scroll = from.query.scroll
+		else to.params.scroll = ''
 		next()
 	},
 	beforeRouteLeave(to, from, next) {
@@ -39,7 +44,7 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		this.$nextTick(this.scrollToPrevPos)
+		this.scrollToPrevPos
 	},
 	methods: {
 		scrollToPrevPos() {
