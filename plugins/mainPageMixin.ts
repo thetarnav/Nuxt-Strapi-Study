@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import { searchForSuitableParent } from '~/plugins/helpers'
 
+let alreadyScrolled = false
+
 export default Vue.extend({
 	beforeRouteEnter(to, from, next) {
 		if (
@@ -44,10 +46,13 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		this.scrollToPrevPos
+		alreadyScrolled = false
+		this.scrollToPrevPos()
 	},
 	methods: {
 		scrollToPrevPos() {
+			if (alreadyScrolled) return
+
 			const { params } = this.$route,
 				scrollParent =
 					searchForSuitableParent(this.$el as HTMLElement, {
@@ -69,6 +74,8 @@ export default Vue.extend({
 					top: 0,
 				})
 			}
+
+			alreadyScrolled = true
 		},
 	},
 })
