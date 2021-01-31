@@ -69,12 +69,12 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .filter-pill {
 	--color: #{$gray1};
 	border-radius: 200px;
-	// height: 30px;
-	padding: 2px 10px;
+	height: 34px;
+	padding: 0 10px;
 	background-color: transparent;
 	border: 2px solid var(--color);
 	color: var(--color);
@@ -92,11 +92,11 @@ export default Vue.extend({
 		background-color: var(--color);
 		color: $white;
 	}
-}
-.icon {
-	margin-right: 8px;
-}
-.text {
-	margin: 0;
+	.icon:not(.alone) {
+		margin-right: 8px;
+	}
+	.text {
+		margin: 0;
+	}
 }
 </style>

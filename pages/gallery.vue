@@ -2,7 +2,31 @@
 	<div class="page gallery">
 		<header class="gallery-header">
 			<h2 class="gallery-title">Galeria</h2>
-			<div class="filters-group">
+			<div class="side-filters-group">
+				<FilterPill
+					v-for="(filter, index) in onSideFilters"
+					:key="filter.name"
+					:tag="filter.name"
+					:icon="filter.icon"
+					:selected="filter.isSelected"
+					:color="filter.color"
+					:class="{ raise: index < 3 }"
+					@select="selectFilter"
+					>{{ filter.title }}</FilterPill
+				>
+				<div
+					v-if="filters.length > 6"
+					class="show-more"
+					@click="toggleFullFilters"
+				>
+					<div class="filter-pill">
+						<Icon icon="plus" class="icon alone"></Icon>
+					</div>
+				</div>
+			</div>
+		</header>
+		<transition name="show-full-filters">
+			<div v-if="showFullFilters" class="full-filters-group">
 				<FilterPill
 					v-for="filter in filters"
 					:key="filter.name"
@@ -13,8 +37,11 @@
 					@select="selectFilter"
 					>{{ filter.title }}</FilterPill
 				>
+				<button class="close-button btn-dark" @click="toggleFullFilters">
+					<Icon icon="circle" class="icon"></Icon>
+				</button>
 			</div>
-		</header>
+		</transition>
 	</div>
 </template>
 
@@ -56,6 +83,7 @@ export default Vue.extend({
 			// selectedFilters: new Set() as Set<ProductTag>,
 			filters: [] as Filter[],
 			filtersIndexes: {},
+			showFullFilters: false,
 		}
 	},
 	fetch() {
@@ -69,8 +97,16 @@ export default Vue.extend({
 			this.filters.push(new Filter(title, name, icon))
 		})
 
+		interface Category {
+			title: string
+			name: string
+		}
+
 		// Later from API:
-		const otherCategories = [{ title: 'Przykład', name: 'example' }]
+		const otherCategories: Category[] = [
+			{ title: 'Przykład', name: 'example' },
+			{ title: 'Kolejny', name: 'another' },
+		]
 
 		// Add filters from Database
 		otherCategories.forEach(category =>
@@ -105,9 +141,21 @@ export default Vue.extend({
 			title: 'Renkidzieło - Galeria',
 		}
 	},
+	computed: {
+		onSideFilters(): Filter[] {
+			return this.filters.filter(
+				(filter, index) =>
+					index < 4 || ['available', 'new'].includes(filter.name),
+			)
+		},
+	},
 	mounted() {
 		// Scroll below upper swipe padding at the beginning
-		this.$nextTick(() => window.scrollTo({ top: 120 }))
+		this.$nextTick(() =>
+			window.scrollTo({
+				top: this.$store.state.application.swipeVerticalPadding,
+			}),
+		)
 
 		// Select filters from URL
 		;(() => {
@@ -129,6 +177,9 @@ export default Vue.extend({
 		})()
 	},
 	methods: {
+		toggleFullFilters() {
+			this.showFullFilters = !this.showFullFilters
+		},
 		selectFilter(payload: PillSelectPayload) {
 			const { filters, filtersIndexes } = this,
 				{ tag: name, selected: isSelected } = payload,
@@ -182,11 +233,80 @@ export default Vue.extend({
 	position: relative;
 	margin-right: calc(var(--page-margin) * -1);
 }
-.filters-group {
+.side-filters-group {
+	position: relative;
 	display: flex;
 	flex-wrap: wrap;
 	> * {
 		margin: 6px;
+	}
+	.show-more {
+		position: absolute;
+		z-index: 10;
+		$pill-height: 34px;
+		$v-margin: 6px;
+		top: $pill-height + 2 * $v-margin;
+		right: var(--page-margin);
+
+		&:before {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			top: -2px;
+			bottom: -2px;
+			right: calc(var(--page-margin) * -1 - 2px);
+			width: 40vw;
+			background: linear-gradient(90deg, transparent, $white, $white);
+		}
+	}
+	.raise {
+		position: relative;
+		z-index: 20;
+	}
+}
+
+.full-filters-group {
+	position: fixed;
+	z-index: 20;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	flex-wrap: wrap;
+	padding: 20px;
+	> * {
+		margin: 6px;
+	}
+
+	background: $gray9;
+
+	.close-button {
+		$size: 50px;
+		border-radius: 50%;
+		width: $size;
+		height: $size;
+		display: flex;
+		padding: 0;
+		margin: 0;
+		> * {
+			margin: auto;
+		}
+
+		position: absolute;
+		top: calc(100% - #{$size} / 2);
+		right: var(--page-margin);
+	}
+}
+
+.show-full-filters {
+	&-enter-active,
+	&-leave-active {
+		transition: transform 0.3s;
+	}
+	&-enter,
+	&-leave-to {
+		// opacity: 0;
+		transform: translateY(-120%);
 	}
 }
 </style>
