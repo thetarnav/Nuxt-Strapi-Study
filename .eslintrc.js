@@ -59,7 +59,7 @@ module.exports = {
 		'object-curly-newline': 'off',
 		indent: ['off', 'tab'],
 		'linebreak-style': 'off',
-		quotes: ['warn', 'single'],
+		quotes: ['off', 'single'],
 		semi: ['warn', 'never'],
 		'no-new': 'off',
 		'no-underscore-dangle': 'off',
