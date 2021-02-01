@@ -3,7 +3,7 @@ import { GetterTree, ActionTree, MutationTree } from 'vuex'
 export const state = () => ({
 	topPagesOrder: ['index', 'lamps', 'belt-bags', 'paintings'],
 	topPagesNames: ['Home', 'Lampy', 'Saszetki', 'Obrazy'],
-	swipeVerticalPadding: 90,
+	swipeVerticalPadding: 100,
 })
 export type State = ReturnType<typeof state>
 

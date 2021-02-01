@@ -217,7 +217,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-$vertical-swipe-space: 90px;
+$vertical-swipe-space: 100px;
 .outer-wrapper {
 	position: relative;
 	// background-color: $secondary;

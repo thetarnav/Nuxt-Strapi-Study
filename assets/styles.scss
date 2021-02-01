@@ -12,6 +12,12 @@
 	padding-bottom: calc(var(--page-margin) + #{$mobile-nav-height});
 }
 
+.layout {
+	// important for navigation and swiping:
+	height: 100vh;
+	overflow-y: auto;
+}
+
 $page-translate: 4rem;
 
 /*
@@ -90,5 +96,20 @@ $page-translate: 4rem;
 	&-enter-active,
 	&-leave-active {
 		transition: opacity 0.3s;
+	}
+}
+
+.blur-top {
+	&-leave-active {
+		transition: opacity 0.2s 0.1s, transform 0.3s, filter 0.3s;
+	}
+	&-enter-active {
+		transition: opacity 0.2s, transform 0.3s, filter 0.3s;
+	}
+	&-enter,
+	&-leave-to {
+		opacity: 0;
+		transform: translateY(-30px);
+		filter: blur(30px);
 	}
 }

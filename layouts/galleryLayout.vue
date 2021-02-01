@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="">
 		<SwipeAndScroll :directions="['down']" @swipe="swipe">
 			<Nuxt class="page" />
 		</SwipeAndScroll>
@@ -24,5 +24,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style></style>

@@ -49,21 +49,13 @@ export default Vue.extend({
 
 	methods: {
 		handleClick() {
-			const { tag, selected } = this
-			const payload: PillSelectPayload = {
-				tag: tag as ProductTag,
-				selected: !this.selected,
-			}
+			const { tag, selected } = this,
+				payload: PillSelectPayload = {
+					tag,
+					selected: !selected,
+				}
 
 			this.$emit('select', payload)
-			// if (((productTags as unknown) as string).includes(tag)) {
-			// 	const payload: PillSelectPayload = {
-			// 		tag: tag as ProductTag,
-			// 		selected: !selected,
-			// 	}
-			// 	this.$emit('select', payload)
-			// } else
-			// 	console.warn(`Tag property (${tag}) doesn't match ProductTag Type`)
 		},
 	},
 })
@@ -75,7 +67,7 @@ export default Vue.extend({
 	border-radius: 200px;
 	height: 34px;
 	padding: 0 10px;
-	background-color: transparent;
+	background-color: $white;
 	border: 2px solid var(--color);
 	color: var(--color);
 	display: flex;

@@ -59,10 +59,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.layout {
-	// important for navigation and swiping:
-	height: 100vh;
-	overflow-y: auto;
-}
-</style>
+<style lang="scss"></style>

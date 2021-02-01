@@ -1,6 +1,9 @@
 <template>
 	<div class="page gallery">
-		<header class="gallery-header">
+		<header
+			class="gallery-header hide-me"
+			:class="{ hidden: showFullFilters || showLineFilters }"
+		>
 			<h2 class="gallery-title">Galeria</h2>
 			<div class="side-filters-group">
 				<FilterPill
@@ -10,7 +13,7 @@
 					:icon="filter.icon"
 					:selected="filter.isSelected"
 					:color="filter.color"
-					:class="{ raise: index < 3 }"
+					:class="{ 'raise-me': index < 3 }"
 					@select="selectFilter"
 					>{{ filter.title }}</FilterPill
 				>
@@ -20,12 +23,12 @@
 					@click="toggleFullFilters"
 				>
 					<div class="filter-pill">
-						<Icon icon="plus" class="icon alone"></Icon>
+						<Icon icon="ellipsis-h" class="icon alone"></Icon>
 					</div>
 				</div>
 			</div>
 		</header>
-		<transition name="show-full-filters">
+		<transition name="blur-top" duration="300">
 			<div v-if="showFullFilters" class="full-filters-group">
 				<FilterPill
 					v-for="filter in filters"
@@ -38,15 +41,43 @@
 					>{{ filter.title }}</FilterPill
 				>
 				<button class="close-button btn-dark" @click="toggleFullFilters">
-					<Icon icon="circle" class="icon"></Icon>
+					<Icon icon="times" class="icon"></Icon>
 				</button>
 			</div>
 		</transition>
+		<transition name="line-filters">
+			<div
+				v-if="showLineFilters"
+				class="line-filters-group hide-me"
+				:class="{ hidden: showFullFilters }"
+			>
+				<FilterPill
+					v-for="filter in filters"
+					:key="filter.name"
+					:tag="filter.name"
+					:selected="filter.isSelected"
+					:color="filter.color"
+					@select="selectFilter"
+					>{{ filter.title }}</FilterPill
+				>
+				<div
+					v-if="filters.length > 6"
+					class="show-more"
+					@click="toggleFullFilters"
+				>
+					<div class="filter-pill">
+						<Icon icon="ellipsis-h" class="icon alone"></Icon>
+					</div>
+				</div>
+			</div>
+		</transition>
+		<GlobalEvents @scroll="debounceScroll" />
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import debounce from 'lodash.debounce'
 import { PillSelectPayload } from '~/components/gallery/FilterPill.vue'
 import { ProductTag, pages } from '~/plugins/types'
 
@@ -84,6 +115,8 @@ export default Vue.extend({
 			filters: [] as Filter[],
 			filtersIndexes: {},
 			showFullFilters: false,
+			showLineFilters: false,
+			debounceScroll: () => {},
 		}
 	},
 	fetch() {
@@ -122,7 +155,7 @@ export default Vue.extend({
 				new Filter(
 					'Dostępne',
 					'available',
-					'image',
+					'shopping-bag',
 					'primary',
 					true,
 					false,
@@ -150,6 +183,8 @@ export default Vue.extend({
 		},
 	},
 	mounted() {
+		this.debounceScroll = debounce(this.handleScroll, 200, { maxWait: 300 })
+
 		// Scroll below upper swipe padding at the beginning
 		this.$nextTick(() =>
 			window.scrollTo({
@@ -177,6 +212,12 @@ export default Vue.extend({
 		})()
 	},
 	methods: {
+		handleScroll() {
+			this.showLineFilters =
+				window.scrollY >
+				this.$store.state.application.swipeVerticalPadding + 90
+			console.log(window.scrollY)
+		},
 		toggleFullFilters() {
 			this.showFullFilters = !this.showFullFilters
 		},
@@ -221,9 +262,10 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .gallery {
 	padding-top: 10px;
+	min-height: 150vh;
 }
 .gallery-title {
 	margin-right: 10px;
@@ -233,6 +275,16 @@ export default Vue.extend({
 	position: relative;
 	margin-right: calc(var(--page-margin) * -1);
 }
+
+.hide-me {
+	transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+	&.hidden {
+		transition: opacity 0.2s, transform 0.2s;
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+}
+
 .side-filters-group {
 	position: relative;
 	display: flex;
@@ -259,7 +311,7 @@ export default Vue.extend({
 			background: linear-gradient(90deg, transparent, $white, $white);
 		}
 	}
-	.raise {
+	.raise-me {
 		position: relative;
 		z-index: 20;
 	}
@@ -267,7 +319,7 @@ export default Vue.extend({
 
 .full-filters-group {
 	position: fixed;
-	z-index: 20;
+	z-index: 40;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -292,21 +344,75 @@ export default Vue.extend({
 			margin: auto;
 		}
 
+		.icon {
+			$icon-size: 24px;
+			height: $icon-size;
+			width: $icon-size;
+		}
+
 		position: absolute;
 		top: calc(100% - #{$size} / 2);
 		right: var(--page-margin);
 	}
 }
 
-.show-full-filters {
-	&-enter-active,
+.line-filters-group {
+	position: fixed;
+	z-index: 30;
+	top: 0;
+	left: 0;
+	// right: 0;
+	min-width: 100vw;
+	display: flex;
+	$group-bg: rgba($gray9, 0.5);
+	background: $gray9;
+	backdrop-filter: blur(20px);
+
+	padding: 10px;
+	> * {
+		margin: 6px;
+	}
+
+	.show-more {
+		position: absolute;
+		z-index: 40;
+		// $pill-height: 34px;
+		// $v-margin: 6px;
+		top: 10px;
+		left: calc(100vw - var(--page-margin));
+		transform: translateX(-100%);
+		// right: var(--page-margin);
+
+		&:before {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			top: -2px;
+			bottom: -2px;
+			right: calc(var(--page-margin) * -1 - 2px);
+			width: 30vw;
+			background: linear-gradient(
+				90deg,
+				transparent,
+				$gray9,
+				$gray9,
+				$gray9
+			);
+		}
+	}
+}
+
+.line-filters {
 	&-leave-active {
-		transition: transform 0.3s;
+		transition: opacity 0.2s 0.1s, transform 0.3s;
+	}
+	&-enter-active {
+		transition: opacity 0.2s, transform 0.3s;
 	}
 	&-enter,
 	&-leave-to {
-		// opacity: 0;
-		transform: translateY(-120%);
+		opacity: 0;
+		transform: translateY(-100%);
 	}
 }
 </style>

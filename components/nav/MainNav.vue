@@ -7,13 +7,17 @@
 		<NavLink key="lamps" name="lamps" to="lamps" icon="lightbulb"
 			>Lampy</NavLink
 		>
-		<NavLink key="belt-bags" name="belt-bags" to="belt-bags" icon="image"
+		<NavLink
+			key="belt-bags"
+			name="belt-bags"
+			to="belt-bags"
+			icon="shopping-bag"
 			>Saszetki</NavLink
 		>
 		<NavLink key="paintings" name="paintings" to="paintings" icon="image"
 			>Obrazy</NavLink
 		>
-		<NavLink key="gallery" name="gallery" to="gallery" icon="list"
+		<NavLink key="gallery" name="gallery" to="gallery" icon="grip-vertical"
 			>Galeria</NavLink
 		>
 	</nav>
