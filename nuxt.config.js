@@ -49,8 +49,8 @@ export default {
 	axios: {},
 
 	strapi: {
-		url: 'http://localhost:1337',
-		entities: ['products'],
+		url: 'http://192.168.43.129:1337',
+		entities: ['products', 'product-categories'],
 	},
 
 	styleResources: {

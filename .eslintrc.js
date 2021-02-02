@@ -54,7 +54,7 @@ module.exports = {
 		'no-unused-expressions': 'off',
 		'function-paren-newline': 'off',
 		'no-await-in-loop': 'warn',
-		'no-mixed-spaces-and-tabs': 'warn',
+		'no-mixed-spaces-and-tabs': 'off',
 		'class-methods-use-this': 'off',
 		'object-curly-newline': 'off',
 		indent: ['off', 'tab'],

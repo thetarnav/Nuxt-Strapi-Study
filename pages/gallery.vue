@@ -5,6 +5,7 @@
 			:class="{ hidden: showFullFilters || showLineFilters }"
 		>
 			<h2 class="gallery-title">Galeria</h2>
+			<!-- Side Group Filters -->
 			<div class="side-filters-group">
 				<FilterPill
 					v-for="(filter, index) in onSideFilters"
@@ -28,6 +29,7 @@
 				</div>
 			</div>
 		</header>
+		<!-- Full View Filters -->
 		<transition name="blur-top" duration="300">
 			<div v-if="showFullFilters" class="full-filters-group">
 				<FilterPill
@@ -45,6 +47,7 @@
 				</button>
 			</div>
 		</transition>
+		<!-- Single line Filters -->
 		<transition name="line-filters">
 			<div
 				v-if="showLineFilters"
@@ -72,11 +75,15 @@
 			</div>
 		</transition>
 		<GlobalEvents @scroll="debounceScroll" />
+
+		<!-- Gallery Grid -->
+		<Grid :selected="selectedFilters" />
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { Context } from '@nuxt/types'
 import debounce from 'lodash.debounce'
 import { PillSelectPayload } from '~/components/gallery/FilterPill.vue'
 import { ProductTag, pages } from '~/plugins/types'
@@ -119,7 +126,9 @@ export default Vue.extend({
 			debounceScroll: () => {},
 		}
 	},
-	fetch() {
+	async fetch() {
+		const filters: Filter[] = []
+
 		// Add filters from pages
 		pages.forEach(page => {
 			const { name, icon, title } = page
@@ -127,7 +136,7 @@ export default Vue.extend({
 			// Ignore Home and Gallery
 			if (['gallery', 'index'].includes(name)) return
 
-			this.filters.push(new Filter(title, name, icon))
+			filters.push(new Filter(title, name, icon))
 		})
 
 		interface Category {
@@ -136,21 +145,45 @@ export default Vue.extend({
 		}
 
 		// Later from API:
-		const otherCategories: Category[] = [
-			{ title: 'Przykład', name: 'example' },
-			{ title: 'Kolejny', name: 'another' },
+		let otherCategories: Category[] = [
+			// { title: 'Przykład', name: 'example' },
+			// { title: 'Kolejny', name: 'another' },
 		]
+
+		interface StrapiCategory {
+			CategoryID: string
+			CategoryName: string
+		}
+
+		// Fetching Product Categories from Strapi API
+		try {
+			const fetchedCategories = await (this.$nuxt
+				.context as Context).$strapi.find<StrapiCategory[]>(
+				'product-categories',
+			)
+			otherCategories = fetchedCategories
+				.filter(
+					({ CategoryID }) =>
+						!['lamps', 'paintings', 'belt-bags'].includes(CategoryID),
+				)
+				.map(({ CategoryName, CategoryID }) => ({
+					title: CategoryName,
+					name: CategoryID,
+				}))
+		} catch (error) {
+			console.error(error)
+		}
 
 		// Add filters from Database
 		otherCategories.forEach(category =>
-			this.filters.push(new Filter(category.title, category.name)),
+			filters.push(new Filter(category.title, category.name)),
 		)
 
 		// Add 'other' filter
-		this.filters.push(new Filter('Inne', 'others'))
+		filters.push(new Filter('Inne', 'other'))
 
 		// Add new and available
-		this.filters.push(
+		filters.push(
 			...[
 				new Filter(
 					'Dostępne',
@@ -165,9 +198,13 @@ export default Vue.extend({
 		)
 
 		// Create Dictionary containing indexes of specific filters in 'this.filters' array, to avoid iterating over every time when you want to find some by name
-		this.filters.forEach(
-			(filter, index) => (this.filtersIndexes[filter.name] = index),
-		)
+		const filtersIndexes = {}
+		filters.forEach((filter, index) => (filtersIndexes[filter.name] = index))
+
+		this.filtersIndexes = filtersIndexes
+		this.filters = filters
+
+		this.selectFilterFromQuery()
 	},
 	head() {
 		return {
@@ -175,6 +212,12 @@ export default Vue.extend({
 		}
 	},
 	computed: {
+		selectedFilters(): Set<string> {
+			const selectedArray = this.filters
+				.filter(filter => filter.isSelected)
+				.map(filter => filter.name)
+			return new Set(selectedArray)
+		},
 		onSideFilters(): Filter[] {
 			return this.filters.filter(
 				(filter, index) =>
@@ -191,9 +234,9 @@ export default Vue.extend({
 				top: this.$store.state.application.swipeVerticalPadding,
 			}),
 		)
-
-		// Select filters from URL
-		;(() => {
+	},
+	methods: {
+		selectFilterFromQuery() {
 			const { filtersIndexes, filters } = this,
 				filtersQuery = this.$route.query.filters as
 					| string
@@ -209,14 +252,11 @@ export default Vue.extend({
 					if (filters[filtersIndexes[filterName]])
 						filters[filtersIndexes[filterName]].isSelected = true
 				})
-		})()
-	},
-	methods: {
+		},
 		handleScroll() {
 			this.showLineFilters =
 				window.scrollY >
 				this.$store.state.application.swipeVerticalPadding + 90
-			console.log(window.scrollY)
 		},
 		toggleFullFilters() {
 			this.showFullFilters = !this.showFullFilters
@@ -366,7 +406,7 @@ export default Vue.extend({
 	display: flex;
 	$group-bg: rgba($gray9, 0.5);
 	background: $gray9;
-	backdrop-filter: blur(20px);
+	// backdrop-filter: blur(20px);
 
 	padding: 10px;
 	> * {
