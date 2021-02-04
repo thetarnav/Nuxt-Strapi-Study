@@ -1,11 +1,6 @@
 import { Context } from '@nuxt/types'
 import Vue from 'vue'
-import { ApplicationState } from '~/store/application'
-
-// export default function ({ store }: Context) {
-// 	// Setting Last Visit Timestamp in the Application Store
-// 	store.commit('application/setLastVisit')
-// }
+// import { ApplicationState } from '~/store'
 
 declare module 'vue/types/vue' {
 	interface Vue {
@@ -13,7 +8,24 @@ declare module 'vue/types/vue' {
 	}
 }
 
-Vue.prototype.$lastVisit =
-	parseInt(localStorage.getItem('lastVisit') || '') || Date.now()
+export default function ({ store, $strapi }: Context) {
+	const lastVisit =
+		parseInt(localStorage.getItem('lastVisit') || '') || Date.now()
+	Vue.prototype.$lastVisit = lastVisit
 
-localStorage.setItem('lastVisit', Date.now().toString())
+	checkFilterPopulation()
+
+	async function checkFilterPopulation() {
+		const countNew = await $strapi.count('products', {
+				Timestamp_gte: lastVisit,
+			}),
+			countAvailable = await $strapi.count('products', {
+				Available: true,
+			})
+
+		store.commit('setSpecialCount', {
+			countNew,
+			countAvailable,
+		})
+	}
+}

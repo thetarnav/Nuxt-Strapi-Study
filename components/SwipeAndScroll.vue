@@ -66,10 +66,10 @@ export default Vue.extend({
 		},
 		prevRouteName() {
 			const prevRoute = this.$route.query.prevRoute || 'index'
-			return this.$store.getters['application/pageName'](prevRoute) || 'Home'
+			return this.$store.getters.pageName(prevRoute) || 'Home'
 		},
 		verticalPadding() {
-			return this.$store.state.application.swipeVerticalPadding
+			return this.$store.state.swipeVerticalPadding
 		},
 	},
 	mounted() {

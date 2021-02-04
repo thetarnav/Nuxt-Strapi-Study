@@ -33,7 +33,7 @@
 		<transition name="blur-top" duration="300">
 			<div v-if="showFullFilters" class="full-filters-group">
 				<FilterPill
-					v-for="filter in filters"
+					v-for="filter in availableFilters"
 					:key="filter.name"
 					:tag="filter.name"
 					:icon="filter.icon"
@@ -55,7 +55,7 @@
 				:class="{ hidden: showFullFilters }"
 			>
 				<FilterPill
-					v-for="filter in filters"
+					v-for="filter in availableFilters"
 					:key="filter.name"
 					:tag="filter.name"
 					:selected="filter.isSelected"
@@ -87,6 +87,7 @@ import { Context } from '@nuxt/types'
 import debounce from 'lodash.debounce'
 import { PillSelectPayload } from '~/components/gallery/FilterPill.vue'
 import { ProductTag, pages } from '~/types/types'
+import { RootState } from '~/store'
 
 class Filter {
 	title
@@ -122,8 +123,9 @@ export default Vue.extend({
 	scrollToTop: false,
 	data() {
 		return {
-			// selectedFilters: new Set() as Set<ProductTag>,
+			// Raw input from API:
 			filters: [] as Filter[],
+			//
 			filtersIndexes: {} as FilterIndexes,
 			showFullFilters: false,
 			showLineFilters: false,
@@ -201,9 +203,9 @@ export default Vue.extend({
 			],
 		)
 
-		const populatedFilters = await this.getOnlyPolupatedFilters(filters)
+		// const populatedFilters = await this.getOnlyPolupatedFilters(filters)
 
-		this.filters = populatedFilters
+		this.filters = filters
 
 		this.createFilterIndexes()
 		this.selectFilterFromQuery()
@@ -214,14 +216,26 @@ export default Vue.extend({
 		}
 	},
 	computed: {
+		availableFilters(): Filter[] {
+			const { newProductsCount, areAvailable } = this.$store
+					.state as RootState,
+				namesToDelete: string[] = []
+
+			if (newProductsCount === 0) namesToDelete.push('new')
+			if (!areAvailable) namesToDelete.push('available')
+
+			return this.filters.filter(
+				filter => !namesToDelete.includes(filter.name),
+			)
+		},
 		selectedFilters(): Set<string> {
-			const selectedArray = this.filters
+			const selectedArray = this.availableFilters
 				.filter(filter => filter.isSelected)
 				.map(filter => filter.name)
 			return new Set(selectedArray)
 		},
 		onSideFilters(): Filter[] {
-			return this.filters.filter(
+			return this.availableFilters.filter(
 				(filter, index) =>
 					index < 4 || ['available', 'new'].includes(filter.name),
 			)
@@ -233,35 +247,40 @@ export default Vue.extend({
 		// Scroll below upper swipe padding at the beginning
 		this.$nextTick(() => {
 			window.scrollTo({
-				top: this.$store.state.application.swipeVerticalPadding,
+				top: this.$store.state.swipeVerticalPadding,
 			})
 		})
+
+		// Sets Last Visit Timestamp when the gallery is visited
+		localStorage.setItem('lastVisit', Date.now().toString())
 	},
 	methods: {
 		/**
 		 * Returns a Promise with filters array, without filters that don't have any products in them.
 		 */
-		async getOnlyPolupatedFilters(filters: Filter[]): Promise<Filter[]> {
-			const namesToDelete: string[] = []
+		// async getOnlyPolupatedFilters(filters: Filter[]): Promise<Filter[]> {
+		// 	const namesToDelete: string[] = []
 
-			try {
-				const lastVisit = this.$lastVisit || Date.now(),
-					countNew = await this.$strapi.count('products', {
-						Timestamp_gte: lastVisit,
-					}),
-					countAvailable = await this.$strapi.count('products', {
-						Available: true,
-					})
+		// 	try {
+		// 		const lastVisit = this.$lastVisit || Date.now(),
+		// 			countNew = await this.$strapi.count('products', {
+		// 				Timestamp_gte: lastVisit,
+		// 			}),
+		// 			countAvailable = await this.$strapi.count('products', {
+		// 				Available: true,
+		// 			})
 
-				countNew === 0 && namesToDelete.push('new')
-				countAvailable === 0 && namesToDelete.push('available')
-			} catch (error) {
-				console.error(error)
-				namesToDelete.push('new', 'available')
-			}
+		// 		console.log('$lastVisit', new Date(lastVisit))
 
-			return filters.filter(filter => !namesToDelete.includes(filter.name))
-		},
+		// 		countNew === 0 && namesToDelete.push('new')
+		// 		countAvailable === 0 && namesToDelete.push('available')
+		// 	} catch (error) {
+		// 		console.error(error)
+		// 		namesToDelete.push('new', 'available')
+		// 	}
+
+		// 	return filters.filter(filter => !namesToDelete.includes(filter.name))
+		// },
 		/**
 		 * Create Dictionary containing indexes of specific filters in 'this.filters' array, to avoid iterating over every time when you want to find some by name
 		 */
@@ -291,8 +310,7 @@ export default Vue.extend({
 		},
 		handleScroll() {
 			this.showLineFilters =
-				window.scrollY >
-				this.$store.state.application.swipeVerticalPadding + 90
+				window.scrollY > this.$store.state.swipeVerticalPadding + 90
 		},
 		toggleFullFilters() {
 			this.showFullFilters = !this.showFullFilters

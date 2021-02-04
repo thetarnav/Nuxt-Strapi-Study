@@ -10,19 +10,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { SwipeDirection } from '~/types/types'
-import { State } from '~/store/application'
+import { RootState } from '~/store'
 
 export default Vue.extend({
 	name: 'TopPageLayout',
 	computed: {
 		topPagesOrder() {
-			return this.$store.state.application
-				.topPagesOrder as State['topPagesOrder']
+			return this.$store.state.topPagesOrder as RootState['topPagesOrder']
 		},
 		pageIndex() {
-			const pageIndex = this.$store.getters['application/pageIndex'](
-				this.$route.name,
-			)
+			const pageIndex = this.$store.getters.pageIndex(this.$route.name)
 			return typeof pageIndex === 'number' ? pageIndex : 0
 		},
 	},

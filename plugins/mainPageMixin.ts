@@ -36,10 +36,8 @@ export default Vue.extend({
 	layout: 'topPageLayout',
 	scrollToTop: false,
 	transition(to, from) {
-		const toIndex = window.$nuxt.$store.getters['application/pageIndex'](
-				to.name,
-			),
-			fromIndex = window.$nuxt.$store.getters['application/pageIndex'](
+		const toIndex = window.$nuxt.$store.getters.pageIndex(to.name),
+			fromIndex = window.$nuxt.$store.getters.pageIndex(
 				from?.name || 'index',
 			)
 
