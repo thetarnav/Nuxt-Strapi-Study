@@ -25,6 +25,30 @@ export type RoutePath =
 
 // export type ProductTag = typeof productTags[number]
 
+export class Filter {
+	title
+	name
+	icon
+	color
+	isSpecial
+	isSelected
+	constructor(
+		title: String,
+		name: ProductTag,
+		icon: string | null = null,
+		color: 'primary' | 'secondary' | 'black' = 'black',
+		isSpecial = false,
+		isSelected = false,
+	) {
+		this.title = title
+		this.name = name
+		this.icon = icon
+		this.color = color
+		this.isSpecial = isSpecial
+		this.isSelected = isSelected
+	}
+}
+
 export class Page {
 	name
 	path

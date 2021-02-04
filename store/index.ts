@@ -1,4 +1,5 @@
-import { GetterTree, ActionTree, MutationTree } from 'vuex'
+import { GetterTree, ActionTree, MutationTree, Store } from 'vuex'
+import { Filter } from '~/types/types'
 
 export const state = () => ({
 	topPagesOrder: ['index', 'lamps', 'belt-bags', 'paintings'],
@@ -6,6 +7,7 @@ export const state = () => ({
 	swipeVerticalPadding: 100,
 	newProductsCount: 0,
 	areAvailable: false,
+	filters: [] as Filter[],
 })
 export type RootState = ReturnType<typeof state>
 
@@ -30,6 +32,7 @@ export const mutations: MutationTree<RootState> = {
 		if (typeof countAvailable === 'number' && countAvailable > 0)
 			state.areAvailable = true
 	},
+	setFilters: (store, filters: Filter[]) => (store.filters = filters),
 }
 
 /**

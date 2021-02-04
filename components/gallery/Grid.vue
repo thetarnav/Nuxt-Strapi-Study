@@ -125,8 +125,6 @@ export default Vue.extend({
 			query._sort = 'Timestamp:desc'
 
 			this.products = await this.$strapi.find('products', stringify(query))
-
-			console.log('Last Product:', new Date(this.products[0].Timestamp))
 		},
 	},
 })

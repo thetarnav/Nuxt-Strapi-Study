@@ -86,32 +86,8 @@ import Vue from 'vue'
 import { Context } from '@nuxt/types'
 import debounce from 'lodash.debounce'
 import { PillSelectPayload } from '~/components/gallery/FilterPill.vue'
-import { ProductTag, pages } from '~/types/types'
+import { ProductTag, pages, Filter } from '~/types/types'
 import { RootState } from '~/store'
-
-class Filter {
-	title
-	name
-	icon
-	color
-	isSpecial
-	isSelected
-	constructor(
-		title: String,
-		name: ProductTag,
-		icon: string | null = null,
-		color: 'primary' | 'secondary' | 'black' = 'black',
-		isSpecial = false,
-		isSelected = false,
-	) {
-		this.title = title
-		this.name = name
-		this.icon = icon
-		this.color = color
-		this.isSpecial = isSpecial
-		this.isSelected = isSelected
-	}
-}
 
 interface FilterIndexes {
 	[name: string]: number
@@ -133,79 +109,14 @@ export default Vue.extend({
 		}
 	},
 	async fetch() {
-		const filters: Filter[] = []
+		let { filters } = this.$store.state as RootState
 
-		// Add filters from pages
-		pages.forEach(page => {
-			const { name, icon, title } = page
-
-			// Ignore Home and Gallery
-			if (['gallery', 'index'].includes(name)) return
-
-			filters.push(new Filter(title, name, icon))
-		})
-
-		interface Category {
-			title: string
-			name: string
+		if (filters.length === 0) {
+			filters = await this.generateFilters()
+			this.$store.commit('setFilters', filters)
 		}
 
-		// Later from API:
-		let otherCategories: Category[] = [
-			// { title: 'Przykład', name: 'example' },
-			// { title: 'Kolejny', name: 'another' },
-		]
-
-		interface StrapiCategory {
-			CategoryID: string
-			CategoryName: string
-		}
-
-		// Fetching Product Categories from Strapi API
-		try {
-			const fetchedCategories = await (this.$nuxt
-				.context as Context).$strapi.find<StrapiCategory[]>(
-				'product-categories',
-			)
-			otherCategories = fetchedCategories
-				.filter(
-					({ CategoryID }) =>
-						!['lamps', 'paintings', 'belt-bags'].includes(CategoryID),
-				)
-				.map(({ CategoryName, CategoryID }) => ({
-					title: CategoryName,
-					name: CategoryID,
-				}))
-		} catch (error) {
-			console.error(error)
-		}
-
-		// Add filters from Database
-		otherCategories.forEach(category =>
-			filters.push(new Filter(category.title, category.name)),
-		)
-
-		// Add 'other' filter
-		filters.push(new Filter('Inne', 'other'))
-
-		// Add new and available
-		filters.push(
-			...[
-				new Filter(
-					'Dostępne',
-					'available',
-					'shopping-bag',
-					'primary',
-					true,
-					false,
-				),
-				new Filter('Nowe', 'new', null, 'secondary', true, false),
-			],
-		)
-
-		// const populatedFilters = await this.getOnlyPolupatedFilters(filters)
-
-		this.filters = filters
+		this.filters = filters.map(x => ({ ...x, isSelected: false }))
 
 		this.createFilterIndexes()
 		this.selectFilterFromQuery()
@@ -255,6 +166,73 @@ export default Vue.extend({
 		localStorage.setItem('lastVisit', Date.now().toString())
 	},
 	methods: {
+		async generateFilters(): Promise<Filter[]> {
+			const filters: Filter[] = []
+
+			// Add filters from pages
+			pages.forEach(page => {
+				const { name, icon, title } = page
+
+				// Ignore Home and Gallery
+				if (['gallery', 'index'].includes(name)) return
+
+				filters.push(new Filter(title, name, icon))
+			})
+
+			interface Category {
+				title: string
+				name: string
+			}
+
+			interface StrapiCategory {
+				CategoryID: string
+				CategoryName: string
+			}
+
+			let otherCategories: Category[] = []
+
+			// Fetching Product Categories from Strapi API
+			try {
+				const fetchedCategories = await (this.$nuxt
+					.context as Context).$strapi.find<StrapiCategory[]>(
+					'product-categories',
+				)
+				otherCategories = fetchedCategories
+					.filter(
+						({ CategoryID }) =>
+							!['lamps', 'paintings', 'belt-bags'].includes(CategoryID),
+					)
+					.map(({ CategoryName, CategoryID }) => ({
+						title: CategoryName,
+						name: CategoryID,
+					}))
+			} catch (error) {
+				console.error(error)
+			}
+
+			// Add filters from Database
+			otherCategories.forEach(category =>
+				filters.push(new Filter(category.title, category.name)),
+			)
+
+			// Add 'other', new and available filters
+			filters.push(
+				...[
+					new Filter('Inne', 'other'),
+					new Filter(
+						'Dostępne',
+						'available',
+						'shopping-bag',
+						'primary',
+						true,
+						false,
+					),
+					new Filter('Nowe', 'new', null, 'secondary', true, false),
+				],
+			)
+
+			return filters
+		},
 		/**
 		 * Returns a Promise with filters array, without filters that don't have any products in them.
 		 */
