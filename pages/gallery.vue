@@ -86,7 +86,7 @@ import Vue from 'vue'
 import { Context } from '@nuxt/types'
 import debounce from 'lodash.debounce'
 import { PillSelectPayload } from '~/components/gallery/FilterPill.vue'
-import { ProductTag, pages } from '~/plugins/types'
+import { ProductTag, pages } from '~/types/types'
 
 class Filter {
 	title
@@ -112,6 +112,10 @@ class Filter {
 	}
 }
 
+interface FilterIndexes {
+	[name: string]: number
+}
+
 export default Vue.extend({
 	name: 'Gallery',
 	layout: 'galleryLayout',
@@ -120,7 +124,7 @@ export default Vue.extend({
 		return {
 			// selectedFilters: new Set() as Set<ProductTag>,
 			filters: [] as Filter[],
-			filtersIndexes: {},
+			filtersIndexes: {} as FilterIndexes,
 			showFullFilters: false,
 			showLineFilters: false,
 			debounceScroll: () => {},
@@ -197,13 +201,11 @@ export default Vue.extend({
 			],
 		)
 
-		// Create Dictionary containing indexes of specific filters in 'this.filters' array, to avoid iterating over every time when you want to find some by name
-		const filtersIndexes = {}
-		filters.forEach((filter, index) => (filtersIndexes[filter.name] = index))
+		const populatedFilters = await this.getOnlyPolupatedFilters(filters)
 
-		this.filtersIndexes = filtersIndexes
-		this.filters = filters
+		this.filters = populatedFilters
 
+		this.createFilterIndexes()
 		this.selectFilterFromQuery()
 	},
 	head() {
@@ -229,13 +231,47 @@ export default Vue.extend({
 		this.debounceScroll = debounce(this.handleScroll, 200, { maxWait: 300 })
 
 		// Scroll below upper swipe padding at the beginning
-		this.$nextTick(() =>
+		this.$nextTick(() => {
 			window.scrollTo({
 				top: this.$store.state.application.swipeVerticalPadding,
-			}),
-		)
+			})
+		})
 	},
 	methods: {
+		/**
+		 * Returns a Promise with filters array, without filters that don't have any products in them.
+		 */
+		async getOnlyPolupatedFilters(filters: Filter[]): Promise<Filter[]> {
+			const namesToDelete: string[] = []
+
+			try {
+				const lastVisit = this.$lastVisit || Date.now(),
+					countNew = await this.$strapi.count('products', {
+						Timestamp_gte: lastVisit,
+					}),
+					countAvailable = await this.$strapi.count('products', {
+						Available: true,
+					})
+
+				countNew === 0 && namesToDelete.push('new')
+				countAvailable === 0 && namesToDelete.push('available')
+			} catch (error) {
+				console.error(error)
+				namesToDelete.push('new', 'available')
+			}
+
+			return filters.filter(filter => !namesToDelete.includes(filter.name))
+		},
+		/**
+		 * Create Dictionary containing indexes of specific filters in 'this.filters' array, to avoid iterating over every time when you want to find some by name
+		 */
+		createFilterIndexes() {
+			const filtersIndexes = {}
+			this.filters.forEach(
+				(filter, index) => (filtersIndexes[filter.name] = index),
+			)
+			this.filtersIndexes = filtersIndexes
+		},
 		selectFilterFromQuery() {
 			const { filtersIndexes, filters } = this,
 				filtersQuery = this.$route.query.filters as

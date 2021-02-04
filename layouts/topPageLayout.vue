@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { SwipeDirection } from '~/plugins/types'
+import { SwipeDirection } from '~/types/types'
 import { State } from '~/store/application'
 
 export default Vue.extend({

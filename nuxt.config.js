@@ -24,7 +24,7 @@ export default {
 	plugins: [
 		'~/plugins/fontawesome.js',
 		'~/plugins/globalEvents.js',
-		'~/plugins/types.ts',
+		'~/plugins/localStorage.client.ts',
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components

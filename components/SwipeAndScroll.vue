@@ -29,7 +29,7 @@
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
 import { searchForSuitableParent } from '~/plugins/helpers'
-import { SwipeDirection } from '~/plugins/types'
+import { SwipeDirection } from '~/types/types'
 
 let lastTouchMove = {
 	x: 0,

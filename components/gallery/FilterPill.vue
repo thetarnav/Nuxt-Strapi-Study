@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { ProductTag } from '~/plugins/types'
+import { ProductTag } from '~/types/types'
 
 export interface PillSelectPayload {
 	tag: ProductTag

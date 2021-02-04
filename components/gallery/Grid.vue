@@ -51,15 +51,6 @@ export default Vue.extend({
 			debouncedDisplay: () => {},
 		}
 	},
-	async fetch() {
-		/**
-		 * 1. Takes filters from URL query
-		 * 2. Calls displaySearch
-		 */
-		const filters = this.getSelectedFromURL()
-
-		await this.displaySearch(filters)
-	},
 	watch: {
 		selected() {
 			this.hideResults = true
@@ -67,10 +58,9 @@ export default Vue.extend({
 		},
 	},
 	mounted() {
-		setTimeout(() => {
-			this.hideResults = false
-			this.debouncedDisplay = debounce(this.displaySearch, 800)
-		}, 500)
+		this.hideResults = false
+		this.debouncedDisplay = debounce(this.displaySearch, 800)
+		this.debouncedDisplay()
 	},
 	methods: {
 		getImageUrl(product: Product): string {
@@ -90,27 +80,26 @@ export default Vue.extend({
 			// For string query
 			else if (typeof queryFilters === 'string') return [queryFilters]
 		},
-		async displaySearch(fetchCategories?: string[]) {
+		async displaySearch() {
 			this.hideResults = false
-			// if (this.displayedInitially)
-			const categories =
-				fetchCategories ?? filterStringArray([...this.selected]) ?? []
+
+			const categories = filterStringArray([...this.selected]) ?? []
 			interface Query {
-				[key: string]: string | boolean | number
+				[key: string]: string | boolean | number | Query | any
 			}
-			let query: undefined | string | Query
+			let query: Query = {}
 			// If selected AVAILABLE
 			if (categories.includes('available')) query = { Available: true }
 			// If selected NEW
 			else if (categories.includes('new'))
-				query = { Timestamp_gte: 1611103552796 }
+				query = { Timestamp_gte: this.$lastVisit }
 			// If selected OTHER
 			else if (categories.includes('other')) {
 				// Only OTHER
 				if (categories.length === 1) query = { product_category_null: true }
 				// OTHER with some other filters
 				else
-					query = stringify({
+					query = {
 						_where: {
 							_or: [
 								{
@@ -123,17 +112,19 @@ export default Vue.extend({
 								},
 							],
 						},
-					})
-			} else if (categories.length === 0) query = undefined
+					}
+			} else if (categories.length === 0) query = {}
 			// If selected any number of product categories
 			else
-				query = stringify({
+				query = {
 					_where: {
 						'product_category.CategoryID': categories as any,
 					},
-				})
+				}
 
-			this.products = await this.$strapi.find('products', query)
+			query._sort = 'Timestamp:desc'
+
+			this.products = await this.$strapi.find('products', stringify(query))
 		},
 	},
 })

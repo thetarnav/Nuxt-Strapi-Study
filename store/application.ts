@@ -5,12 +5,12 @@ export const state = () => ({
 	topPagesNames: ['Home', 'Lampy', 'Saszetki', 'Obrazy'],
 	swipeVerticalPadding: 100,
 })
-export type State = ReturnType<typeof state>
+export type ApplicationState = ReturnType<typeof state>
 
 /**
  * GETTERS:
  */
-export const getters: GetterTree<State, State> = {
+export const getters: GetterTree<ApplicationState, ApplicationState> = {
 	pageIndex: ({ topPagesOrder }) => (page: string) =>
 		topPagesOrder.findIndex(x => page === x),
 	pageName: ({ topPagesNames }, { pageIndex }) => (page: string | number) =>
@@ -18,3 +18,8 @@ export const getters: GetterTree<State, State> = {
 			? topPagesNames[page]
 			: topPagesNames[pageIndex(page)],
 }
+
+/**
+ * MUTATIONS:
+ */
+export const mutations: MutationTree<ApplicationState> = {}
