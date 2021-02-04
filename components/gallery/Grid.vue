@@ -1,8 +1,11 @@
 <template>
 	<div class="gallery-grid" :class="{ 'hide-results': hideResults }">
-		<p v-for="product in products" :key="product.id">
-			{{ product.Name }}
-		</p>
+		<a v-for="product in products" :key="product.id" class="product">
+			<img :src="getImageUrl(product)" />
+			<p>
+				{{ product.Name }}
+			</p>
+		</a>
 	</div>
 </template>
 
@@ -70,6 +73,12 @@ export default Vue.extend({
 		}, 500)
 	},
 	methods: {
+		getImageUrl(product: Product): string {
+			const host = process.env.strapiUrl,
+				url = product.Images[0]?.formats.small.url ?? product.Images[0]?.url
+			if (!url) return ''
+			return `http://${host}${url}`
+		},
 		getSelectedFromURL() {
 			const { filters: queryFilters } = this.$route.query
 
@@ -138,8 +147,11 @@ function filterStringArray(array: unknown[]): string[] {
 <style lang="scss" scoped>
 .gallery-grid {
 	// background: $gray9;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 20px;
 }
 .hide-results {
-	background: red;
+	background: $gray9;
 }
 </style>

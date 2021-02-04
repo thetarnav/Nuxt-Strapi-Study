@@ -49,7 +49,7 @@ export default {
 	axios: {},
 
 	strapi: {
-		url: 'http://192.168.43.129:1337',
+		url: `http://${process.env.STRAPI_URL}:1337`,
 		entities: ['products', 'product-categories'],
 	},
 
@@ -61,7 +61,14 @@ export default {
 	build: {},
 
 	server: {
-		host: '192.168.43.129',
-		port: 1234, // default: 3000
+		host: process.env.BASE_URL,
+		port: process.env.BASE_PORT, // default: 3000
+	},
+
+	env: {
+		baseUrl:
+			`${process.env.BASE_URL}:${process.env.BASE_PORT}` ||
+			'http://localhost:3000',
+		strapiUrl: `${process.env.STRAPI_URL}:1337`,
 	},
 }
