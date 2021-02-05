@@ -85,6 +85,7 @@
 import Vue from 'vue'
 import { Context } from '@nuxt/types'
 import debounce from 'lodash.debounce'
+import cloneDeep from 'lodash.clonedeep'
 import { PillSelectPayload } from '~/components/gallery/FilterPill.vue'
 import { ProductTag, pages, Filter } from '~/types/types'
 import { RootState } from '~/store'
@@ -109,14 +110,14 @@ export default Vue.extend({
 		}
 	},
 	async fetch() {
-		let { filters } = this.$store.state as RootState
+		let filters: Filter[]
 
-		if (filters.length === 0) {
+		if (this.$store.state.filters.length === 0) {
 			filters = await this.generateFilters()
 			this.$store.commit('setFilters', filters)
-		}
+		} else filters = cloneDeep((this.$store.state as RootState).filters)
 
-		this.filters = filters.map(x => ({ ...x, isSelected: false }))
+		this.filters = filters
 
 		this.createFilterIndexes()
 		this.selectFilterFromQuery()
@@ -233,32 +234,6 @@ export default Vue.extend({
 
 			return filters
 		},
-		/**
-		 * Returns a Promise with filters array, without filters that don't have any products in them.
-		 */
-		// async getOnlyPolupatedFilters(filters: Filter[]): Promise<Filter[]> {
-		// 	const namesToDelete: string[] = []
-
-		// 	try {
-		// 		const lastVisit = this.$lastVisit || Date.now(),
-		// 			countNew = await this.$strapi.count('products', {
-		// 				Timestamp_gte: lastVisit,
-		// 			}),
-		// 			countAvailable = await this.$strapi.count('products', {
-		// 				Available: true,
-		// 			})
-
-		// 		console.log('$lastVisit', new Date(lastVisit))
-
-		// 		countNew === 0 && namesToDelete.push('new')
-		// 		countAvailable === 0 && namesToDelete.push('available')
-		// 	} catch (error) {
-		// 		console.error(error)
-		// 		namesToDelete.push('new', 'available')
-		// 	}
-
-		// 	return filters.filter(filter => !namesToDelete.includes(filter.name))
-		// },
 		/**
 		 * Create Dictionary containing indexes of specific filters in 'this.filters' array, to avoid iterating over every time when you want to find some by name
 		 */

@@ -1,4 +1,5 @@
 import { GetterTree, ActionTree, MutationTree, Store } from 'vuex'
+import cloneDeep from 'lodash.clonedeep'
 import { Filter } from '~/types/types'
 
 export const state = () => ({
@@ -32,7 +33,8 @@ export const mutations: MutationTree<RootState> = {
 		if (typeof countAvailable === 'number' && countAvailable > 0)
 			state.areAvailable = true
 	},
-	setFilters: (store, filters: Filter[]) => (store.filters = filters),
+	setFilters: (store, filters: Filter[]) =>
+		(store.filters = cloneDeep(filters)),
 }
 
 /**
