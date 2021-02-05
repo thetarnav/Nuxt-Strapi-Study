@@ -3,7 +3,7 @@
 		<div class="middle-button">
 			<button>kontakt</button>
 		</div>
-		<NavLink key="home" name="home" to="/" icon="home">Home</NavLink>
+		<NavLink key="home" name="home" to="index" icon="home">Home</NavLink>
 		<NavLink key="lamps" name="lamps" to="lamps" icon="lightbulb"
 			>Lampy</NavLink
 		>

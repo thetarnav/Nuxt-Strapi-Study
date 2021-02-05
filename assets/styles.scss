@@ -1,5 +1,9 @@
 @import 'variables/mixins', 'variables/variables';
 
+.disable-scroll {
+	overflow: hidden !important;
+}
+
 :root {
 	--nav-height: 70px;
 }

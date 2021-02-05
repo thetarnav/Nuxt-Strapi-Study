@@ -1,5 +1,14 @@
 @import 'variables';
 
+@mixin full-fixed($z-index: unset) {
+	position: fixed;
+	z-index: $z-index;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
 @mixin full-absolute {
 	position: absolute;
 	top: 0;
@@ -25,4 +34,3 @@
 	left: calc(50% - #{$width} / 2);
 	top: calc(50% - #{$height} / 2);
 }
-

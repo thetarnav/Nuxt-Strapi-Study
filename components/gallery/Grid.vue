@@ -1,6 +1,11 @@
 <template>
 	<div class="gallery-grid" :class="{ 'hide-results': hideResults }">
-		<a v-for="product in products" :key="product.id" class="product">
+		<a
+			v-for="product in products"
+			:key="product.id"
+			class="product"
+			@click="openProduct(product.id)"
+		>
 			<img :src="getImageUrl(product)" />
 			<p>
 				{{ product.Name }}
@@ -125,6 +130,13 @@ export default Vue.extend({
 			query._sort = 'Timestamp:desc'
 
 			this.products = await this.$strapi.find('products', stringify(query))
+		},
+		openProduct(productId: number): void {
+			// this.$store.commit('openProduct', productId)
+			this.$router.push({
+				params: { productId },
+				query: { ...this.$route.query, productId },
+			})
 		},
 	},
 })

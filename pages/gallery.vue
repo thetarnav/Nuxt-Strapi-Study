@@ -312,7 +312,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .gallery {
 	padding-top: 10px;
-	min-height: 150vh;
+	min-height: 100vh;
 }
 .gallery-title {
 	margin-right: 10px;

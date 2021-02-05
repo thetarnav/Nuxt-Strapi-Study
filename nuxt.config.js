@@ -67,7 +67,7 @@ export default {
 
 	env: {
 		baseUrl:
-			`${process.env.BASE_URL}:${process.env.BASE_PORT}` ||
+			`http://${process.env.BASE_URL}:${process.env.BASE_PORT}` ||
 			'http://localhost:3000',
 		strapiUrl: `${process.env.STRAPI_URL}:1337`,
 	},

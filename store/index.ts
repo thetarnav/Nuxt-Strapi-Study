@@ -9,6 +9,7 @@ export const state = () => ({
 	newProductsCount: 0,
 	areAvailable: false,
 	filters: [] as Filter[],
+	// productId: null as number | null,
 })
 export type RootState = ReturnType<typeof state>
 
@@ -35,6 +36,10 @@ export const mutations: MutationTree<RootState> = {
 	},
 	setFilters: (store, filters: Filter[]) =>
 		(store.filters = cloneDeep(filters)),
+	// openProduct: (store, id: unknown) => {
+	// 	if (typeof id === 'number') store.productId = id
+	// },
+	// closeProduct: store => (store.productId = null),
 }
 
 /**

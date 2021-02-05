@@ -1,5 +1,5 @@
 <template>
-	<nuxt-link :to="to" class="nav-link" :class="name">
+	<nuxt-link :to="{ name: to }" class="nav-link" :class="name">
 		<Icon :icon="icon" class="link-icon"></Icon>
 		<p class="link-text">
 			<slot></slot>
