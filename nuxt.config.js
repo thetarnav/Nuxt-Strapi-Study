@@ -35,6 +35,7 @@ export default {
 		// https://go.nuxtjs.dev/typescript
 		'@nuxt/typescript-build',
 		'@nuxtjs/composition-api',
+		'nuxt-graphql-request',
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
@@ -49,8 +50,12 @@ export default {
 	axios: {},
 
 	strapi: {
-		url: `http://${process.env.STRAPI_URL}:1337`,
+		url: process.env.STRAPI_URL,
 		entities: ['products', 'product-categories'],
+	},
+
+	graphql: {
+		endpoint: `${process.env.STRAPI_URL}/graphql`,
 	},
 
 	styleResources: {
@@ -69,6 +74,6 @@ export default {
 		baseUrl:
 			`http://${process.env.BASE_URL}:${process.env.BASE_PORT}` ||
 			'http://localhost:3000',
-		strapiUrl: `${process.env.STRAPI_URL}:1337`,
+		strapiUrl: process.env.STRAPI_URL,
 	},
 }

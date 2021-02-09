@@ -16,16 +16,20 @@ export default function ({ store, $strapi }: Context) {
 	checkFilterPopulation()
 
 	async function checkFilterPopulation() {
-		const countNew = await $strapi.count('products', {
-				Timestamp_gte: lastVisit,
-			}),
-			countAvailable = await $strapi.count('products', {
-				Available: true,
-			})
+		try {
+			const countNew = await $strapi.count('products', {
+					timestamp_gte: lastVisit,
+				}),
+				countAvailable = await $strapi.count('products', {
+					isAvailable: true,
+				})
 
-		store.commit('setSpecialCount', {
-			countNew,
-			countAvailable,
-		})
+			store.commit('setSpecialCount', {
+				countNew,
+				countAvailable,
+			})
+		} catch (err) {
+			console.error(err)
+		}
 	}
 }

@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { gql } from 'nuxt-graphql-request'
 import { RootState } from '~/store'
 
 export default Vue.extend({
@@ -38,12 +39,13 @@ export default Vue.extend({
 		}
 	},
 	computed: {
-		id(): number {
+		id(): number | null {
 			const { params, query } = this.$route
 			return (
 				parseInt(params.productId) ||
-				// (this.$store.state as RootState).productId
-				parseInt(query.productId)
+				(typeof query.productId === 'string' &&
+					parseInt(query.productId)) ||
+				null
 			)
 		},
 	},

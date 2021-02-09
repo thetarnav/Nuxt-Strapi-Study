@@ -26,21 +26,24 @@ export type RoutePath =
 // export type ProductTag = typeof productTags[number]
 
 export class Filter {
-	title
+	id
 	name
+	uid
 	icon
 	color
 	isSpecial
 	isSelected
 	constructor(
-		title: String,
-		name: ProductTag,
+		name: string,
+		uid: ProductTag,
+		id: string | null = null,
 		icon: string | null = null,
 		color: 'primary' | 'secondary' | 'black' = 'black',
 		isSpecial = false,
 		isSelected = false,
 	) {
-		this.title = title
+		this.id = id
+		this.uid = uid
 		this.name = name
 		this.icon = icon
 		this.color = color

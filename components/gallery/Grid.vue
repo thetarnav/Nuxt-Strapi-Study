@@ -134,8 +134,8 @@ export default Vue.extend({
 		openProduct(productId: number): void {
 			// this.$store.commit('openProduct', productId)
 			this.$router.push({
-				params: { productId },
-				query: { ...this.$route.query, productId },
+				params: { productId: productId.toString() },
+				query: { ...this.$route.query, productId: productId.toString() },
 			})
 		},
 	},

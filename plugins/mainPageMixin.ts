@@ -6,7 +6,7 @@ let alreadyScrolled = false
 export default Vue.extend({
 	beforeRouteEnter(to, from, next) {
 		if (
-			from.name === 'gallery' &&
+			from.name?.includes('gallery') &&
 			from.query.prevRoute === to.name &&
 			typeof from.query.scroll === 'string'
 		)

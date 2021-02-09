@@ -1,7 +1,7 @@
 <template>
 	<div class="">
 		<SwipeAndScroll :directions="['down']" @swipe="swipe">
-			<Nuxt class="page" />
+			<Nuxt class="page" keep-alive />
 		</SwipeAndScroll>
 		<MainNav />
 		<ProductOverlay v-if="showProduct" />
@@ -33,8 +33,8 @@ export default Vue.extend({
 			const html = document.querySelector('html')
 
 			this.showProduct
-				? html.classList.add('disable-scroll')
-				: html.classList.remove('disable-scroll')
+				? html?.classList.add('disable-scroll')
+				: html?.classList.remove('disable-scroll')
 		},
 		swipe(direction: SwipeDirection) {
 			if (direction !== 'down') return

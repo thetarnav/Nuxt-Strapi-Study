@@ -9,14 +9,14 @@
 			<div class="side-filters-group">
 				<FilterPill
 					v-for="(filter, index) in onSideFilters"
-					:key="filter.name"
-					:tag="filter.name"
+					:key="filter.uid"
+					:tag="filter.uid"
 					:icon="filter.icon"
 					:selected="filter.isSelected"
 					:color="filter.color"
 					:class="{ 'raise-me': index < 3 }"
 					@select="selectFilter"
-					>{{ filter.title }}</FilterPill
+					>{{ filter.name }}</FilterPill
 				>
 				<div
 					v-if="filters.length > 6"
@@ -34,13 +34,13 @@
 			<div v-if="showFullFilters" class="full-filters-group">
 				<FilterPill
 					v-for="filter in availableFilters"
-					:key="filter.name"
-					:tag="filter.name"
+					:key="filter.uid"
+					:tag="filter.uid"
 					:icon="filter.icon"
 					:selected="filter.isSelected"
 					:color="filter.color"
 					@select="selectFilter"
-					>{{ filter.title }}</FilterPill
+					>{{ filter.name }}</FilterPill
 				>
 				<button class="close-button btn-dark" @click="toggleFullFilters">
 					<Icon icon="times" class="icon"></Icon>
@@ -56,12 +56,12 @@
 			>
 				<FilterPill
 					v-for="filter in availableFilters"
-					:key="filter.name"
-					:tag="filter.name"
+					:key="filter.uid"
+					:tag="filter.uid"
 					:selected="filter.isSelected"
 					:color="filter.color"
 					@select="selectFilter"
-					>{{ filter.title }}</FilterPill
+					>{{ filter.name }}</FilterPill
 				>
 				<div
 					v-if="filters.length > 6"
@@ -83,9 +83,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
 import debounce from 'lodash.debounce'
 import cloneDeep from 'lodash.clonedeep'
+import { CategoriesResponse, categoriesQuery } from '~/assets/js/queries'
 import { PillSelectPayload } from '~/components/gallery/FilterPill.vue'
 import { ProductTag, pages, Filter } from '~/types/types'
 import { RootState } from '~/store'
@@ -170,51 +170,25 @@ export default Vue.extend({
 		async generateFilters(): Promise<Filter[]> {
 			const filters: Filter[] = []
 
-			// Add filters from pages
-			pages.forEach(page => {
-				const { name, icon, title } = page
-
-				// Ignore Home and Gallery
-				if (['gallery', 'index'].includes(name)) return
-
-				filters.push(new Filter(title, name, icon))
-			})
-
-			interface Category {
-				title: string
-				name: string
-			}
-
-			interface StrapiCategory {
-				CategoryID: string
-				CategoryName: string
-			}
-
-			let otherCategories: Category[] = []
-
 			// Fetching Product Categories from Strapi API
 			try {
-				const fetchedCategories = await (this.$nuxt
-					.context as Context).$strapi.find<StrapiCategory[]>(
-					'product-categories',
+				const data: CategoriesResponse = await this.$graphql.request(
+						categoriesQuery,
+					),
+					{ categories } = data
+
+				// Turn categories to filters
+				filters.push(
+					...categories.map<Filter>(({ id, uid, name }) => {
+						const icon =
+							pages.find(({ name }) => name === uid)?.icon ?? null
+						return new Filter(name, uid, id, icon)
+					}),
 				)
-				otherCategories = fetchedCategories
-					.filter(
-						({ CategoryID }) =>
-							!['lamps', 'paintings', 'belt-bags'].includes(CategoryID),
-					)
-					.map(({ CategoryName, CategoryID }) => ({
-						title: CategoryName,
-						name: CategoryID,
-					}))
 			} catch (error) {
 				console.error(error)
+				return []
 			}
-
-			// Add filters from Database
-			otherCategories.forEach(category =>
-				filters.push(new Filter(category.title, category.name)),
-			)
 
 			// Add 'other', new and available filters
 			filters.push(
@@ -223,12 +197,13 @@ export default Vue.extend({
 					new Filter(
 						'Dostępne',
 						'available',
+						null,
 						'shopping-bag',
 						'primary',
 						true,
 						false,
 					),
-					new Filter('Nowe', 'new', null, 'secondary', true, false),
+					new Filter('Nowe', 'new', null, null, 'secondary', true, false),
 				],
 			)
 
@@ -240,7 +215,7 @@ export default Vue.extend({
 		createFilterIndexes() {
 			const filtersIndexes = {}
 			this.filters.forEach(
-				(filter, index) => (filtersIndexes[filter.name] = index),
+				(filter, index) => (filtersIndexes[filter.uid] = index),
 			)
 			this.filtersIndexes = filtersIndexes
 		},
