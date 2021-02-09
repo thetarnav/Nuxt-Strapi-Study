@@ -1,7 +1,7 @@
 <template>
 	<button
 		class="filter-pill"
-		:class="{ [color]: true, selected: selected }"
+		:class="{ [color]: true, selected: isSelected }"
 		@click="handleClick"
 	>
 		<Icon v-if="icon" :icon="icon" class="icon"></Icon>
@@ -33,26 +33,25 @@ export default Vue.extend({
 			// validator: value => productTags.includes(value),
 		},
 		selected: {
-			type: Boolean,
-			default: false,
+			type: String,
+			default: null,
 		},
 		color: {
 			type: String,
 			default: '',
 		},
 	},
-	data() {
-		return {
-			isSelected: false,
-		}
+	computed: {
+		isSelected(): boolean {
+			return this.selected !== '' && this.selected === this.tag
+		},
 	},
-
 	methods: {
 		handleClick() {
-			const { tag, selected } = this,
+			const { tag, isSelected } = this,
 				payload: PillSelectPayload = {
 					tag,
-					selected: !selected,
+					selected: !isSelected,
 				}
 
 			this.$emit('select', payload)

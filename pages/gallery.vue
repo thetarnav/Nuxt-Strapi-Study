@@ -12,7 +12,7 @@
 					:key="filter.uid"
 					:tag="filter.uid"
 					:icon="filter.icon"
-					:selected="filter.isSelected"
+					:selected="selectedFilter"
 					:color="filter.color"
 					:class="{ 'raise-me': index < 3 }"
 					@select="selectFilter"
@@ -37,7 +37,7 @@
 					:key="filter.uid"
 					:tag="filter.uid"
 					:icon="filter.icon"
-					:selected="filter.isSelected"
+					:selected="selectedFilter"
 					:color="filter.color"
 					@select="selectFilter"
 					>{{ filter.name }}</FilterPill
@@ -58,7 +58,7 @@
 					v-for="filter in availableFilters"
 					:key="filter.uid"
 					:tag="filter.uid"
-					:selected="filter.isSelected"
+					:selected="selectedFilter"
 					:color="filter.color"
 					@select="selectFilter"
 					>{{ filter.name }}</FilterPill
@@ -77,7 +77,7 @@
 		<GlobalEvents @scroll="debounceScroll" />
 
 		<!-- Gallery Grid -->
-		<Grid :selected="selectedFilters" />
+		<Grid :id="selectedFilterID" :uid="selectedFilter" />
 	</div>
 </template>
 
@@ -106,6 +106,7 @@ export default Vue.extend({
 			filtersIndexes: {} as FilterIndexes,
 			showFullFilters: false,
 			showLineFilters: false,
+			selectedFilter: '',
 			debounceScroll: () => {},
 		}
 	},
@@ -135,21 +136,17 @@ export default Vue.extend({
 
 			if (newProductsCount === 0) namesToDelete.push('new')
 			if (!areAvailable) namesToDelete.push('available')
-
-			return this.filters.filter(
-				filter => !namesToDelete.includes(filter.name),
-			)
-		},
-		selectedFilters(): Set<string> {
-			const selectedArray = this.availableFilters
-				.filter(filter => filter.isSelected)
-				.map(filter => filter.name)
-			return new Set(selectedArray)
+			return this.filters.filter(({ uid }) => !namesToDelete.includes(uid))
 		},
 		onSideFilters(): Filter[] {
 			return this.availableFilters.filter(
-				(filter, index) =>
-					index < 4 || ['available', 'new'].includes(filter.name),
+				({ uid }, index) => index < 4 || ['available', 'new'].includes(uid),
+			)
+		},
+		selectedFilterID(): string {
+			return (
+				this.filters.find(({ uid }) => uid === this.selectedFilter)?.id ??
+				''
 			)
 		},
 	},
@@ -201,9 +198,8 @@ export default Vue.extend({
 						'shopping-bag',
 						'primary',
 						true,
-						false,
 					),
-					new Filter('Nowe', 'new', null, null, 'secondary', true, false),
+					new Filter('Nowe', 'new', null, null, 'secondary', true),
 				],
 			)
 
@@ -220,15 +216,11 @@ export default Vue.extend({
 			this.filtersIndexes = filtersIndexes
 		},
 		selectFilterFromQuery() {
-			const { filtersIndexes, filters } = this,
-				filtersQuery = this.$route.query.filter as string | undefined
+			const filtersQuery = this.$route.query.filter as string | undefined
 
 			if (!filtersQuery) return
-			if (
-				typeof filtersQuery === 'string' &&
-				filters[filtersIndexes[filtersQuery]]
-			)
-				filters[filtersIndexes[filtersQuery]].isSelected = true
+			if (typeof filtersQuery === 'string')
+				this.selectedFilter = filtersQuery
 		},
 		handleScroll() {
 			this.showLineFilters =
@@ -238,16 +230,11 @@ export default Vue.extend({
 			this.showFullFilters = !this.showFullFilters
 		},
 		selectFilter(payload: PillSelectPayload) {
-			const { filters, filtersIndexes } = this,
-				{ tag: name, selected: isSelected } = payload,
-				filter = filters[filtersIndexes[name]]
-			if (!filter) return
+			const { tag: name, selected: isSelected } = payload
 
 			// Select clicked Filter and diselect the others.
 			// or diselect clicked.
-			if (isSelected)
-				filters.forEach(item => (item.isSelected = name === item.name))
-			else filter.isSelected = false
+			this.selectedFilter = isSelected ? name : ''
 
 			// Update URL Query
 			this.$router.push({

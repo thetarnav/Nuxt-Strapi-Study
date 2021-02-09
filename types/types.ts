@@ -32,7 +32,6 @@ export class Filter {
 	icon
 	color
 	isSpecial
-	isSelected
 	constructor(
 		name: string,
 		uid: ProductTag,
@@ -40,7 +39,6 @@ export class Filter {
 		icon: string | null = null,
 		color: 'primary' | 'secondary' | 'black' = 'black',
 		isSpecial = false,
-		isSelected = false,
 	) {
 		this.id = id
 		this.uid = uid
@@ -48,7 +46,6 @@ export class Filter {
 		this.icon = icon
 		this.color = color
 		this.isSpecial = isSpecial
-		this.isSelected = isSelected
 	}
 }
 

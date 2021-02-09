@@ -1,14 +1,10 @@
 <template>
 	<div class="gallery-grid" :class="{ 'hide-results': hideResults }">
-		<a
-			v-for="product in products"
-			:key="product.id"
-			class="product"
-			@click="openProduct(product.id)"
-		>
-			<img :src="getImageUrl(product)" />
+		<a v-for="product in products" :key="product.id" class="product">
+			<!-- @click="openProduct(product.id)" -->
+			<!-- <img :src="getImageUrl(product)" /> -->
 			<p>
-				{{ product.Name }}
+				{{ product.title }}
 			</p>
 		</a>
 	</div>
@@ -18,62 +14,53 @@
 import debounce from 'lodash.debounce'
 import stringify from 'qs-stringify'
 import Vue from 'vue'
-
-interface ImageFromat {
-	url: string
-	height: number
-	width: number
-}
-interface Image extends ImageFromat {
-	formats: {
-		thumbnail: ImageFromat
-		small: ImageFromat
-		medium: ImageFromat
-		large: ImageFromat
-	}
-}
-interface Product {
-	id: number
-	Available: boolean
-	Images: Image[]
-	Name: string
-	Timestamp: number
-	Slug: string
-}
+import {
+	ProductThumbnail,
+	ProductsResponse,
+	availableProductsQuery,
+	newProductsQuery,
+	productsOfCategoryQuery,
+	noCategoryProductsQuery,
+	allProductsQuery,
+} from '~/assets/js/queries'
 
 export default Vue.extend({
 	name: 'GalleryGrid',
 	props: {
-		selected: {
-			type: Set,
+		uid: {
+			type: String,
+			required: true,
+		},
+		id: {
+			type: String,
 			required: true,
 		},
 	},
 	data() {
 		return {
-			products: [] as Product[],
+			products: [] as ProductThumbnail[],
 			hideResults: false,
-			debouncedDisplay: () => {},
+			debouncedFetch: () => {},
 		}
 	},
 	watch: {
-		selected() {
+		uid() {
 			this.hideResults = true
-			this.debouncedDisplay()
+			this.debouncedFetch()
 		},
 	},
 	mounted() {
 		this.hideResults = false
-		this.debouncedDisplay = debounce(this.displaySearch, 800)
-		this.debouncedDisplay()
+		this.debouncedFetch = debounce(this.fetchProducts, 800)
+		this.debouncedFetch()
 	},
 	methods: {
-		getImageUrl(product: Product): string {
-			const host = process.env.strapiUrl,
-				url = product.Images[0]?.formats.small.url ?? product.Images[0]?.url
-			if (!url) return ''
-			return `http://${host}${url}`
-		},
+		// getImageUrl(product: ProductThumbnail): string {
+		// 	const host = process.env.strapiUrl,
+		// 		url = product.Images[0]?.formats.small.url ?? product.Images[0]?.url
+		// 	if (!url) return ''
+		// 	return `http://${host}${url}`
+		// },
 		// getSelectedFromURL() {
 		// 	const { filters: queryFilters } = this.$route.query
 
@@ -85,51 +72,41 @@ export default Vue.extend({
 		// 	// For string query
 		// 	else if (typeof queryFilters === 'string') return [queryFilters]
 		// },
-		async displaySearch() {
-			this.hideResults = false
-
-			const categories = filterStringArray([...this.selected]) ?? []
-			interface Query {
-				[key: string]: string | boolean | number | Query | any
+		async fetchProducts() {
+			interface Varaibles {
+				start?: number
+				id?: string
+				timestamp?: number
 			}
-			let query: Query = {}
-			// If selected AVAILABLE
-			if (categories.includes('available')) query = { Available: true }
-			// If selected NEW
-			else if (categories.includes('new'))
-				query = { Timestamp_gte: this.$lastVisit }
-			// If selected OTHER
-			else if (categories.includes('other')) {
-				// Only OTHER
-				if (categories.length === 1) query = { product_category_null: true }
-				// OTHER with some other filters
-				else
-					query = {
-						_where: {
-							_or: [
-								{
-									'product_category.CategoryID': categories.filter(
-										item => item !== 'other',
-									) as any,
-								},
-								{
-									product_category_null: true as any,
-								},
-							],
-						},
-					}
-			} else if (categories.length === 0) query = {}
-			// If selected any number of product categories
-			else
-				query = {
-					_where: {
-						'product_category.CategoryID': categories as any,
-					},
+
+			const { id, uid } = this,
+				variables: Varaibles = {
+					start: 0,
 				}
+			let query: string
 
-			query._sort = 'Timestamp:desc'
+			if (uid === '') query = allProductsQuery
+			else if (uid === 'available') query = availableProductsQuery
+			else if (uid === 'new') {
+				query = newProductsQuery
+				variables.timestamp = this.$lastVisit
+			} else if (uid === 'other') query = noCategoryProductsQuery
+			else if (id) {
+				query = productsOfCategoryQuery
+				variables.id = id
+			} else return
 
-			this.products = await this.$strapi.find('products', stringify(query))
+			try {
+				const data = await this.$graphql.request<ProductsResponse>(
+					query,
+					variables,
+				)
+				this.products = data.category?.products ?? data?.products ?? []
+			} catch (error) {
+				console.error(error)
+			}
+
+			this.hideResults = false
 		},
 		openProduct(productId: number): void {
 			// this.$store.commit('openProduct', productId)
