@@ -74,17 +74,17 @@ export default Vue.extend({
 			if (!url) return ''
 			return `http://${host}${url}`
 		},
-		getSelectedFromURL() {
-			const { filters: queryFilters } = this.$route.query
+		// getSelectedFromURL() {
+		// 	const { filters: queryFilters } = this.$route.query
 
-			// For array query
-			if (typeof queryFilters === 'object')
-				return queryFilters.filter(
-					item => typeof item === 'string',
-				) as string[]
-			// For string query
-			else if (typeof queryFilters === 'string') return [queryFilters]
-		},
+		// 	// For array query
+		// 	if (typeof queryFilters === 'object')
+		// 		return queryFilters.filter(
+		// 			item => typeof item === 'string',
+		// 		) as string[]
+		// 	// For string query
+		// 	else if (typeof queryFilters === 'string') return [queryFilters]
+		// },
 		async displaySearch() {
 			this.hideResults = false
 

@@ -25,7 +25,7 @@ export default Vue.extend({
 				name: 'gallery',
 				query: {
 					prevRoute,
-					filters: prevRoute !== 'index' ? [prevRoute] : undefined,
+					filter: prevRoute !== 'index' ? prevRoute : undefined,
 					scroll: Math.round(
 						scrollParent?.scrollTop || window.scrollY,
 					).toString(),

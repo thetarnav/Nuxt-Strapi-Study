@@ -221,20 +221,14 @@ export default Vue.extend({
 		},
 		selectFilterFromQuery() {
 			const { filtersIndexes, filters } = this,
-				filtersQuery = this.$route.query.filters as
-					| string
-					| string[]
-					| undefined
+				filtersQuery = this.$route.query.filter as string | undefined
 
 			if (!filtersQuery) return
-			if (typeof filtersQuery === 'string') {
-				if (filters[filtersIndexes[filtersQuery]])
-					filters[filtersIndexes[filtersQuery]].isSelected = true
-			} else
-				filtersQuery.forEach((filterName: string) => {
-					if (filters[filtersIndexes[filterName]])
-						filters[filtersIndexes[filterName]].isSelected = true
-				})
+			if (
+				typeof filtersQuery === 'string' &&
+				filters[filtersIndexes[filtersQuery]]
+			)
+				filters[filtersIndexes[filtersQuery]].isSelected = true
 		},
 		handleScroll() {
 			this.showLineFilters =
@@ -249,34 +243,17 @@ export default Vue.extend({
 				filter = filters[filtersIndexes[name]]
 			if (!filter) return
 
-			if (isSelected) {
-				// When selecting special filter:
-				if (filter.isSpecial)
-					filters.forEach(item => (item.isSelected = false))
-				// When selecting category filter:
-				else
-					filters.forEach(
-						item =>
-							(item.isSelected = item.isSpecial
-								? false
-								: item.isSelected),
-					)
-			}
+			// Select clicked Filter and diselect the others.
+			// or diselect clicked.
+			if (isSelected)
+				filters.forEach(item => (item.isSelected = name === item.name))
+			else filter.isSelected = false
 
-			filter.isSelected = isSelected
-
-			/**
-			 * Set URL query to the selected filters:
-			 */
-			const selectedFilters = filters
-				.filter(item => item.isSelected)
-				.map(item => item.name)
-
+			// Update URL Query
 			this.$router.push({
 				query: {
 					...this.$route.query,
-					filters:
-						selectedFilters.length > 0 ? selectedFilters : undefined,
+					filter: isSelected ? name : undefined,
 				},
 			})
 		},
