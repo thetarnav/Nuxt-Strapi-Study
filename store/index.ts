@@ -7,7 +7,8 @@ export const state = () => ({
 	topPagesNames: ['Home', 'Lampy', 'Saszetki', 'Obrazy'],
 	swipeVerticalPadding: 100,
 	newProductsCount: 0,
-	areAvailable: false,
+	areAvailableProducts: false,
+	areOtherProducts: false,
 	filters: [] as Filter[],
 	// productId: null as number | null,
 })
@@ -29,10 +30,12 @@ export const getters: GetterTree<RootState, RootState> = {
  * MUTATIONS:
  */
 export const mutations: MutationTree<RootState> = {
-	setSpecialCount: (state, { countNew, countAvailable }) => {
+	setFilterCount: (state, { countNew, countAvailable, countOther }) => {
 		if (typeof countNew === 'number') state.newProductsCount = countNew
 		if (typeof countAvailable === 'number' && countAvailable > 0)
-			state.areAvailable = true
+			state.areAvailableProducts = true
+		if (typeof countOther === 'number' && countOther > 0)
+			state.areOtherProducts = true
 	},
 	setFilters: (store, filters: Filter[]) =>
 		(store.filters = cloneDeep(filters)),

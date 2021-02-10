@@ -130,12 +130,16 @@ export default Vue.extend({
 	},
 	computed: {
 		availableFilters(): Filter[] {
-			const { newProductsCount, areAvailable } = this.$store
-					.state as RootState,
+			const {
+					newProductsCount,
+					areAvailableProducts,
+					areOtherProducts,
+				} = this.$store.state as RootState,
 				namesToDelete: string[] = []
 
-			if (newProductsCount === 0) namesToDelete.push('new')
-			if (!areAvailable) namesToDelete.push('available')
+			newProductsCount === 0 && namesToDelete.push('new')
+			!areAvailableProducts && namesToDelete.push('available')
+			!areOtherProducts && namesToDelete.push('other')
 			return this.filters.filter(({ uid }) => !namesToDelete.includes(uid))
 		},
 		onSideFilters(): Filter[] {
@@ -162,6 +166,9 @@ export default Vue.extend({
 
 		// Sets Last Visit Timestamp when the gallery is visited
 		localStorage.setItem('lastVisit', Date.now().toString())
+
+		// this.$strapi.
+		// this.$axios.get('')
 	},
 	methods: {
 		async generateFilters(): Promise<Filter[]> {

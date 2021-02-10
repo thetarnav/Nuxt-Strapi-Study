@@ -22,11 +22,15 @@ export default function ({ store, $strapi }: Context) {
 				}),
 				countAvailable = await $strapi.count('products', {
 					isAvailable: true,
+				}),
+				countOther = await $strapi.count('products', {
+					category_null: true,
 				})
 
-			store.commit('setSpecialCount', {
+			store.commit('setFilterCount', {
 				countNew,
 				countAvailable,
+				countOther,
 			})
 		} catch (err) {
 			console.error(err)

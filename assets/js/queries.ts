@@ -142,3 +142,48 @@ export interface ProductsResponse {
 		products: ProductThumbnail[]
 	}
 }
+
+export const fullProductQuery = gql`
+	query FullProduct($id: ID!) {
+		product(id: $id) {
+			thumbnail {
+				url
+			}
+			slides {
+				url
+				formats
+			}
+			title
+			number
+			description
+			table
+			shopLink
+			isAvailable
+			ties(sort: "value:desc", limit: 4) {
+				products(where: { id_ne: $id }) {
+					...ProductThumbnail
+				}
+			}
+		}
+	}
+	${productThumbnail}
+`
+
+export type FullProductResponse = {
+	product: FullProduct
+}
+export interface FullProduct {
+	thumbnail: {
+		url: string
+	}
+	slides: Image[]
+	title: string
+	number: number | null
+	description: string
+	table: string
+	shopLink: string
+	isAvailable: boolean
+	ties: {
+		products: ProductThumbnail[]
+	}[]
+}

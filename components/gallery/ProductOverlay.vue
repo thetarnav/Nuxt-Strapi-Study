@@ -7,46 +7,71 @@
 			<button class="close-button share btn-dark" @click="copyLink">
 				<Icon icon="share" class="icon"></Icon>
 			</button>
-			<h2>{{ data.Name }}</h2>
-			<h6 v-if="data.Number">#{{ data.Number }}</h6>
+			<h2>{{ data.title }}</h2>
+			<h6 v-if="data.number">#{{ data.number }}</h6>
 			<pre class="desc">
-            {{ data.Description }}
+            {{ data.description }}
          </pre>
+			<pre class="desc">
+				{{ data.table }}
+			</pre
+			>
+			<a v-if="data.isAvailable" :href="data.shopLink" target="_blank"
+				>link do sklepu</a
+			>
+			<h6>Podobne produkty:</h6>
+			<ul>
+				<li v-for="tie in data.ties" :key="tie.products[0].id">
+					<h5>{{ tie.products[0].title }}</h5>
+				</li>
+			</ul>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { gql } from 'nuxt-graphql-request'
-import { RootState } from '~/store'
+import {
+	fullProductQuery,
+	FullProductResponse,
+	FullProduct,
+} from '~/assets/js/queries'
 
 export default Vue.extend({
 	name: 'ProductOverlay',
 	data() {
 		return {
-			data: {},
+			data: {} as FullProduct,
 		}
 	},
-	async fetch() {
-		const { $strapi, id } = this
+	async fetch(): Promise<void> {
+		const { id, $graphql } = this,
+			query = fullProductQuery
 		try {
-			const data = await $strapi.find(`products/${id}`)
-			this.data = data
+			const { product } = await $graphql.request<FullProductResponse>(
+				query,
+				{ id },
+			)
+			this.data = product
 		} catch (error) {
 			console.error(error)
 			this.closeOverlay()
 		}
 	},
 	computed: {
-		id(): number | null {
-			const { params, query } = this.$route
-			return (
-				parseInt(params.productId) ||
-				(typeof query.productId === 'string' &&
-					parseInt(query.productId)) ||
-				null
-			)
+		id(): string {
+			const { params, query } = this.$route,
+				id =
+					params.productId ||
+					(typeof query.productId === 'string' && query.productId) ||
+					null
+
+			if (id === null) {
+				this.closeOverlay()
+				return ''
+			}
+
+			return id
 		},
 	},
 	mounted() {
@@ -65,7 +90,7 @@ export default Vue.extend({
 			// When opened in gallery
 			if ($route.name?.includes('gallery'))
 				$router.push({
-					params: { productId: undefined },
+					params: { productId: undefined } as any,
 					query: { ...$route.query, productId: undefined },
 				})
 			// When opened in other page

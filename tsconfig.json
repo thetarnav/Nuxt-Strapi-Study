@@ -16,7 +16,13 @@
 			"~/*": ["./*"],
 			"@/*": ["./*"]
 		},
-		"types": ["@nuxt/types", "@types/node", "@nuxtjs/strapi"]
+		"types": [
+			"@nuxt/types",
+			"@types/node",
+			"@nuxtjs/strapi",
+			"nuxt-graphql-request",
+			"@nuxtjs/axios"
+		]
 	},
 	"exclude": ["node_modules", ".nuxt", "dist"]
 }
