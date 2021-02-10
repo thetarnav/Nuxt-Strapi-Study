@@ -75,6 +75,7 @@ export default Vue.extend({
 		},
 	},
 	mounted() {
+		this.$store.dispatch('seeProduct', this.id)
 		// this.setProductId()
 	},
 	methods: {

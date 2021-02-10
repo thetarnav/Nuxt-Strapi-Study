@@ -166,9 +166,6 @@ export default Vue.extend({
 
 		// Sets Last Visit Timestamp when the gallery is visited
 		localStorage.setItem('lastVisit', Date.now().toString())
-
-		// this.$strapi.
-		// this.$axios.get('')
 	},
 	methods: {
 		async generateFilters(): Promise<Filter[]> {
