@@ -16,6 +16,7 @@ export const state = () => ({
 	areOtherProducts: false,
 	filters: [] as Filter[],
 	seenProducts: {} as SeenProducts,
+	relatedProducts: new Set() as Set<string>,
 })
 export type RootState = ReturnType<typeof state>
 
@@ -47,8 +48,10 @@ export const mutations: MutationTree<RootState> = {
 	VIEW_PRODUCT: (store, id: string) => {
 		const current = store.seenProducts[id]
 		store.seenProducts[id] = typeof current === 'number' ? current + 1 : 1
+		store.relatedProducts.add(id)
 	},
 	RESET_VIEWS: store => (store.seenProducts = {}),
+	RESET_RELATIONS: store => store.relatedProducts.clear(),
 	// openProduct: (store, id: unknown) => {
 	// 	if (typeof id === 'number') store.productId = id
 	// },
@@ -61,6 +64,7 @@ export const mutations: MutationTree<RootState> = {
 export const actions: ActionTree<RootState, RootState> = {
 	seeProduct({ dispatch, commit }, id) {
 		dispatch('debounceEmitViews')
+		dispatch('debounceEmitRelations')
 		commit('VIEW_PRODUCT', id)
 	},
 	emitViews({ state, commit }) {
@@ -73,6 +77,19 @@ export const actions: ActionTree<RootState, RootState> = {
 		({ dispatch }) => dispatch('emitViews'),
 		100000,
 		{ maxWait: 180000 },
+	),
+	emitRelations({ state, commit }) {
+		const { relatedProducts } = state
+		if (relatedProducts.size > 1)
+			this.$axios.post(`${process.env.strapiUrl}/ties/increase`, {
+				entries: [...relatedProducts],
+			})
+		commit('RESET_RELATIONS')
+	},
+	debounceEmitRelations: debounce(
+		({ dispatch }) => dispatch('emitRelations'),
+		120000,
+		{ maxWait: 300000 },
 	),
 	// async setNewProductsCount({ commit }, promise: Promise<number>) {
 	// 	const count = await promise
