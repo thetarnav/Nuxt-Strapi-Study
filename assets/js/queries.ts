@@ -59,11 +59,11 @@ const productThumbnail = gql`
 `
 
 export const availableProductsQuery = gql`
-	query AvailableProducts($start: Int) {
+	query AvailableProducts($start: Int, $limit: Int) {
 		products(
 			sort: "timestamp:desc"
 			where: { isAvailable: true }
-			limit: 10
+			limit: $limit
 			start: $start
 		) {
 			...ProductThumbnail
@@ -72,11 +72,11 @@ export const availableProductsQuery = gql`
 	${productThumbnail}
 `
 export const newProductsQuery = gql`
-	query NewProducts($start: Int, $timestamp: Float) {
+	query NewProducts($start: Int, $timestamp: Float, $limit: Int) {
 		products(
 			sort: "timestamp:desc"
 			where: { timestamp_gte: $timestamp }
-			limit: 10
+			limit: $limit
 			start: $start
 		) {
 			...ProductThumbnail
@@ -85,9 +85,9 @@ export const newProductsQuery = gql`
 	${productThumbnail}
 `
 export const productsOfCategoryQuery = gql`
-	query ProductsOfCategory($id: ID!, $start: Int) {
+	query ProductsOfCategory($id: ID!, $start: Int, $limit: Int) {
 		category(id: $id) {
-			products(sort: "timestamp:desc", limit: 10, start: $start) {
+			products(sort: "timestamp:desc", limit: $limit, start: $start) {
 				...ProductThumbnail
 			}
 		}
@@ -95,19 +95,19 @@ export const productsOfCategoryQuery = gql`
 	${productThumbnail}
 `
 export const allProductsQuery = gql`
-	query AllProducts($start: Int) {
-		products(sort: "timestamp:desc", limit: 10, start: $start) {
+	query AllProducts($start: Int, $limit: Int) {
+		products(sort: "timestamp:desc", limit: $limit, start: $start) {
 			...ProductThumbnail
 		}
 	}
 	${productThumbnail}
 `
 export const noCategoryProductsQuery = gql`
-	query WithoutCategoryProducts($start: Int) {
+	query WithoutCategoryProducts($start: Int, $limit: Int) {
 		products(
 			sort: "timestamp:desc"
 			where: { category_null: true }
-			limit: 10
+			limit: $limit
 			start: $start
 		) {
 			...ProductThumbnail

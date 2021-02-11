@@ -11,6 +11,7 @@
 				{{ product.title }}
 			</p>
 		</a>
+		<GlobalEvents @scroll="debouncedScroll" />
 	</div>
 </template>
 
@@ -44,6 +45,9 @@ export default Vue.extend({
 			products: [] as ProductThumbnail[],
 			hideResults: false,
 			debouncedFetch: () => {},
+			debouncedScroll: () => {},
+			reachedEnd: false,
+			paginationStart: 0,
 		}
 	},
 	watch: {
@@ -54,27 +58,46 @@ export default Vue.extend({
 	},
 	mounted() {
 		this.hideResults = false
-		this.debouncedFetch = debounce(this.fetchProducts, 800)
+		this.debouncedFetch = debounce(this.filterChange, 800)
+		this.debouncedScroll = debounce(this.scroll, 100, { maxWait: 300 })
 		this.debouncedFetch()
 	},
 	methods: {
+		scroll() {
+			if (this.reachedEnd || this.products.length === 0) return
+
+			const { scrollHeight } = document.scrollingElement || this.$el,
+				fromBottom = scrollHeight - window.scrollY - window.innerHeight
+
+			if (fromBottom <= 100) this.fetchProducts()
+		},
 		getImageUrl(product: ProductThumbnail): string {
 			return (
 				product.thumbnail?.formats.small.url ?? product.thumbnail?.url ?? ''
 			)
 		},
-		async fetchProducts(): Promise<void> {
-			interface Varaibles {
-				start?: number
+		filterChange() {
+			this.reachedEnd = false
+			this.paginationStart = 0
+			this.fetchProducts(true)
+		},
+		async fetchProducts(replace: boolean): Promise<void> {
+			interface QueryVaraibles {
+				start: number
+				limit: number
 				id?: string
 				timestamp?: number
 			}
 
 			const { id, uid } = this,
-				variables: Varaibles = {
-					start: 0,
+				limit = 8,
+				variables: QueryVaraibles = {
+					start: this.paginationStart,
+					limit,
 				}
 			let query: string
+
+			this.paginationStart += limit
 
 			if (uid === '') query = allProductsQuery
 			else if (uid === 'available') query = availableProductsQuery
@@ -89,11 +112,18 @@ export default Vue.extend({
 
 			try {
 				const data = await this.$graphql.request<ProductsResponse>(
-					query,
-					variables,
-				)
-				this.products = data.category?.products ?? data?.products ?? []
+						query,
+						variables,
+					),
+					products = data.category?.products ?? data?.products ?? []
+
+				// Update Component DATA:
+				if (products.length < limit) this.reachedEnd = true
+				replace
+					? (this.products = products)
+					: this.products.push(...products)
 			} catch (error) {
+				this.paginationStart -= limit
 				console.error(error)
 			}
 
