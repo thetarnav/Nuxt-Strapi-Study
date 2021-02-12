@@ -35,12 +35,22 @@
 	top: calc(50% - #{$height} / 2);
 }
 
-@mixin skeleton {
+@mixin skeleton($before: false, $loaded-target: false) {
 	position: relative;
 	overflow: hidden;
-	background-color: $skeleton-color;
 	border: none;
 	filter: blur(0.3px);
+
+	@if $before {
+		&:before {
+			content: '';
+			@include full-absolute;
+			background-color: $skeleton-color;
+		}
+	} @else {
+		background-color: $skeleton-color;
+	}
+
 	&::after {
 		content: '';
 		@include full-absolute;
@@ -54,6 +64,20 @@
 		);
 		transform: translateX(-100%);
 		animation: shimmer 3s infinite;
+	}
+
+	@if $loaded-target {
+		animation: unset;
+		&::after,
+		&::before {
+			transition: opacity 0.6s;
+		}
+		&#{$loaded-target} {
+			&::after,
+			&::before {
+				opacity: 0;
+			}
+		}
 	}
 }
 

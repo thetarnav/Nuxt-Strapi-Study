@@ -1,34 +1,43 @@
 <template>
-	<main class="gallery-grid" :class="{ 'hide-results': hideResults }">
-		<figure
-			v-for="(product, index) in products"
-			:key="index"
-			class="product-wrapper"
+	<!-- <main > -->
+	<span>
+		<transition-group
+			appear
+			name="fade"
+			tag="main"
+			class="gallery-grid"
+			:class="{ 'hide-results': hideResults }"
 		>
-			<!-- :key="product ? product.id : index" -->
-			<a
-				v-if="product.isLoaded && !hideResults"
-				class="product"
-				@click="openProduct(getData(product).id)"
+			<figure
+				v-for="(product, index) in products"
+				:key="`${index}`"
+				class="product-wrapper"
 			>
-				<div
-					class="product-thumbnail"
-					:lazy-background="getData(product).thumbnail"
-				></div>
-				<!-- :style="{ '--img-src': `url('${getData(product).thumbnail}')` }" -->
-				<!-- <img class="product-thumbnail" :src="getImageUrl(product)" /> -->
-				<p class="product-title">
-					{{ getData(product).title }}
-				</p>
-			</a>
-			<div v-else class="product skeleton">
-				<div class="product-thumbnail"></div>
-				<p class="product-title"></p>
-				<p class="product-title"></p>
-			</div>
-		</figure>
+				<!-- :key="product ? product.id : index" -->
+				<a
+					v-if="product.isLoaded && !hideResults"
+					class="product"
+					@click="openProduct(getData(product).id)"
+				>
+					<div
+						class="product-thumbnail"
+						:lazy-background="getData(product).thumbnail"
+					></div>
+					<p class="product-title">
+						{{ getData(product).title }}
+					</p>
+				</a>
+				<div v-else class="product skeleton">
+					<div class="product-thumbnail"></div>
+					<p class="product-title"></p>
+					<p class="product-title"></p>
+				</div>
+			</figure>
+		</transition-group>
 		<GlobalEvents @scroll="debouncedScroll" />
-	</main>
+	</span>
+
+	<!-- </main> -->
 </template>
 
 <script lang="ts">
@@ -49,6 +58,8 @@ interface Product {
 	data?: ProductThumbnail
 	isLoaded: boolean
 }
+
+let retryCount = 0
 
 export default Vue.extend({
 	name: 'GalleryGrid',
@@ -107,7 +118,7 @@ export default Vue.extend({
 				value.title = title
 				value.id = id
 				value.thumbnail =
-					thumbnail.formats?.small?.url ?? thumbnail?.url ?? ''
+					thumbnail.formats?.large?.url ?? thumbnail?.url ?? ''
 			}
 			return value
 		},
@@ -187,8 +198,14 @@ export default Vue.extend({
 				// 	? (this.products = productCapsules)
 				// 	: this.products.push(...productCapsules)
 			} catch (error) {
+				/**
+				 * If Fetching Data FAILS:
+				 */
 				this.paginationStart -= limit
-				console.error(error)
+				this.products.splice(this.products.length - limit, 8)
+				retryCount++
+				if (retryCount < 4) setTimeout(this.fetchProducts, 500)
+				else window.addEventListener('online', () => this.fetchProducts())
 			}
 
 			this.hideResults = false
@@ -232,21 +249,15 @@ export default Vue.extend({
 	border-radius: 20px;
 	aspect-ratio: 1/1;
 	padding-bottom: 100%;
-	// background-image: var(--img-src);
 	background-size: cover;
 	background-position: center;
-	:not(.isLoaded) {
-		@include skeleton;
-	}
+	@include skeleton($before: true, $loaded-target: '.isLoaded');
 }
 .product-title {
 	margin: 10px 16px;
 }
 
 .skeleton {
-	.product-thumbnail {
-		@include skeleton;
-	}
 	.product-title {
 		width: 80%;
 		height: 10px;

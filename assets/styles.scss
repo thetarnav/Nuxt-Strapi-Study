@@ -103,6 +103,15 @@ $page-translate: 4rem;
 	}
 }
 
+.fade-enter {
+	&-enter {
+		opacity: 0;
+	}
+	&-enter-active {
+		transition: opacity 0.3s;
+	}
+}
+
 .blur-top {
 	&-leave-active {
 		transition: opacity 0.2s 0.1s, transform 0.3s, filter 0.3s;
