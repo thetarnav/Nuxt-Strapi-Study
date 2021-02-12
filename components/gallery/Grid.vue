@@ -13,25 +13,29 @@
 				:key="`${index}`"
 				class="product-wrapper"
 			>
-				<!-- :key="product ? product.id : index" -->
-				<a
-					v-if="product.isLoaded && !hideResults"
-					class="product"
-					@click="openProduct(getData(product).id)"
-				>
-					<div
-						class="product-thumbnail"
-						:lazy-background="getData(product).thumbnail"
-					></div>
-					<p class="product-title">
-						{{ getData(product).title }}
-					</p>
-				</a>
-				<div v-else class="product skeleton">
-					<div class="product-thumbnail"></div>
-					<p class="product-title"></p>
-					<p class="product-title"></p>
-				</div>
+				<transition name="fade" mode="out-in">
+					<!-- Product -->
+					<a
+						v-if="product.isLoaded && !hideResults"
+						:key="'product' + index"
+						class="product"
+						@click="openProduct(getData(product).id)"
+					>
+						<div
+							class="product-thumbnail"
+							:lazy-background="getData(product).thumbnail"
+						></div>
+						<p class="product-title">
+							{{ getData(product).title }}
+						</p>
+					</a>
+					<!-- Skeleton -->
+					<div v-else :key="'skeleton' + index" class="product skeleton">
+						<div class="product-thumbnail"></div>
+						<p class="product-title"></p>
+						<p class="product-title"></p>
+					</div>
+				</transition>
 			</figure>
 		</transition-group>
 		<GlobalEvents @scroll="debouncedScroll" />
@@ -81,6 +85,7 @@ export default Vue.extend({
 			debouncedScroll: () => {},
 			reachedEnd: false,
 			paginationStart: 0,
+			// hash: random(0, 10000),
 		}
 	},
 	watch: {
@@ -125,6 +130,7 @@ export default Vue.extend({
 		filterChange() {
 			this.reachedEnd = false
 			this.paginationStart = 0
+			// this.hash = random(0, 10000)
 			this.fetchProducts(true)
 		},
 		async fetchProducts(replace: boolean = false): Promise<void> {
