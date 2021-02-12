@@ -1,4 +1,5 @@
 // import Vue from 'vue'
+// import imagesloaded from 'imagesloaded'
 
 // Vue.directive('lazy-load', {
 //    // my custom directive
@@ -12,7 +13,7 @@
 //          el.classList.add('loading')
 
 //          // WHEN LOADED:
-//          imagesLoaded(el, { background: true }, instance => {
+//          imagesloaded(el, { background: true }, instance => {
 //             instance.images.forEach(image => {
 //                el.classList.add('loaded')
 

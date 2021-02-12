@@ -172,6 +172,9 @@ export default Vue.extend({
 
 		// Sets Last Visit Timestamp when the gallery is visited
 		localStorage.setItem('lastVisit', Date.now().toString())
+
+		// Refresh the page if the connection is restored
+		window.addEventListener('online', () => this.$router.go())
 	},
 	methods: {
 		async generateFilters(): Promise<Filter[]> {

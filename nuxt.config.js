@@ -44,6 +44,7 @@ export default {
 		'@nuxtjs/axios',
 		'@nuxtjs/strapi',
 		'@nuxtjs/style-resources',
+		'nuxt-lazy-load',
 	],
 
 	// Axios module configuration: https://go.nuxtjs.dev/config-axios

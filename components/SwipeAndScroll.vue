@@ -28,7 +28,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
-import { searchForSuitableParent } from '~/plugins/helpers'
+import { searchForSuitableParent } from '~/assets/js/helpers'
 import { SwipeDirection } from '~/types/types'
 
 let lastTouchMove = {

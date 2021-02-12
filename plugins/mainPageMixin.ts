@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { searchForSuitableParent } from '~/plugins/helpers'
+import { searchForSuitableParent } from '~/assets/js/helpers'
 
 let alreadyScrolled = false
 

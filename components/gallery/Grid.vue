@@ -13,8 +13,9 @@
 			>
 				<div
 					class="product-thumbnail"
-					:style="{ '--img-src': `url('${getData(product).thumbnail}')` }"
+					:lazy-background="getData(product).thumbnail"
 				></div>
+				<!-- :style="{ '--img-src': `url('${getData(product).thumbnail}')` }" -->
 				<!-- <img class="product-thumbnail" :src="getImageUrl(product)" /> -->
 				<p class="product-title">
 					{{ getData(product).title }}
@@ -231,9 +232,12 @@ export default Vue.extend({
 	border-radius: 20px;
 	aspect-ratio: 1/1;
 	padding-bottom: 100%;
-	background-image: var(--img-src);
+	// background-image: var(--img-src);
 	background-size: cover;
 	background-position: center;
+	:not(.isLoaded) {
+		@include skeleton;
+	}
 }
 .product-title {
 	margin: 10px 16px;
