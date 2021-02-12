@@ -47,7 +47,7 @@
     "graphql": "^15.5.0",
     "nuxt-graphql-request": "^3.2.1",
     "prettier": "^2.2.1",
-    "sass": "^1.32.6",
+    "sass": "^1.32.7",
     "sass-loader": "^10.1.1"
   }
 }
