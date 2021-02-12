@@ -1,14 +1,16 @@
 <template>
-	<button
-		class="filter-pill"
-		:class="{ [color]: true, selected: isSelected }"
-		@click="handleClick"
-	>
-		<Icon v-if="icon" :icon="icon" class="icon"></Icon>
-		<p class="text">
-			<slot></slot>
-		</p>
-	</button>
+	<transition appear name="fade">
+		<button
+			class="pill"
+			:class="{ [color]: true, selected: isSelected }"
+			@click="handleClick"
+		>
+			<Icon v-if="icon" :icon="icon" class="icon"></Icon>
+			<p class="text">
+				<slot></slot>
+			</p>
+		</button>
+	</transition>
 </template>
 
 <script lang="ts">
@@ -60,34 +62,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.filter-pill {
-	--color: #{$gray1};
-	border-radius: 200px;
-	height: 34px;
-	padding: 0 10px;
-	background-color: $white;
-	border: 2px solid var(--color);
-	color: var(--color);
-	display: flex;
-	align-items: center;
-
-	&.secondary {
-		--color: #{$secondary};
-	}
-	&.primary {
-		--color: #{$primary};
-	}
-
-	&.selected {
-		background-color: var(--color);
-		color: $white;
-	}
-	.icon:not(.alone) {
-		margin-right: 8px;
-	}
-	.text {
-		margin: 0;
-	}
-}
-</style>
+<style lang="scss"></style>

@@ -1,4 +1,4 @@
-@import 'variables/mixins', 'variables/variables';
+@import 'variables/mixins', 'variables/variables', 'elements';
 
 .disable-scroll {
 	overflow: hidden !important;
@@ -12,7 +12,7 @@
 	min-height: 100vh;
 	overflow: hidden;
 	--page-margin: calc(var(--space-size) * 6);
-	padding: 0 var(--page-margin);
+	// padding: 0 var(--page-margin);
 	padding-bottom: calc(var(--page-margin) + #{$mobile-nav-height});
 }
 

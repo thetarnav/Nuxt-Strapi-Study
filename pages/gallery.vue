@@ -18,6 +18,12 @@
 					@select="selectFilter"
 					>{{ filter.name }}</FilterPill
 				>
+				<template v-if="filters.length === 0">
+					<div class="pill pill--loading"></div>
+					<div class="pill pill--loading"></div>
+					<div class="pill pill--loading"></div>
+					<div class="pill pill--loading"></div>
+				</template>
 				<div
 					v-if="filters.length > 6"
 					class="show-more"
@@ -155,7 +161,7 @@ export default Vue.extend({
 		},
 	},
 	mounted() {
-		this.debounceScroll = debounce(this.handleScroll, 200, { maxWait: 300 })
+		this.debounceScroll = debounce(this.handleScroll, 180, { maxWait: 250 })
 
 		// Scroll below upper swipe padding at the beginning
 		this.$nextTick(() => {
@@ -263,7 +269,8 @@ export default Vue.extend({
 .gallery-header {
 	display: flex;
 	position: relative;
-	margin-right: calc(var(--page-margin) * -1);
+	// margin-right: calc(var(--page-margin) * -1);
+	margin-left: var(--page-margin);
 }
 
 .hide-me {
@@ -305,6 +312,12 @@ export default Vue.extend({
 		position: relative;
 		z-index: 20;
 	}
+}
+
+.loading-pill {
+	width: 20vw;
+	height: 35px;
+	background: gray;
 }
 
 .full-filters-group {
