@@ -1,10 +1,9 @@
 <template>
 	<div class="layout">
+		<MainNav />
 		<SwipeAndScroll :directions="['up', 'left', 'right']" @swipe="swipe">
 			<Nuxt class="page" />
 		</SwipeAndScroll>
-		<MainNav />
-		<ProductOverlay v-if="$route.query.productId !== undefined" />
 	</div>
 </template>
 

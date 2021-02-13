@@ -15,23 +15,15 @@
 			class="btn btn-primary btn-large u-center"
 			>Dostępne produkty</nuxt-link
 		>
-		<div class="mt-20">
-			<nuxt-link
-				:to="{
-					query: {
-						...$route.query,
-						productId: '6021bd9be541ac0015845c94',
-					},
-				}"
-			>
-				<img
-					srcX="https://source.unsplash.com/800x1000/?lamp,interior,design"
-					src="img/widok na komin-8.jpg"
-					alt="zdjęcie wystawy przykładowej lampy"
-					class="promo-photo cover-img"
-				/>
-			</nuxt-link>
-		</div>
+		<figure>
+			<img
+				srcX="https://source.unsplash.com/800x1000/?lamp,interior,design"
+				src="img/widok na komin-8.jpg"
+				alt="zdjęcie wystawy przykładowej lampy"
+				class="promo-photo mt-20 cover-img"
+			/>
+			<button>Zobacz produkt</button>
+		</figure>
 	</div>
 </template>
 
