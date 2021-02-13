@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import remove from 'lodash.remove'
 import {
 	fullProductQuery,
 	FullProductResponse,
@@ -53,10 +52,6 @@ export default Vue.extend({
 				query,
 				{ id },
 			)
-
-			// Remove "Broken Ties"
-			remove(product.ties, ({ products }) => products.length === 0)
-
 			this.data = product
 		} catch (error) {
 			console.error(error)

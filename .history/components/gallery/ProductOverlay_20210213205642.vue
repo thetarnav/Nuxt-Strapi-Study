@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import remove from 'lodash.remove'
 import {
 	fullProductQuery,
 	FullProductResponse,
@@ -49,13 +48,14 @@ export default Vue.extend({
 		const { id, $graphql } = this,
 			query = fullProductQuery
 		try {
+			console.log('product', id)
+
 			const { product } = await $graphql.request<FullProductResponse>(
 				query,
 				{ id },
 			)
 
-			// Remove "Broken Ties"
-			remove(product.ties, ({ products }) => products.length === 0)
+			console.log('fetch', product)
 
 			this.data = product
 		} catch (error) {

@@ -54,7 +54,6 @@ export default Vue.extend({
 				{ id },
 			)
 
-			// Remove "Broken Ties"
 			remove(product.ties, ({ products }) => products.length === 0)
 
 			this.data = product
