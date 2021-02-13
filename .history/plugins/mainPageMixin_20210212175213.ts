@@ -19,16 +19,13 @@ export default Vue.extend({
 			const scrollParent = searchForSuitableParent(this.$el as HTMLElement, {
 					overflowY: ['scroll', 'auto'],
 				}),
-				prevRoute = from.name || 'index',
-				filter =
-					to.query.filter ??
-					(prevRoute !== 'index' ? prevRoute : undefined)
+				prevRoute = from.name || 'index'
 
 			next({
 				name: 'gallery',
 				query: {
 					prevRoute,
-					filter,
+					filter: prevRoute !== 'index' ? prevRoute : undefined,
 					scroll: Math.round(
 						scrollParent?.scrollTop || window.scrollY,
 					).toString(),

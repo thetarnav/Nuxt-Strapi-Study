@@ -21,8 +21,13 @@ export default Vue.extend({
 				}),
 				prevRoute = from.name || 'index',
 				filter =
-					to.query.filter ??
-					(prevRoute !== 'index' ? prevRoute : undefined)
+					this.$route.query.filter || prevRoute !== 'index'
+						? prevRoute
+						: undefined
+
+			console.log('$route', this.$route.query)
+			console.log('to', to.query)
+			console.log('from', from.query)
 
 			next({
 				name: 'gallery',

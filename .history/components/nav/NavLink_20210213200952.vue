@@ -17,11 +17,23 @@ export default Vue.extend({
 			type: String,
 			default: '',
 		},
+		// to: {
+		// 	type: String,
+		// 	default: 'index',
+		// },
 		icon: {
 			type: String,
 			default: 'image',
 		},
 	},
+	mounted() {
+		console.log(this.$attrs)
+	},
+	// computed: {
+	// 	display() {
+	// 		return this.to !== this.route?.name && this.to !== this.route?.path
+	// 	},
+	// },
 })
 </script>
 

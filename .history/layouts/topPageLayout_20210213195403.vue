@@ -3,7 +3,7 @@
 		<SwipeAndScroll :directions="['up', 'left', 'right']" @swipe="swipe">
 			<Nuxt class="page" />
 		</SwipeAndScroll>
-		<MainNav :new-products="newProductsCount" />
+		<MainNav />
 		<ProductOverlay v-if="$route.query.productId !== undefined" />
 		<div v-if="newProductsCount > 0" class="new-products-notification">
 			<p>Nowe produkty: +{{ newProductsCount }}</p>
@@ -29,6 +29,9 @@ export default Vue.extend({
 			const pageIndex = this.$store.getters.pageIndex(this.$route.name)
 			return typeof pageIndex === 'number' ? pageIndex : 0
 		},
+	},
+	mounted() {
+		console.log('mounted', (this.$store.state as RootState).newProductsCount)
 	},
 	methods: {
 		swipe(direction: SwipeDirection): void {

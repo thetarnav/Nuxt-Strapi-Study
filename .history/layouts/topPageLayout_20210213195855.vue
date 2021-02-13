@@ -30,6 +30,9 @@ export default Vue.extend({
 			return typeof pageIndex === 'number' ? pageIndex : 0
 		},
 	},
+	mounted() {
+		console.log('mounted', (this.$store.state as RootState).newProductsCount)
+	},
 	methods: {
 		swipe(direction: SwipeDirection): void {
 			const { pageIndex, topPagesOrder } = this

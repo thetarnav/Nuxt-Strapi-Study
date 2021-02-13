@@ -3,35 +3,34 @@
 		<SwipeAndScroll :directions="['up', 'left', 'right']" @swipe="swipe">
 			<Nuxt class="page" />
 		</SwipeAndScroll>
-		<MainNav :new-products="newProductsCount" />
+		<MainNav />
 		<ProductOverlay v-if="$route.query.productId !== undefined" />
-		<div v-if="newProductsCount > 0" class="new-products-notification">
-			<p>Nowe produkty: +{{ newProductsCount }}</p>
-		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { SwipeDirection } from '~/types/types'
 import { RootState } from '~/store'
 
 export default Vue.extend({
 	name: 'TopPageLayout',
 	computed: {
-		topPagesOrder() {
-			return (this.$store.state as RootState).topPagesOrder
-		},
-		newProductsCount() {
-			return (this.$store.state as RootState).newProductsCount
-		},
+		...mapState(['topPagesOrder', 'newProductsCount']),
+		// topPagesOrder() {
+		// 	return this.$store.state.topPagesOrder as RootState['topPagesOrder']
+		// },
 		pageIndex() {
 			const pageIndex = this.$store.getters.pageIndex(this.$route.name)
 			return typeof pageIndex === 'number' ? pageIndex : 0
 		},
 	},
+	mounted() {
+		console.log('mounted', (this.$store.state as RootState).newProductsCount)
+	},
 	methods: {
-		swipe(direction: SwipeDirection): void {
+		swipe(direction: SwipeDirection) {
 			const { pageIndex, topPagesOrder } = this
 
 			switch (direction) {
@@ -63,13 +62,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped>
-.new-products-notification {
-	position: fixed;
-	top: 20px;
-	left: 0;
-	right: 0;
-	display: flex;
-	justify-content: center;
-}
-</style>
+<style lang="scss"></style>

@@ -1,5 +1,5 @@
 <template>
-	<nav class="main-nav" :class="$route.name">
+	<nav class="main-nav" :class="route.name">
 		<div class="middle-button">
 			<button>kontakt</button>
 		</div>
@@ -46,6 +46,11 @@ export default Vue.extend({
 		newProducts: {
 			type: Number,
 			default: 0,
+		},
+	},
+	computed: {
+		route() {
+			return this.$route
 		},
 	},
 })

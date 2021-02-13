@@ -1,5 +1,5 @@
 <template>
-	<nuxt-link :to="$attrs.to || ''" class="nav-link" :class="name">
+	<nuxt-link :to="{ name: to }" class="nav-link" :class="name">
 		<Icon :icon="icon" class="link-icon"></Icon>
 		<p class="link-text">
 			<slot></slot>
@@ -17,17 +17,25 @@ export default Vue.extend({
 			type: String,
 			default: '',
 		},
+		to: {
+			type: String,
+			default: 'index',
+		},
 		icon: {
 			type: String,
 			default: 'image',
 		},
 	},
+	// computed: {
+	// 	display() {
+	// 		return this.to !== this.route?.name && this.to !== this.route?.path
+	// 	},
+	// },
 })
 </script>
 
 <style lang="scss" scoped>
 .link-text {
-	position: relative;
 	margin: 0;
 	line-height: 70%;
 	margin-top: 5px;

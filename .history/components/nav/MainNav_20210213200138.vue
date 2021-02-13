@@ -1,16 +1,16 @@
 <template>
-	<nav class="main-nav" :class="$route.name">
+	<nav class="main-nav" :class="route.name">
 		<div class="middle-button">
 			<button>kontakt</button>
 		</div>
-		<NavLink key="home" name="home" to="/" icon="home">Home</NavLink>
-		<NavLink key="lamps" name="lamps" to="/lamps" icon="lightbulb"
+		<NavLink key="home" name="home" to="index" icon="home">Home</NavLink>
+		<NavLink key="lamps" name="lamps" to="lamps" icon="lightbulb"
 			>Lampy</NavLink
 		>
 		<NavLink
 			key="belt-bags"
 			name="belt-bags"
-			to="/belt-bags"
+			to="belt-bags"
 			icon="shopping-bag"
 			>Saszetki</NavLink
 		>
@@ -21,7 +21,7 @@
 			v-if="newProducts === 0"
 			key="gallery"
 			name="gallery"
-			to="/gallery"
+			to="gallery"
 			icon="grip-vertical"
 			>Galeria</NavLink
 		>
@@ -46,6 +46,11 @@ export default Vue.extend({
 		newProducts: {
 			type: Number,
 			default: 0,
+		},
+	},
+	computed: {
+		route() {
+			return this.$route
 		},
 	},
 })
