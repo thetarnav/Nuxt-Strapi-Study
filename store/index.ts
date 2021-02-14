@@ -1,4 +1,4 @@
-import { GetterTree, ActionTree, MutationTree, Store } from 'vuex'
+import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import cloneDeep from 'lodash.clonedeep'
 import debounce from 'lodash.debounce'
 import { Filter } from '~/types/types'
@@ -12,6 +12,7 @@ export const state = () => ({
 	topPagesNames: ['Home', 'Lampy', 'Saszetki', 'Obrazy'],
 	swipeVerticalPadding: 100,
 	newProductsCount: 0,
+	avgViews: null as number | null,
 	areAvailableProducts: false,
 	areOtherProducts: false,
 	filters: [] as Filter[],
@@ -45,6 +46,9 @@ export const mutations: MutationTree<RootState> = {
 	},
 	setFilters: (store, filters: Filter[]) =>
 		(store.filters = cloneDeep(filters)),
+	setAverageViews: (store, views) => {
+		if (typeof views === 'number') store.avgViews = views
+	},
 	VIEW_PRODUCT: (store, id: string) => {
 		const current = store.seenProducts[id]
 		store.seenProducts[id] = typeof current === 'number' ? current + 1 : 1

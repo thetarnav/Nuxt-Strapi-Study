@@ -42,7 +42,7 @@ export default {
 	modules: [
 		// https://go.nuxtjs.dev/axios
 		'@nuxtjs/axios',
-		'@nuxtjs/strapi',
+		// '@nuxtjs/strapi',
 		'@nuxtjs/style-resources',
 		'nuxt-lazy-load',
 	],
@@ -50,10 +50,10 @@ export default {
 	// Axios module configuration: https://go.nuxtjs.dev/config-axios
 	axios: {},
 
-	strapi: {
-		url: process.env.STRAPI_URL,
-		entities: ['products', 'product-categories'],
-	},
+	// strapi: {
+	// 	url: process.env.STRAPI_URL,
+	// 	entities: ['products', 'product-categories'],
+	// },
 
 	graphql: {
 		endpoint: `${process.env.STRAPI_URL}/graphql`,

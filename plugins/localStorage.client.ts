@@ -1,5 +1,6 @@
 import { Context } from '@nuxt/types'
 import Vue from 'vue'
+import { countQuery, CountResponse } from '~/assets/js/queries'
 // import { ApplicationState } from '~/store'
 
 declare module 'vue/types/vue' {
@@ -8,7 +9,7 @@ declare module 'vue/types/vue' {
 	}
 }
 
-export default function ({ store, $strapi }: Context) {
+export default function ({ store, $graphql }: Context) {
 	const lastVisit =
 		parseInt(localStorage.getItem('lastVisit') || '') || Date.now()
 	Vue.prototype.$lastVisit = lastVisit
@@ -17,21 +18,31 @@ export default function ({ store, $strapi }: Context) {
 
 	async function checkFilterPopulation() {
 		try {
-			const countNew = await $strapi.count('products', {
-					timestamp_gte: lastVisit,
-				}),
-				countAvailable = await $strapi.count('products', {
-					isAvailable: true,
-				}),
-				countOther = await $strapi.count('products', {
-					category_null: true,
-				})
+			const {
+				new: {
+					aggregate: { count: countNew },
+				},
+				available: {
+					aggregate: { count: countAvailable },
+				},
+				other: {
+					aggregate: { count: countOther },
+				},
+				views: {
+					aggregate: {
+						avg: { views },
+					},
+				},
+			} = await $graphql.request<CountResponse>(countQuery, {
+				timestamp: lastVisit,
+			})
 
 			store.commit('setFilterCount', {
 				countNew,
 				countAvailable,
 				countOther,
 			})
+			store.commit('setAverageViews', views)
 		} catch (err) {
 			console.error(err)
 		}

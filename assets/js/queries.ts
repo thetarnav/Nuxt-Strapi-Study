@@ -17,28 +17,53 @@ export interface CategoriesResponse {
 	}[]
 }
 
-export const countNewQuery = gql`
-	query CountNew($timestamp: Float) {
-		productsConnection(where: { timestamp_gte: $timestamp }) {
+export const countQuery = gql`
+	query Count($timestamp: Float) {
+		new: productsConnection(where: { timestamp_gte: $timestamp }) {
 			aggregate {
 				count
 			}
 		}
-	}
-`
-export const countAvailableQuery = gql`
-	query CountAvailable {
-		productsConnection(where: { isAvailable: true }) {
+		available: productsConnection(where: { isAvailable: true }) {
 			aggregate {
 				count
+			}
+		}
+		other: productsConnection(where: { category_null: true }) {
+			aggregate {
+				count
+			}
+		}
+		views: productsConnection {
+			aggregate {
+				avg {
+					views
+				}
 			}
 		}
 	}
 `
 const countResponse = {
-	productsConnection: {
+	new: {
 		aggregate: {
-			count: 7,
+			count: 14,
+		},
+	},
+	available: {
+		aggregate: {
+			count: 13,
+		},
+	},
+	other: {
+		aggregate: {
+			count: 3,
+		},
+	},
+	views: {
+		aggregate: {
+			avg: {
+				views: 8.642857142857142,
+			},
 		},
 	},
 }

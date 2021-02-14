@@ -19,7 +19,7 @@
 		"types": [
 			"@nuxt/types",
 			"@types/node",
-			"@nuxtjs/strapi",
+			// "@nuxtjs/strapi",
 			"nuxt-graphql-request",
 			"@nuxtjs/axios"
 		]
