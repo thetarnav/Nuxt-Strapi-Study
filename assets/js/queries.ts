@@ -86,7 +86,7 @@ const productThumbnail = gql`
 export const availableProductsQuery = gql`
 	query AvailableProducts($start: Int, $limit: Int) {
 		products(
-			sort: "timestamp:desc"
+			sort: "popularity:desc"
 			where: { isAvailable: true }
 			limit: $limit
 			start: $start
@@ -112,7 +112,7 @@ export const newProductsQuery = gql`
 export const productsOfCategoryQuery = gql`
 	query ProductsOfCategory($id: ID!, $start: Int, $limit: Int) {
 		category(id: $id) {
-			products(sort: "timestamp:desc", limit: $limit, start: $start) {
+			products(sort: "popularity:desc", limit: $limit, start: $start) {
 				...ProductThumbnail
 			}
 		}
@@ -121,7 +121,7 @@ export const productsOfCategoryQuery = gql`
 `
 export const allProductsQuery = gql`
 	query AllProducts($start: Int, $limit: Int) {
-		products(sort: "timestamp:desc", limit: $limit, start: $start) {
+		products(sort: "popularity:desc", limit: $limit, start: $start) {
 			...ProductThumbnail
 		}
 	}
@@ -130,7 +130,7 @@ export const allProductsQuery = gql`
 export const noCategoryProductsQuery = gql`
 	query WithoutCategoryProducts($start: Int, $limit: Int) {
 		products(
-			sort: "timestamp:desc"
+			sort: "popularity:desc"
 			where: { category_null: true }
 			limit: $limit
 			start: $start
