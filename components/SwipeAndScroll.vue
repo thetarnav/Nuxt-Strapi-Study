@@ -21,6 +21,7 @@
 		<GlobalEvents @scroll="debouncedHandleScroll"></GlobalEvents>
 
 		<!-- <div class="log">
+			{{ isAllowedDown }}
 		</div> -->
 	</div>
 </template>
@@ -56,6 +57,8 @@ export default Vue.extend({
 			debouncedHandleTouchMove: (e: TouchEvent) => {},
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			debouncedTriggerSwipe: (direction: SwipeDirection) => {},
+			debAllowUp: () => {},
+			debAllowDown: () => {},
 		}
 	},
 	computed: {
@@ -81,6 +84,8 @@ export default Vue.extend({
 			leading: true,
 			trailing: false,
 		})
+		this.debAllowUp = debounce(this.allowUp, 80, { maxWait: 80 })
+		this.debAllowDown = debounce(this.allowDown, 200, { maxWait: 200 })
 		;(this.parent ?? window).addEventListener(
 			'scroll',
 			this.debouncedHandleScroll,
@@ -150,6 +155,9 @@ export default Vue.extend({
 		allowUp() {
 			if (this.getFromBottom() < 5) this.isAllowedUp = true
 		},
+		allowDown() {
+			this.isAllowedDown = true
+		},
 		touchmove(e: TouchEvent) {
 			/**
 			 * Triggers Swipe Check
@@ -191,8 +199,22 @@ export default Vue.extend({
 				this.isAllowedUp = false
 			}, 100)
 		},
-		wheel() {
-			this.isAllowedDown = true
+		wheel({ deltaY }: WheelEvent) {
+			const fromBottom = this.getFromBottom(),
+				fromTop = this.getFromTop(),
+				{ isAllowedUp, isAllowedDown, verticalPadding } = this
+
+			// Allowing Swipe UP
+			// and swiping if constantly scrolling down
+			if (fromBottom <= 20 && deltaY > 0) {
+				if (!isAllowedUp) this.debAllowUp()
+				else this.triggerSwipe('up')
+			} else this.isAllowedUp = false
+
+			// Allowing Swipe DOWN
+			if (fromTop <= verticalPadding + 10 && deltaY < 0) {
+				if (!isAllowedDown) this.debAllowDown()
+			} else this.isAllowedDown = false
 		},
 		checkVerticalSwipe() {
 			const { directions, isAllowedDown, parent, verticalPadding } = this,
