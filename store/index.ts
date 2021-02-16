@@ -12,7 +12,7 @@ export const state = () => ({
 	topPagesNames: ['Home', 'Lampy', 'Saszetki', 'Obrazy'],
 	swipeVerticalPadding: 100,
 	newProductsCount: 0,
-	avgViews: null as number | null,
+	areNewProducts: false,
 	areAvailableProducts: false,
 	areOtherProducts: false,
 	filters: [] as Filter[],
@@ -37,8 +37,17 @@ export const getters: GetterTree<RootState, RootState> = {
  * MUTATIONS:
  */
 export const mutations: MutationTree<RootState> = {
-	setFilterCount: (state, { countNew, countAvailable, countOther }) => {
-		if (typeof countNew === 'number') state.newProductsCount = countNew
+	setFilterCount: (
+		state,
+		{ sinceLastVisit, sinceLastWeek, countAvailable, countOther },
+	) => {
+		if (typeof sinceLastVisit === 'number') {
+			state.newProductsCount = sinceLastVisit
+			state.areNewProducts = true
+		}
+		if (typeof sinceLastWeek === 'number' && sinceLastWeek > 0)
+			state.areNewProducts = true
+
 		if (typeof countAvailable === 'number' && countAvailable > 0)
 			state.areAvailableProducts = true
 		if (typeof countOther === 'number' && countOther > 0)
@@ -46,9 +55,6 @@ export const mutations: MutationTree<RootState> = {
 	},
 	setFilters: (store, filters: Filter[]) =>
 		(store.filters = cloneDeep(filters)),
-	setAverageViews: (store, views) => {
-		if (typeof views === 'number') store.avgViews = views
-	},
 	VIEW_PRODUCT: (store, id: string) => {
 		const current = store.seenProducts[id]
 		store.seenProducts[id] = typeof current === 'number' ? current + 1 : 1

@@ -19,8 +19,11 @@ export default function ({ store, $graphql }: Context) {
 	async function checkFilterPopulation() {
 		try {
 			const {
-				new: {
-					aggregate: { count: countNew },
+				sinceLastWeek: {
+					aggregate: { count: sinceLastWeek },
+				},
+				sinceLastVisit: {
+					aggregate: { count: sinceLastVisit },
 				},
 				available: {
 					aggregate: { count: countAvailable },
@@ -28,21 +31,17 @@ export default function ({ store, $graphql }: Context) {
 				other: {
 					aggregate: { count: countOther },
 				},
-				views: {
-					aggregate: {
-						avg: { views },
-					},
-				},
 			} = await $graphql.request<CountResponse>(countQuery, {
-				timestamp: lastVisit,
+				lastVisit,
+				weekAgo: Date.now() - 6.048e8,
 			})
 
 			store.commit('setFilterCount', {
-				countNew,
+				sinceLastVisit,
+				sinceLastWeek,
 				countAvailable,
 				countOther,
 			})
-			store.commit('setAverageViews', views)
 		} catch (err) {
 			console.error(err)
 		}

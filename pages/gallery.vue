@@ -136,14 +136,11 @@ export default Vue.extend({
 	},
 	computed: {
 		availableFilters(): Filter[] {
-			const {
-					newProductsCount,
-					areAvailableProducts,
-					areOtherProducts,
-				} = this.$store.state as RootState,
+			const { areAvailableProducts, areNewProducts, areOtherProducts } = this
+					.$store.state as RootState,
 				namesToDelete: string[] = []
 
-			newProductsCount === 0 && namesToDelete.push('new')
+			!areNewProducts && namesToDelete.push('new')
 			!areAvailableProducts && namesToDelete.push('available')
 			!areOtherProducts && namesToDelete.push('other')
 			return this.filters.filter(({ uid }) => !namesToDelete.includes(uid))

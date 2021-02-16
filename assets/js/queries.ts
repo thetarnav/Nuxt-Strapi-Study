@@ -18,8 +18,13 @@ export interface CategoriesResponse {
 }
 
 export const countQuery = gql`
-	query Count($timestamp: Float) {
-		new: productsConnection(where: { timestamp_gte: $timestamp }) {
+	query Count($weekAgo: Float, $lastVisit: Float) {
+		sinceLastWeek: productsConnection(where: { timestamp_gte: $weekAgo }) {
+			aggregate {
+				count
+			}
+		}
+		sinceLastVisit: productsConnection(where: { timestamp_gte: $lastVisit }) {
 			aggregate {
 				count
 			}
@@ -34,17 +39,15 @@ export const countQuery = gql`
 				count
 			}
 		}
-		views: productsConnection {
-			aggregate {
-				avg {
-					views
-				}
-			}
-		}
 	}
 `
 const countResponse = {
-	new: {
+	sinceLastWeek: {
+		aggregate: {
+			count: 14,
+		},
+	},
+	sinceLastVisit: {
 		aggregate: {
 			count: 14,
 		},
@@ -57,13 +60,6 @@ const countResponse = {
 	other: {
 		aggregate: {
 			count: 3,
-		},
-	},
-	views: {
-		aggregate: {
-			avg: {
-				views: 8.642857142857142,
-			},
 		},
 	},
 }

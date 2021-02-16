@@ -18,7 +18,7 @@
 			>Obrazy</NavLink
 		>
 		<NavLink
-			v-if="newProducts === 0"
+			v-if="!areNew"
 			key="gallery"
 			name="gallery"
 			to="/gallery"
@@ -46,6 +46,10 @@ export default Vue.extend({
 		newProducts: {
 			type: Number,
 			default: 0,
+		},
+		areNew: {
+			type: Boolean,
+			default: false,
 		},
 	},
 })

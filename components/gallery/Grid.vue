@@ -170,7 +170,9 @@ export default Vue.extend({
 			else if (uid === 'available') query = availableProductsQuery
 			else if (uid === 'new') {
 				query = newProductsQuery
-				variables.timestamp = this.$lastVisit
+				const weekAgo = Date.now() - 6.048e8,
+					lastVisit = this.$lastVisit
+				variables.timestamp = Math.min(lastVisit, weekAgo)
 			} else if (uid === 'other') query = noCategoryProductsQuery
 			else if (id) {
 				query = productsOfCategoryQuery
