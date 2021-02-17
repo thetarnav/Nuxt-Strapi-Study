@@ -51,6 +51,9 @@ export default {
 	generate: {
 		dir: 'docs',
 	},
+	router: {
+		base: '/nuxt-strapi-prototyping/',
+	},
 
 	// Axios module configuration: https://go.nuxtjs.dev/config-axios
 	axios: {},
