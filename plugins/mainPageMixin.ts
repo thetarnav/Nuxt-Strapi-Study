@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { searchForSuitableParent } from '~/assets/js/helpers'
+import { PageOrder } from '~/types/types'
 
 let alreadyScrolled = false
 
@@ -39,10 +40,10 @@ export default Vue.extend({
 	layout: 'topPageLayout',
 	scrollToTop: false,
 	transition(to, from) {
-		const toIndex = window.$nuxt.$store.getters.pageIndex(to.name),
-			fromIndex = window.$nuxt.$store.getters.pageIndex(
-				from?.name || 'index',
-			)
+		const toIndex =
+				(PageOrder[to?.name || 'index'] as number | undefined) || 0,
+			fromIndex =
+				(PageOrder[from?.name || 'index'] as number | undefined) || 0
 
 		return {
 			name: toIndex < fromIndex ? 'swipe-right' : 'swipe-left',

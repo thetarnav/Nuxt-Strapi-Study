@@ -14,6 +14,19 @@ export type RoutePath =
 	| '/paintings'
 	| '/gallery'
 
+export enum PageOrder {
+	index,
+	lamps,
+	'belt-bags',
+	paintings,
+}
+export enum PageTitles {
+	index = 'Home',
+	lamps = 'Lampy',
+	'belt-bags' = 'Saszetki',
+	paintings = 'Obrazy',
+}
+
 // export const productTags = [
 // 	'lamp',
 // 	'belt-bag',

@@ -8,8 +8,6 @@ interface SeenProducts {
 }
 
 export const state = () => ({
-	topPagesOrder: ['index', 'lamps', 'belt-bags', 'paintings'],
-	topPagesNames: ['Home', 'Lampy', 'Saszetki', 'Obrazy'],
 	swipeVerticalPadding: 100,
 	newProductsCount: 0,
 	areNewProducts: false,
@@ -24,14 +22,7 @@ export type RootState = ReturnType<typeof state>
 /**
  * GETTERS:
  */
-export const getters: GetterTree<RootState, RootState> = {
-	pageIndex: ({ topPagesOrder }) => (page: string) =>
-		topPagesOrder.findIndex(x => page === x),
-	pageName: ({ topPagesNames }, { pageIndex }) => (page: string | number) =>
-		typeof page === 'number'
-			? topPagesNames[page]
-			: topPagesNames[pageIndex(page)],
-}
+export const getters: GetterTree<RootState, RootState> = {}
 
 /**
  * MUTATIONS:

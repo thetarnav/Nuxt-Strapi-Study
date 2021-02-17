@@ -13,29 +13,28 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { SwipeDirection } from '~/types/types'
+import { SwipeDirection, PageOrder } from '~/types/types'
 import { RootState } from '~/store'
 
 export default Vue.extend({
 	name: 'TopPageLayout',
 	computed: {
-		topPagesOrder() {
-			return (this.$store.state as RootState).topPagesOrder
-		},
 		newProductsCount() {
 			return (this.$store.state as RootState).newProductsCount
 		},
 		areNewProducts() {
 			return (this.$store.state as RootState).areNewProducts
 		},
-		pageIndex() {
-			const pageIndex = this.$store.getters.pageIndex(this.$route.name)
-			return typeof pageIndex === 'number' ? pageIndex : 0
+		pageIndex(): number | null {
+			const routeName = this.$route.name
+			if (!routeName) return null
+			return PageOrder[routeName]
 		},
 	},
 	methods: {
 		swipe(direction: SwipeDirection): void {
-			const { pageIndex, topPagesOrder } = this
+			const { pageIndex } = this
+			if (pageIndex === null) return
 
 			switch (direction) {
 				case 'up':
@@ -45,16 +44,16 @@ export default Vue.extend({
 					break
 
 				case 'left':
-					pageIndex + 1 < topPagesOrder.length &&
+					PageOrder[pageIndex + 1] &&
 						this.$router.push({
-							name: topPagesOrder[pageIndex + 1],
+							name: PageOrder[pageIndex + 1],
 						})
 					break
 
 				case 'right':
-					pageIndex - 1 >= 0 &&
+					PageOrder[pageIndex - 1] &&
 						this.$router.push({
-							name: topPagesOrder[pageIndex - 1],
+							name: PageOrder[pageIndex - 1],
 						})
 					break
 

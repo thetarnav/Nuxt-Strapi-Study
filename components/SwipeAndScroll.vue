@@ -15,7 +15,7 @@
 			class="swipe-space swipe-space--top"
 		>
 			<p>
-				{{ prevRouteName }}
+				{{ prevRouteTitle }}
 			</p>
 		</div>
 		<GlobalEvents @scroll="debouncedHandleScroll"></GlobalEvents>
@@ -30,7 +30,7 @@
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
 import { searchForSuitableParent } from '~/assets/js/helpers'
-import { SwipeDirection } from '~/types/types'
+import { SwipeDirection, PageTitles } from '~/types/types'
 
 let lastTouchMove = {
 	x: 0,
@@ -67,9 +67,12 @@ export default Vue.extend({
 				overflowY: ['scroll', 'auto'],
 			})
 		},
-		prevRouteName() {
-			const prevRoute = this.$route.query.prevRoute || 'index'
-			return this.$store.getters.pageName(prevRoute) || 'Home'
+		prevRouteTitle(): string {
+			const { prevRoute } = this.$route.query
+			let title = 'Home'
+			if (typeof prevRoute === 'string' && PageTitles[prevRoute])
+				title = PageTitles[prevRoute]
+			return title
 		},
 		verticalPadding() {
 			return this.$store.state.swipeVerticalPadding
