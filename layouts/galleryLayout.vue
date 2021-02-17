@@ -1,7 +1,7 @@
 <template>
 	<div class="">
 		<SwipeAndScroll :directions="['down']" @swipe="swipe">
-			<Nuxt class="page" keep-alive />
+			<Nuxt class="page" />
 		</SwipeAndScroll>
 		<MainNav />
 		<!-- <ProductOverlay v-if="showProduct" /> -->

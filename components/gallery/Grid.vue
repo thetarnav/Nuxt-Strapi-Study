@@ -47,6 +47,7 @@
 <script lang="ts">
 import debounce from 'lodash.debounce'
 import remove from 'lodash.remove'
+import qs from 'qs'
 import Vue from 'vue'
 import {
 	ProductThumbnail,
@@ -219,10 +220,8 @@ export default Vue.extend({
 			this.hideResults = false
 		},
 		openProduct(productId: ProductThumbnail['id']): void {
-			this.$router.push({
-				params: { productId },
-				query: { ...this.$route.query, productId },
-			})
+			const query = qs.stringify(this.$route.query)
+			this.$router.push(`gallery/${productId}?${query}`)
 		},
 	},
 })

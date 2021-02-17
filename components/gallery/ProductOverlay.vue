@@ -32,6 +32,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import remove from 'lodash.remove'
+import qs from 'qs'
 import {
 	fullProductQuery,
 	FullProductResponse,
@@ -48,6 +49,10 @@ export default Vue.extend({
 	async fetch(): Promise<void> {
 		const { id, $graphql } = this,
 			query = fullProductQuery
+		if (!id) {
+			this.closeOverlay()
+			return
+		}
 		try {
 			const { product } = await $graphql.request<FullProductResponse>(
 				query,
@@ -66,12 +71,9 @@ export default Vue.extend({
 	computed: {
 		id(): string {
 			const { params, query } = this.$route,
-				id =
-					params.productId ||
-					(typeof query.productId === 'string' && query.productId) ||
-					null
+				id = params.productId ?? query.productId
 
-			if (id === null) {
+			if (!id) {
 				this.closeOverlay()
 				return ''
 			}
@@ -79,33 +81,20 @@ export default Vue.extend({
 			return id
 		},
 	},
-	mounted() {
+	created() {
 		this.$store.dispatch('seeProduct', this.id)
-		// this.setProductId()
 	},
 	methods: {
-		// setProductId(): void {
-		// 	const { id: productId } = this
-		// 	this.$router.push({
-		// 		params: { productId },
-		// 		query: { ...this.$route.query, productId },
-		// 	})
-		// },
 		closeOverlay() {
-			const { $route, $router, $store } = this
+			const { $route, $router } = this,
+				query = qs.stringify($route.query)
 			// When opened in gallery
-			if ($route.name?.includes('gallery'))
-				$router.push({
-					params: { productId: undefined } as any,
-					query: { ...$route.query, productId: undefined },
-				})
+			if ($route.name?.includes('gallery')) $router.push(`/gallery?${query}`)
 			// When opened in other page
 			else
 				$router.push({
 					query: { ...$route.query, productId: undefined },
 				})
-
-			// $store.commit('closeProduct')
 		},
 		copyLink() {
 			const { id } = this,

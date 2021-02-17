@@ -85,7 +85,7 @@
 		<!-- Gallery Grid -->
 		<Grid :id="selectedFilterID" :uid="selectedFilter" />
 
-		<nuxt-child />
+		<nuxt-child v-if="showOverlay" />
 	</div>
 </template>
 
@@ -137,6 +137,10 @@ export default Vue.extend({
 		}
 	},
 	computed: {
+		showOverlay(): boolean {
+			const { params, query } = this.$route
+			return params.productId !== undefined || query.productId !== undefined
+		},
 		availableFilters(): Filter[] {
 			const { areAvailableProducts, areNewProducts, areOtherProducts } = this
 					.$store.state as RootState,
@@ -159,6 +163,7 @@ export default Vue.extend({
 			)
 		},
 	},
+	watchQuery: ['productId'],
 	mounted() {
 		this.debounceScroll = debounce(this.handleScroll, 180, { maxWait: 250 })
 
