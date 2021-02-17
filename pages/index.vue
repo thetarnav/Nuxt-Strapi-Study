@@ -1,6 +1,6 @@
 <template>
 	<div class="page home px-6">
-		<figure class="banner" lazy-background="/img/picek.jpg"></figure>
+		<figure class="banner" lazy-background="img/picek.jpg"></figure>
 		<h1 class="project-name">Renkidzieło</h1>
 		<span class="project-logo icon subtitle u-center" style="font-size: 28px">
 			<Icon icon="image"></Icon>
