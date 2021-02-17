@@ -71,6 +71,15 @@ export default {
 		base: '/nuxt-strapi-prototyping/',
 	},
 
+	vue: {
+		config: {
+			productionTip: true,
+			devtools: true,
+			performance: true,
+			silent: false,
+		},
+	},
+
 	// Axios module configuration: https://go.nuxtjs.dev/config-axios
 	axios: {},
 

@@ -82,6 +82,8 @@ export default Vue.extend({
 		},
 	},
 	mounted() {
+		console.log('MOUNTED', this.data)
+
 		this.$store.dispatch('seeProduct', this.id)
 	},
 	methods: {
