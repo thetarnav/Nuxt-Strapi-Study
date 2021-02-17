@@ -1,6 +1,6 @@
 <template>
 	<div class="page home px-6">
-		<figure class="banner"></figure>
+		<figure class="banner" lazy-background="/img/picek.jpg"></figure>
 		<h1 class="project-name">Renkidzieło</h1>
 		<span class="project-logo icon subtitle u-center" style="font-size: 28px">
 			<Icon icon="image"></Icon>
@@ -58,7 +58,7 @@ export default MainPageMixin.extend({
 	height: 30rem;
 
 	// background: url('https://source.unsplash.com/featured/?workshop,artist,carpenter');
-	background: url('/img/picek.jpg');
+	// background: url('~/static/img/picek.jpg');
 	background-size: cover;
 	background-position-x: center;
 
