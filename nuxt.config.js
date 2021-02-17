@@ -47,6 +47,11 @@ export default {
 		'nuxt-lazy-load',
 	],
 
+	target: 'static',
+	generate: {
+		dir: 'docs',
+	},
+
 	// Axios module configuration: https://go.nuxtjs.dev/config-axios
 	axios: {},
 
