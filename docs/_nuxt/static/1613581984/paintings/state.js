@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1613581984",layout:"topPageLayout",error:null,state:{swipeVerticalPadding:100,newProductsCount:0,areNewProducts:a,areAvailableProducts:a,areOtherProducts:a,filters:[],seenProducts:{},relatedProducts:new Set([])},serverRendered:true,routePath:"\u002Fpaintings",config:{},globalRefs:{}}}(false));
