@@ -47,26 +47,10 @@ export default Vue.extend({
 		}
 	},
 	async fetch(): Promise<void> {
-		const { id, $graphql } = this,
-			query = fullProductQuery
-		if (!id) {
-			this.closeOverlay()
-			return
-		}
-		try {
-			const { product } = await $graphql.request<FullProductResponse>(
-				query,
-				{ id },
-			)
+		console.log('FETCHING')
 
-			// Remove "Broken Ties"
-			remove(product.ties, ({ products }) => products.length === 0)
-
-			this.data = product
-		} catch (error) {
-			console.error(error)
-			this.closeOverlay()
-		}
+		const product = await this.fetchData()
+		if (product) this.data = product
 	},
 	computed: {
 		id(): string {
@@ -82,11 +66,37 @@ export default Vue.extend({
 		},
 	},
 	mounted() {
-		console.log('MOUNTED', this.data)
-
 		this.$store.dispatch('seeProduct', this.id)
+
+		console.log('MOUNTED', this.data.title, this.$fetchState.pending)
+		if (this.data.title === undefined && this.$fetchState.pending === false)
+			this.$fetch()
 	},
 	methods: {
+		async fetchData(): Promise<FullProduct | undefined> {
+			const { id, $graphql } = this,
+				query = fullProductQuery
+
+			if (!id) {
+				this.closeOverlay()
+				return
+			}
+
+			try {
+				const { product } = await $graphql.request<FullProductResponse>(
+					query,
+					{ id },
+				)
+
+				// Remove "Broken Ties"
+				remove(product.ties, ({ products }) => products.length === 0)
+
+				return product
+			} catch (error) {
+				console.error(error)
+				this.closeOverlay()
+			}
+		},
 		closeOverlay() {
 			const { $route, $router } = this,
 				query = qs.stringify($route.query)
