@@ -81,20 +81,15 @@ export default Vue.extend({
 			return id
 		},
 	},
-	created() {
+	mounted() {
 		this.$store.dispatch('seeProduct', this.id)
 	},
 	methods: {
 		closeOverlay() {
 			const { $route, $router } = this,
 				query = qs.stringify($route.query)
-			// When opened in gallery
-			if ($route.name?.includes('gallery')) $router.push(`/gallery?${query}`)
-			// When opened in other page
-			else
-				$router.push({
-					query: { ...$route.query, productId: undefined },
-				})
+
+			$router.push(`/gallery?${query}`)
 		},
 		copyLink() {
 			const { id } = this,

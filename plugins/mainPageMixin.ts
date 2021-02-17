@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import qs from 'qs'
 import { searchForSuitableParent } from '~/assets/js/helpers'
 import { PageOrder } from '~/types/types'
 
@@ -16,25 +17,24 @@ export default Vue.extend({
 		next()
 	},
 	beforeRouteLeave(to, from, next) {
-		if (to.name === 'gallery' && to.query.prevRoute !== from.name) {
+		if (to.name?.includes('gallery') && to.query.prevRoute !== from.name) {
 			const scrollParent = searchForSuitableParent(this.$el as HTMLElement, {
-					overflowY: ['scroll', 'auto'],
-				}),
-				prevRoute = from.name || 'index',
-				filter =
-					to.query.filter ??
-					(prevRoute !== 'index' ? prevRoute : undefined)
-
-			next({
-				name: 'gallery',
-				query: {
-					prevRoute,
-					filter,
-					scroll: Math.round(
-						scrollParent?.scrollTop || window.scrollY,
-					).toString(),
-				},
+				overflowY: ['scroll', 'auto'],
 			})
+			const prevRoute = from.name || 'index'
+			const filter =
+				to.query.filter ?? (prevRoute !== 'index' ? prevRoute : undefined)
+			const scroll = Math.round(
+				scrollParent?.scrollTop || window.scrollY,
+			).toString()
+			const query = qs.stringify({
+				...to.query,
+				prevRoute,
+				filter,
+				scroll,
+			})
+
+			next(`/gallery/${to.params.productId || ''}?${query}`)
 		} else next()
 	},
 	layout: 'topPageLayout',

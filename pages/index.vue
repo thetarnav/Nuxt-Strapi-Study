@@ -16,14 +16,7 @@
 			>Dostępne produkty</nuxt-link
 		>
 		<div class="mt-20">
-			<nuxt-link
-				:to="{
-					query: {
-						...$route.query,
-						productId: '6021bd9be541ac0015845c94',
-					},
-				}"
-			>
+			<nuxt-link to="/gallery/6021bd9be541ac0015845c94">
 				<img
 					srcX="https://source.unsplash.com/800x1000/?lamp,interior,design"
 					src="img/widok na komin-8.jpg"

@@ -25,6 +25,7 @@ export default {
 		'~/plugins/fontawesome.js',
 		'~/plugins/globalEvents.js',
 		'~/plugins/localStorage.client.ts',
+		'~/plugins/toggleDocScroll.client.ts',
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components

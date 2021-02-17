@@ -4,7 +4,6 @@
 			<Nuxt class="page" />
 		</SwipeAndScroll>
 		<MainNav :new-products="newProductsCount" :are-new="areNewProducts" />
-		<ProductOverlay v-if="$route.query.productId !== undefined" />
 		<div v-if="newProductsCount > 0" class="new-products-notification">
 			<p>Nowe produkty: +{{ newProductsCount }}</p>
 		</div>

@@ -163,7 +163,6 @@ export default Vue.extend({
 			)
 		},
 	},
-	watchQuery: ['productId'],
 	mounted() {
 		this.debounceScroll = debounce(this.handleScroll, 180, { maxWait: 250 })
 
