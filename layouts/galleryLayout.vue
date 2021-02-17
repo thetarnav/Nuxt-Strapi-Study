@@ -4,7 +4,7 @@
 			<Nuxt class="page" keep-alive />
 		</SwipeAndScroll>
 		<MainNav />
-		<ProductOverlay v-if="showProduct" />
+		<!-- <ProductOverlay v-if="showProduct" /> -->
 	</div>
 </template>
 

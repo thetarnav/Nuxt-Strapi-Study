@@ -84,6 +84,8 @@
 
 		<!-- Gallery Grid -->
 		<Grid :id="selectedFilterID" :uid="selectedFilter" />
+
+		<nuxt-child />
 	</div>
 </template>
 
