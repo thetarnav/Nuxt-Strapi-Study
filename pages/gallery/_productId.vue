@@ -48,8 +48,6 @@ import {
 export default Vue.extend({
 	name: 'ProductOverlay',
 	asyncData({ params, payload }) {
-		console.log('ASYNC DATA')
-		console.log('params', params, 'payload', payload)
 		return {
 			id: params.productId || '',
 			data: payload ?? {},
@@ -68,8 +66,6 @@ export default Vue.extend({
 	async fetch(): Promise<void> {
 		const { id, $graphql, data } = this,
 			query = fullProductQuery
-
-		console.log('FETCHING, data:', data, 'id:', id)
 
 		// if (data.title) return
 		if (!id) {
@@ -112,22 +108,12 @@ export default Vue.extend({
 	},
 	watch: {
 		id() {
-			console.log('ID CHANGED')
-
 			this.fetchedTies = false
 			this.$fetch()
 		},
 	},
 	mounted() {
 		const { id, data, $fetchState } = this
-		console.log(
-			'MOUNTED, title:',
-			data.title,
-			'fetch-pending:',
-			$fetchState.pending,
-		)
-		console.log(this)
-
 		if (!id) {
 			this.closeOverlay()
 			return
@@ -142,8 +128,6 @@ export default Vue.extend({
 	},
 	methods: {
 		async fetchTies() {
-			console.log('FETCH TIES')
-
 			const { id } = this,
 				query = productTiesQuery
 			if (!id) return
