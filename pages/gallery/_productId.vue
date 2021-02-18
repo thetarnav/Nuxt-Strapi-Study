@@ -19,10 +19,13 @@
 			<a v-if="data.isAvailable" :href="data.shopLink" target="_blank"
 				>link do sklepu</a
 			>
-			<h6>Podobne produkty:</h6>
-			<ul>
+			<h4>Podobne produkty:</h4>
+			<ul class="ties">
 				<li v-for="tie in ties" :key="tie.products[0].id">
-					<h5>{{ tie.products[0].title }}</h5>
+					<a @click="goToProduct(tie.products[0].id)">
+						<h5>{{ tie.products[0].title }}</h5>
+					</a>
+					<!-- <nuxt-link :to="`/gallery/${tie.products[0].id}?{}`"></nuxt-link> -->
 				</li>
 			</ul>
 		</div>
@@ -38,6 +41,8 @@ import {
 	FullProductResponse,
 	FullProduct,
 	ProductTies,
+	productTiesQuery,
+	ProductTiesResponse,
 } from '~/assets/js/queries'
 
 export default Vue.extend({
@@ -48,6 +53,7 @@ export default Vue.extend({
 		return {
 			id: params.productId || '',
 			data: payload ?? {},
+			reload: true,
 		}
 	},
 	data() {
@@ -55,6 +61,8 @@ export default Vue.extend({
 			id: '',
 			data: {} as FullProduct,
 			ties: [] as ProductTies,
+			reload: false,
+			fetchedTies: false,
 		}
 	},
 	async fetch(): Promise<void> {
@@ -63,38 +71,53 @@ export default Vue.extend({
 
 		console.log('FETCHING, data:', data, 'id:', id)
 
-		// Fetch only if data is empty
-		if (data.title) return
+		// if (data.title) return
 		if (!id) {
 			this.closeOverlay()
 			return
 		}
 
-		try {
-			const { product } = await $graphql.request<FullProductResponse>(
-				query,
-				{ id },
-			)
+		/**
+		 * Fetch Product Data
+		 */
+		// Fetch only if data is empty
+		if (!data.title)
+			try {
+				const { product } = await $graphql.request<FullProductResponse>(
+					query,
+					{ id },
+				)
 
-			// Remove "Broken Ties"
-			// remove(product.ties, ({ products }) => products.length === 0)
+				this.data = product
+			} catch (error) {
+				console.error(error)
+				this.closeOverlay()
+			}
 
-			this.data = product
-		} catch (error) {
-			console.error(error)
-			this.closeOverlay()
+		/**
+		 * Fetch Ties
+		 */
+		await this.fetchTies()
+	},
+	head() {
+		return {
+			title: this.data.title,
+			meta: [
+				{
+					hid: 'description',
+					name: 'description',
+					content: this.data.description,
+				},
+			],
 		}
 	},
-	computed: {
-		// id(): string {
-		// 	const { params, query } = this.$route,
-		// 		id = params.productId ?? query.productId
-		// 	if (!id) {
-		// 		this.closeOverlay()
-		// 		return ''
-		// 	}
-		// 	return id
-		// },
+	watch: {
+		id() {
+			console.log('ID CHANGED')
+
+			this.fetchedTies = false
+			this.$fetch()
+		},
 	},
 	mounted() {
 		const { id, data, $fetchState } = this
@@ -114,6 +137,31 @@ export default Vue.extend({
 			this.$fetch()
 	},
 	methods: {
+		async fetchTies() {
+			console.log('FETCH TIES')
+
+			const { id } = this,
+				query = productTiesQuery
+			if (!id) return
+
+			try {
+				const {
+					product: { ties },
+				} = await this.$graphql.request<ProductTiesResponse>(query, { id })
+
+				// Remove "Broken Ties"
+				remove(ties, ({ products }) => products.length === 0)
+
+				this.ties = ties
+				this.fetchedTies = true
+			} catch (error) {
+				console.error(error)
+			}
+		},
+		goToProduct(id: string) {
+			const query = qs.stringify(this.$route.query)
+			this.$router.push(`/gallery/${id}?${query}`)
+		},
 		closeOverlay() {
 			const { $route, $router } = this,
 				query = qs.stringify($route.query)

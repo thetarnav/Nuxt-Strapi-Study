@@ -74,11 +74,9 @@ export const actions: ActionTree<RootState, RootState> = {
 		})
 		commit('RESET_VIEWS')
 	},
-	debounceEmitViews: debounce(
-		({ dispatch }) => dispatch('emitViews'),
-		100000,
-		{ maxWait: 180000 },
-	),
+	debounceEmitViews: debounce(({ dispatch }) => dispatch('emitViews'), 60000, {
+		maxWait: 100000,
+	}),
 	emitRelations({ state, commit }) {
 		const { relatedProducts } = state
 		if (relatedProducts.size > 1)
@@ -89,8 +87,8 @@ export const actions: ActionTree<RootState, RootState> = {
 	},
 	debounceEmitRelations: debounce(
 		({ dispatch }) => dispatch('emitRelations'),
-		120000,
-		{ maxWait: 300000 },
+		100000,
+		{ maxWait: 200000 },
 	),
 	// async setNewProductsCount({ commit }, promise: Promise<number>) {
 	// 	const count = await promise

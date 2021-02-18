@@ -222,5 +222,8 @@ export const productTiesQuery = gql`
 
 export type ProductTies = { products: ProductThumbnail[] }[]
 export interface ProductTiesResponse {
-	ties: ProductTies
+	product: {
+		ties: ProductTies
+
+	}
 }
