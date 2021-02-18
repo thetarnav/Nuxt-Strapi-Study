@@ -79,6 +79,24 @@ const productThumbnail = gql`
 	}
 `
 
+export const fullProduct = gql`
+	fragment FullProductFragment on Products {
+		thumbnail {
+			url
+		}
+		slides {
+			url
+			formats
+		}
+		title
+		number
+		description
+		table
+		shopLink
+		isAvailable
+	}
+`
+
 export const availableProductsQuery = gql`
 	query AvailableProducts($start: Int, $limit: Int) {
 		products(
@@ -167,27 +185,10 @@ export interface ProductsResponse {
 export const fullProductQuery = gql`
 	query FullProduct($id: ID!) {
 		product(id: $id) {
-			thumbnail {
-				url
-			}
-			slides {
-				url
-				formats
-			}
-			title
-			number
-			description
-			table
-			shopLink
-			isAvailable
-			ties(sort: "value:desc", limit: 4) {
-				products(where: { id_ne: $id }) {
-					...ProductThumbnail
-				}
-			}
+			...FullProductFragment
 		}
 	}
-	${productThumbnail}
+	${fullProduct}
 `
 
 export type FullProductResponse = {
@@ -204,7 +205,22 @@ export interface FullProduct {
 	table: string
 	shopLink: string
 	isAvailable: boolean
-	ties: {
-		products: ProductThumbnail[]
-	}[]
+}
+
+export const productTiesQuery = gql`
+	query ProductTies($id: ID!) {
+		product(id: $id) {
+			ties(sort: "value:desc", limit: 4) {
+				products(where: { id_ne: $id }) {
+					...ProductThumbnail
+				}
+			}
+		}
+	}
+	${productThumbnail}
+`
+
+export type ProductTies = { products: ProductThumbnail[] }[]
+export interface ProductTiesResponse {
+	ties: ProductTies
 }

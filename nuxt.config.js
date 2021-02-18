@@ -1,4 +1,5 @@
 import { request, gql } from 'graphql-request'
+import { fullProduct } from './assets/js/queries'
 
 export default {
 	// Global page headers: https://go.nuxtjs.dev/config-head
@@ -53,18 +54,24 @@ export default {
 	target: 'static',
 	generate: {
 		dir: 'docs',
+		interval: 100,
 		routes() {
 			const query = gql`
 				{
 					products {
 						id
+						...FullProductFragment
 					}
 				}
+				${fullProduct}
 			`
-			return request(
-				`${process.env.STRAPI_URL}/graphql`,
-				query,
-			).then(({ products }) => products.map(({ id }) => `/gallery/${id}`))
+			return request(`${process.env.STRAPI_URL}/graphql`, query).then(
+				({ products }) =>
+					products.map(({ id, ...data }) => ({
+						route: `/gallery/${id}`,
+						payload: data,
+					})),
+			)
 		},
 	},
 	router: {
