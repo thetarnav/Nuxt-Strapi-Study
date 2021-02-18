@@ -83,10 +83,9 @@ export default Vue.extend({
 		// Fetch only if data is empty
 		if (!data.title)
 			try {
-				const { product } = await $graphql.request<FullProductResponse>(
-					query,
-					{ id },
-				)
+				const {
+					product,
+				}: FullProductResponse = await $graphql.request(query, { id })
 
 				this.data = product
 			} catch (error) {
@@ -101,12 +100,12 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: this.data.title,
+			title: this.$data.data.title,
 			meta: [
 				{
 					hid: 'description',
 					name: 'description',
-					content: this.data.description,
+					content: this.$data.data.description,
 				},
 			],
 		}
@@ -127,13 +126,18 @@ export default Vue.extend({
 			'fetch-pending:',
 			$fetchState.pending,
 		)
+		console.log(this)
+
 		if (!id) {
 			this.closeOverlay()
 			return
 		}
 		this.$store.dispatch('seeProduct', id)
 
-		if (data.title === undefined && $fetchState.pending === false)
+		if (
+			(data.title === undefined || this.ties.length === 0) &&
+			$fetchState.pending === false
+		)
 			this.$fetch()
 	},
 	methods: {
@@ -147,7 +151,7 @@ export default Vue.extend({
 			try {
 				const {
 					product: { ties },
-				} = await this.$graphql.request<ProductTiesResponse>(query, { id })
+				}: ProductTiesResponse = await this.$graphql.request(query, { id })
 
 				// Remove "Broken Ties"
 				remove(ties, ({ products }) => products.length === 0)
