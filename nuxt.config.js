@@ -18,7 +18,6 @@ export default {
 	// Global CSS: https://go.nuxtjs.dev/config-css
 	css: [
 		'@fortawesome/fontawesome-svg-core/styles.css',
-		'cirrus-ui/dist/cirrus.min.css',
 		'~/assets/base.scss',
 		'~/assets/styles.scss',
 	],
@@ -36,18 +35,14 @@ export default {
 
 	// Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
 	buildModules: [
-		// https://go.nuxtjs.dev/typescript
 		'@nuxt/typescript-build',
-		'@nuxtjs/composition-api',
 		'nuxt-graphql-request',
 		'@nuxtjs/svg',
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
 	modules: [
-		// https://go.nuxtjs.dev/axios
 		'@nuxtjs/axios',
-		// '@nuxtjs/strapi',
 		'@nuxtjs/style-resources',
 		'nuxt-lazy-load',
 		'nuxt-i18n',
