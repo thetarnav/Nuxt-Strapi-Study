@@ -1,13 +1,13 @@
 import { request, gql } from 'graphql-request'
+import en from './locales/en.js'
+import pl from './locales/pl.js'
+import de from './locales/de.js'
 import { fullProduct } from './assets/js/queries'
 
 export default {
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
-		title: 'nuxt-contentful',
-		htmlAttrs: {
-			lang: 'pl',
-		},
+		title: 'Renkidzieło',
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -49,7 +49,26 @@ export default {
 		// '@nuxtjs/strapi',
 		'@nuxtjs/style-resources',
 		'nuxt-lazy-load',
+		'nuxt-i18n',
 	],
+
+	i18n: {
+		locales: [
+			{ code: 'en', name: 'English', iso: 'en-US', file: 'en.js' },
+			{ code: 'pl', name: 'Polski', iso: 'pl-PL', file: 'pl.js' },
+			{ code: 'de', name: 'Deutsche', iso: 'de-DE', file: 'de.js' },
+		],
+		langDir: '/locales/',
+		lazy: true,
+		detectBrowserLanguage: {
+			onlyOnRoot: true,
+		},
+		defaultLocale: 'pl',
+		vueI18n: {
+			fallbackLocale: 'pl',
+			messages: { en, pl, de },
+		},
+	},
 
 	target: 'static',
 	generate: {

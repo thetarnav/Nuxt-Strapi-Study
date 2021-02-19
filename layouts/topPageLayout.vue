@@ -17,6 +17,12 @@ import { RootState } from '~/store'
 
 export default Vue.extend({
 	name: 'TopPageLayout',
+	head() {
+		return this.$nuxtI18nHead({
+			addSeoAttributes: true,
+			addDirAttribute: true,
+		})
+	},
 	computed: {
 		newProductsCount() {
 			return (this.$store.state as RootState).newProductsCount
@@ -25,7 +31,7 @@ export default Vue.extend({
 			return (this.$store.state as RootState).areNewProducts
 		},
 		pageIndex(): number | null {
-			const routeName = this.$route.name
+			const routeName = this.$route.name?.split('___')[0] || 'index'
 			if (!routeName) return null
 			return PageOrder[routeName]
 		},
@@ -34,31 +40,22 @@ export default Vue.extend({
 		swipe(direction: SwipeDirection): void {
 			const { pageIndex } = this
 			if (pageIndex === null) return
+			let path: { name?: string } = {}
 
-			switch (direction) {
-				case 'up':
-					this.$router.push({
-						name: 'gallery',
-					})
-					break
+			if (direction === 'up')
+				path = {
+					name: 'gallery',
+				}
+			else if (direction === 'left' && PageOrder[pageIndex + 1])
+				path = {
+					name: PageOrder[pageIndex + 1],
+				}
+			else if (direction === 'right' && PageOrder[pageIndex - 1])
+				path = {
+					name: PageOrder[pageIndex - 1],
+				}
 
-				case 'left':
-					PageOrder[pageIndex + 1] &&
-						this.$router.push({
-							name: PageOrder[pageIndex + 1],
-						})
-					break
-
-				case 'right':
-					PageOrder[pageIndex - 1] &&
-						this.$router.push({
-							name: PageOrder[pageIndex - 1],
-						})
-					break
-
-				default:
-					break
-			}
+			path && this.$router.push(this.localePath(path))
 		},
 	},
 })

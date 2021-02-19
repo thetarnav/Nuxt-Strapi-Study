@@ -25,7 +25,6 @@
 					<a @click="goToProduct(tie.products[0].id)">
 						<h5>{{ tie.products[0].title }}</h5>
 					</a>
-					<!-- <nuxt-link :to="`/gallery/${tie.products[0].id}?{}`"></nuxt-link> -->
 				</li>
 			</ul>
 		</div>
@@ -148,13 +147,13 @@ export default Vue.extend({
 		},
 		goToProduct(id: string) {
 			const query = qs.stringify(this.$route.query)
-			this.$router.push(`/gallery/${id}?${query}`)
+			this.$router.push(this.localePath(`/gallery/${id}?${query}`))
 		},
 		closeOverlay() {
 			const { $route, $router } = this,
 				query = qs.stringify($route.query)
 
-			$router.push(`/gallery?${query}`)
+			$router.push(this.localePath(`/gallery?${query}`))
 		},
 		copyLink() {
 			const { id } = this,

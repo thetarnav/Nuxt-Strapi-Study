@@ -1,5 +1,5 @@
 <template>
-	<nuxt-link :to="$attrs.to || ''" class="nav-link" :class="name">
+	<nuxt-link :to="localePath($attrs.to || '')" class="nav-link" :class="name">
 		<Icon :icon="icon" class="link-icon"></Icon>
 		<p class="link-text">
 			<slot></slot>

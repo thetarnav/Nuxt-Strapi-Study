@@ -25,6 +25,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.remove": "^4.7.0",
     "nuxt": "^2.14.12",
+    "nuxt-i18n": "^6.20.1",
     "nuxt-lazy-load": "^1.2.4",
     "qs": "^6.9.6",
     "vue-global-events": "^1.2.1"

@@ -21,9 +21,11 @@ export default Vue.extend({
 			const scrollParent = searchForSuitableParent(this.$el as HTMLElement, {
 				overflowY: ['scroll', 'auto'],
 			})
-			const prevRoute = from.name || 'index'
+			const prevRoute = from.name || 'index',
+				prevRouteName = prevRoute?.split('___')[0]
 			const filter =
-				to.query.filter ?? (prevRoute !== 'index' ? prevRoute : undefined)
+				to.query.filter ??
+				(prevRouteName !== 'index' ? prevRouteName : undefined)
 			const scroll = Math.round(
 				scrollParent?.scrollTop || window.scrollY,
 			).toString()
@@ -34,16 +36,20 @@ export default Vue.extend({
 				scroll,
 			})
 
-			next(`/gallery/${to.params.productId || ''}?${query}`)
+			next(this.localePath(`/gallery/${to.params.productId || ''}?${query}`))
 		} else next()
 	},
 	layout: 'topPageLayout',
 	scrollToTop: false,
 	transition(to, from) {
 		const toIndex =
-				(PageOrder[to?.name || 'index'] as number | undefined) || 0,
+				(PageOrder[to?.name?.split('___')[0] || 'index'] as
+					| number
+					| undefined) || 0,
 			fromIndex =
-				(PageOrder[from?.name || 'index'] as number | undefined) || 0
+				(PageOrder[from?.name?.split('___')[0] || 'index'] as
+					| number
+					| undefined) || 0
 
 		return {
 			name: toIndex < fromIndex ? 'swipe-right' : 'swipe-left',

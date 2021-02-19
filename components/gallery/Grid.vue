@@ -221,7 +221,7 @@ export default Vue.extend({
 		},
 		openProduct(productId: ProductThumbnail['id']): void {
 			const query = qs.stringify(this.$route.query)
-			this.$router.push(`/gallery/${productId}?${query}`)
+			this.$router.push(this.localePath(`/gallery/${productId}?${query}`))
 		},
 	},
 })

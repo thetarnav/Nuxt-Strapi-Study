@@ -16,7 +16,11 @@
 					:color="filter.color"
 					:class="{ 'raise-me': index < 3 }"
 					@select="selectFilter"
-					>{{ filter.name }}</FilterPill
+					>{{
+						$te(`filter.${filter.uid}`)
+							? $t(`filter.${filter.uid}`)
+							: filter.name
+					}}</FilterPill
 				>
 				<template v-if="filters.length === 0">
 					<div class="pill pill--loading"></div>
@@ -46,7 +50,11 @@
 					:selected="selectedFilter"
 					:color="filter.color"
 					@select="selectFilter"
-					>{{ filter.name }}</FilterPill
+					>{{
+						$te(`filter.${filter.uid}`)
+							? $t(`filter.${filter.uid}`)
+							: filter.name
+					}}</FilterPill
 				>
 				<button class="close-button btn-dark" @click="toggleFullFilters">
 					<Icon icon="times" class="icon"></Icon>
@@ -67,7 +75,11 @@
 					:selected="selectedFilter"
 					:color="filter.color"
 					@select="selectFilter"
-					>{{ filter.name }}</FilterPill
+					>{{
+						$te(`filter.${filter.uid}`)
+							? $t(`filter.${filter.uid}`)
+							: filter.name
+					}}</FilterPill
 				>
 				<div
 					v-if="filters.length > 6"
@@ -250,12 +262,14 @@ export default Vue.extend({
 			this.selectedFilter = isSelected ? name : ''
 
 			// Update URL Query
-			this.$router.push({
-				query: {
-					...this.$route.query,
-					filter: isSelected ? name : undefined,
-				},
-			})
+			this.$router.push(
+				this.localePath({
+					query: {
+						...this.$route.query,
+						filter: isSelected ? name : undefined,
+					},
+				}),
+			)
 		},
 	},
 })

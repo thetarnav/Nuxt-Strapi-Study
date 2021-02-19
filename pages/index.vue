@@ -6,21 +6,19 @@
 			<Icon icon="image"></Icon>
 		</span>
 		<p>
-			Artystyczne i wysokiej jakości rękodzieła. Idealne do wystroju wnętrz i
-			zawsze sprawdzą się jako prezent.
+			{{ $t('home.about') }}
 		</p>
-		<p>Znajdź coś dla siebie!</p>
+		<p>{{ $t('home.cta.incentive') }}</p>
 		<nuxt-link
-			:to="{ name: 'gallery' }"
+			:to="localePath({ name: 'gallery', query: { filter: 'available' } })"
 			class="btn btn-primary btn-large u-center"
-			>Dostępne produkty</nuxt-link
+			>{{ $t('home.cta.button') }}</nuxt-link
 		>
 		<div class="mt-20">
-			<nuxt-link to="/gallery/6021bd9be541ac0015845c94">
+			<nuxt-link :to="localePath('/gallery/6021bd9be541ac0015845c94')">
 				<img
-					srcX="https://source.unsplash.com/800x1000/?lamp,interior,design"
-					src="img/widok na komin-8.jpg"
-					alt="zdjęcie wystawy przykładowej lampy"
+					src="img/lampofon.jpg"
+					:alt="$t('home.heroImgAlt')"
 					class="promo-photo cover-img"
 				/>
 			</nuxt-link>

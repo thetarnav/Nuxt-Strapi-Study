@@ -1,29 +1,31 @@
 <template>
-	<nav class="main-nav" :class="$route.name">
+	<nav class="main-nav" :class="routeName">
 		<div class="middle-button">
-			<button>kontakt</button>
+			<button>{{ $t('contact') }}</button>
 		</div>
-		<NavLink key="home" name="home" to="/" icon="home">Home</NavLink>
-		<NavLink key="lamps" name="lamps" to="/lamps" icon="lightbulb"
-			>Lampy</NavLink
-		>
+		<NavLink key="home" name="home" to="/" icon="home">{{
+			$t('pages.home')
+		}}</NavLink>
+		<NavLink key="lamps" name="lamps" to="/lamps" icon="lightbulb">{{
+			$t('pages.lamps')
+		}}</NavLink>
 		<NavLink
 			key="belt-bags"
 			name="belt-bags"
 			to="/belt-bags"
 			icon="shopping-bag"
-			>Saszetki</NavLink
+			>{{ $t('pages.belt-bags') }}</NavLink
 		>
-		<NavLink key="paintings" name="paintings" to="paintings" icon="image"
-			>Obrazy</NavLink
-		>
+		<NavLink key="paintings" name="paintings" to="paintings" icon="image">{{
+			$t('pages.paintings')
+		}}</NavLink>
 		<NavLink
 			v-if="!areNew"
 			key="gallery"
 			name="gallery"
 			to="/gallery"
 			icon="grip-vertical"
-			>Galeria</NavLink
+			>{{ $t('pages.gallery') }}</NavLink
 		>
 		<NavLink
 			v-else
@@ -31,7 +33,7 @@
 			name="gallery"
 			:to="{ name: 'gallery', query: { filter: 'new' } }"
 			icon="grip-vertical"
-			>Galeria
+			>{{ $t('pages.gallery') }}
 			<span class="new-icon"></span>
 		</NavLink>
 	</nav>
@@ -50,6 +52,11 @@ export default Vue.extend({
 		areNew: {
 			type: Boolean,
 			default: false,
+		},
+	},
+	computed: {
+		routeName(): string {
+			return this.$route.name?.split('___')[0] || 'index'
 		},
 	},
 })
