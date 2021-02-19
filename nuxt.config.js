@@ -38,6 +38,7 @@ export default {
 		'@nuxt/typescript-build',
 		'nuxt-graphql-request',
 		'@nuxtjs/svg',
+		'@nuxtjs/tailwindcss',
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
