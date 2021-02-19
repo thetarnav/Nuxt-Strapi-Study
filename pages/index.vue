@@ -23,18 +23,44 @@
 				/>
 			</nuxt-link>
 		</div>
+		<div class="lang-switch">
+			<i class="icon">
+				<LangIcon />
+			</i>
+			<div class="list">
+				<nuxt-link
+					v-for="locale in availableLocales"
+					:key="locale.code"
+					:to="switchLocalePath(locale.code)"
+					>{{ locale.name }}</nuxt-link
+				>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
+import { NuxtVueI18n } from 'nuxt-i18n/types/nuxt-i18n'
 import MainPageMixin from '~/plugins/mainPageMixin'
 
 export default MainPageMixin.extend({
 	name: 'Home',
+	components: {
+		LangIcon: () => import('~/assets/icons/lang.svg?inline'),
+	},
 	head() {
 		return {
 			title: 'Renkidzieło',
 		}
+	},
+	computed: {
+		availableLocales(): NuxtVueI18n.Options.LocaleObject[] {
+			return (
+				(this.$i18n.locales?.filter(
+					i => typeof i === 'object' && i.code !== this.$i18n.locale,
+				) as NuxtVueI18n.Options.LocaleObject[] | undefined) || []
+			)
+		},
 	},
 })
 </script>

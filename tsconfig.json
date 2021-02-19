@@ -19,11 +19,10 @@
 		"types": [
 			"@nuxt/types",
 			"@types/node",
-			// "@nuxtjs/strapi",
 			"nuxt-graphql-request",
 			"@nuxtjs/axios",
 			"nuxt-i18n"
 		]
 	},
-	"exclude": ["node_modules", ".nuxt", "dist"]
+	"exclude": ["node_modules", ".nuxt", "dist", "docs"]
 }

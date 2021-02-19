@@ -24,4 +24,5 @@ export default {
 		gallery: 'Galeria',
 	},
 	contact: 'Kontakt',
+	changeLang: 'Zmień język',
 }

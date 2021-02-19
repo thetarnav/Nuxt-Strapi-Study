@@ -40,6 +40,7 @@ export default {
 		'@nuxt/typescript-build',
 		'@nuxtjs/composition-api',
 		'nuxt-graphql-request',
+		'@nuxtjs/svg',
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
@@ -60,9 +61,11 @@ export default {
 		],
 		langDir: '/locales/',
 		lazy: true,
-		detectBrowserLanguage: {
-			onlyOnRoot: true,
-		},
+		// detectBrowserLanguage: {
+		// 	onlyOnRoot: true,
+		// },
+		// For git pages:
+		detectBrowserLanguage: false,
 		defaultLocale: 'pl',
 		vueI18n: {
 			fallbackLocale: 'pl',
