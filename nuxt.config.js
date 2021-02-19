@@ -25,7 +25,7 @@ export default {
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
 		'~/plugins/fontawesome.js',
-		'~/plugins/globalEvents.js',
+		'~/plugins/vue-plugins.js',
 		'~/plugins/localStorage.client.ts',
 		'~/plugins/toggleDocScroll.client.ts',
 	],
@@ -122,7 +122,13 @@ export default {
 	},
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
-	build: {},
+	build: {
+		postcss: {
+			plugins: {
+				'postcss-nested': {},
+			},
+		},
+	},
 
 	server: {
 		host: process.env.BASE_URL,

@@ -27,6 +27,7 @@
     "nuxt-i18n": "^6.20.1",
     "nuxt-lazy-load": "^1.2.4",
     "qs": "^6.9.6",
+    "v-click-outside": "^3.1.2",
     "vue-global-events": "^1.2.1"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "@types/lodash.clonedeep": "^4.5.6",
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.remove": "^4.7.6",
+    "autoprefixer": "^9.8.6",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^7.1.0",
@@ -46,8 +48,10 @@
     "eslint-plugin-vue": "^7.5.0",
     "graphql": "^15.5.0",
     "nuxt-graphql-request": "^3.2.1",
+    "postcss": "^7.0.35",
     "prettier": "^2.2.1",
     "sass": "^1.32.7",
-    "sass-loader": "^10.1.1"
+    "sass-loader": "^10.1.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
   }
 }
