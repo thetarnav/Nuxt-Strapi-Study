@@ -28,6 +28,7 @@ export default {
 		'@fortawesome/fontawesome-svg-core/styles.css',
 		'~/assets/base.scss',
 		'~/assets/styles.scss',
+		'~/assets/transitions.scss',
 	],
 
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

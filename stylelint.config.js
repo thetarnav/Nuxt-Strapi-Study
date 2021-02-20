@@ -26,5 +26,9 @@ module.exports = {
 		'selector-pseudo-element-colon-notation': null,
 		'no-eol-whitespace': null,
 		'declaration-colon-newline-after': null,
+		'number-leading-zero': null,
+		'number-no-trailing-zeros': null,
+		'no-empty-source': null,
+		'no-duplicate-selectors': null,
 	},
 }

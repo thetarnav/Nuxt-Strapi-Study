@@ -1,7 +1,7 @@
 <template>
 	<nav class="main-nav" :class="routeName">
 		<div class="middle-button">
-			<button>{{ $t('contact') }}</button>
+			<button class="link-text link-text--light">{{ $t('contact') }}</button>
 		</div>
 		<NavLink key="home" name="home" to="/" icon="home">{{
 			$t('pages.home')
@@ -20,7 +20,7 @@
 			$t('pages.paintings')
 		}}</NavLink>
 		<NavLink
-			v-if="!areNew"
+			v-if="newProducts === 0"
 			key="gallery"
 			name="gallery"
 			to="/gallery"
@@ -34,7 +34,13 @@
 			:to="{ name: 'gallery', query: { filter: 'new' } }"
 			icon="grip-vertical"
 			>{{ $t('pages.gallery') }}
-			<span class="new-icon"></span>
+			<span
+				class="w-6 h-6 bg-secondary rounded-full absolute top-1 right-3 flex text-xs text-white box-content border-2 border-gray-100"
+			>
+				<span class="m-auto">
+					{{ newProducts > 9 ? '9+' : `+${newProducts}` }}
+				</span>
+			</span>
 		</NavLink>
 	</nav>
 </template>
@@ -65,13 +71,10 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .main-nav {
 	--link-width: 20vw;
-	position: fixed;
+	@apply fixed inset-x-0 bottom-0;
+	@apply bg-gray-100 border-t-2;
 	z-index: 2000;
-	left: 0;
-	right: 0;
-	bottom: 0;
 	height: var(--nav-height);
-	background: $gray9;
 
 	> * {
 		width: var(--link-width);
@@ -201,18 +204,20 @@ export default Vue.extend({
 	transform: translateX(calc(var(--link-width) * -2))
 		translateY(calc(var(--nav-height) / -2));
 	button {
-		$button-size: 80px;
+		--button-size: theme(spacing.20);
 
 		position: absolute;
-		top: 50%;
+		top: calc(50% + 1px);
 		left: 50%;
-		margin-left: -$button-size/2;
-		margin-top: -$button-size/2;
-		width: $button-size;
-		height: $button-size;
-		border-radius: 50%;
-		background: $primary;
-		color: $white;
+		margin-left: calc(var(--button-size) / -2);
+		margin-top: calc(var(--button-size) / -2);
+		width: var(--button-size);
+		height: var(--button-size);
+		&:before {
+			content: '';
+			@apply absolute -z-1 inset-0 bg-primary rounded-md;
+			@apply transform rotate-45;
+		}
 	}
 }
 </style>

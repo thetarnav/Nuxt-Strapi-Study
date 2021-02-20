@@ -1,9 +1,13 @@
 <template>
-	<nuxt-link :to="localePath($attrs.to || '')" class="nav-link" :class="name">
+	<nuxt-link
+		:to="localePath($attrs.to || '')"
+		class="nav-link link-text"
+		:class="name"
+	>
 		<Icon :icon="icon" class="link-icon"></Icon>
-		<p class="link-text">
+		<span class="text-slot mt-1">
 			<slot></slot>
-		</p>
+		</span>
 	</nuxt-link>
 </template>
 
@@ -26,10 +30,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.link-text {
-	position: relative;
-	margin: 0;
-	line-height: 70%;
-	margin-top: 5px;
+.text-slot {
+	max-width: 100%;
+	@apply text-center break-words;
 }
 </style>

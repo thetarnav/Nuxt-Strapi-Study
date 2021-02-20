@@ -60,12 +60,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style lang="postcss" scoped>
-.link-text {
-	@apply font-semibold text-gray-900;
-	&:hover {
-		@apply text-primary;
-	}
-}
-</style>

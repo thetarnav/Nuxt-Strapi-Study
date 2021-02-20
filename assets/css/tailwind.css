@@ -24,7 +24,6 @@
 		overflow-wrap: break-word;
 	}
 	p {
-		@apply text-lg;
 		white-space: pre-line;
 		overflow-wrap: break-word;
 	}
