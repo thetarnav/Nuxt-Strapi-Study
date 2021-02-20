@@ -4,7 +4,7 @@
 			<button class="link-text link-text--light">{{ $t('contact') }}</button>
 		</div>
 		<NavLink key="home" name="home" to="/" icon="home">{{
-			$t('pages.home')
+			$t('pages.index')
 		}}</NavLink>
 		<NavLink key="lamps" name="lamps" to="/lamps" icon="lightbulb">{{
 			$t('pages.lamps')

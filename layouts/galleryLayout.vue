@@ -1,6 +1,6 @@
 <template>
 	<div class="">
-		<SwipeAndScroll :directions="['down']" @swipe="swipe">
+		<SwipeAndScroll :directions="['down']" @swipe="handleSwipe">
 			<Nuxt class="page gallery" />
 		</SwipeAndScroll>
 		<MainNav />
@@ -20,7 +20,7 @@ export default Vue.extend({
 		})
 	},
 	methods: {
-		swipe(direction: SwipeDirection) {
+		handleSwipe(direction: SwipeDirection): void {
 			if (direction !== 'down') return
 
 			const { prevRoute } = this.$route.query,

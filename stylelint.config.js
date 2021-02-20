@@ -30,5 +30,6 @@ module.exports = {
 		'number-no-trailing-zeros': null,
 		'no-empty-source': null,
 		'no-duplicate-selectors': null,
+		'comment-empty-line-before': null,
 	},
 }

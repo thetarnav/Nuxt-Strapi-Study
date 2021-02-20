@@ -28,7 +28,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .primary {
-	@apply bg-primary flex justify-center items-center p-5 rounded-md shadow-lg;
+	@apply bg-primary flex justify-center items-center px-5 py-4 rounded-md shadow-lg;
 	.button-content {
 		@apply text-lg font-semibold;
 	}

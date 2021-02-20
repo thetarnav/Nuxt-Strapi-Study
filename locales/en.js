@@ -20,7 +20,7 @@ export default {
 		other: 'Other',
 	},
 	pages: {
-		home: 'Home',
+		index: 'Home',
 		lamps: 'Lamps',
 		'belt-bags': 'Belt Bags',
 		paintings: 'Paintings',

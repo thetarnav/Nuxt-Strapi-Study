@@ -20,7 +20,7 @@ export default {
 		other: 'Inne',
 	},
 	pages: {
-		home: 'Projekt',
+		index: 'Projekt',
 		lamps: 'Lampy',
 		'belt-bags': 'Saszetki',
 		paintings: 'Obrazy',

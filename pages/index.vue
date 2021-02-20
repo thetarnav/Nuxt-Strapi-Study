@@ -12,7 +12,7 @@
 			<Icon icon="image"></Icon>
 		</span>
 		<!-- eslint-disable-next-line vue/no-v-html -->
-		<h6 class="mt-8" v-html="$t('home.about')"></h6>
+		<h6 class="mt-8 whitespace-pre-line" v-html="$t('home.about')"></h6>
 		<Button
 			class="mt-4 self-center primary"
 			:route="{ name: 'gallery', query: { filter: 'available' } }"

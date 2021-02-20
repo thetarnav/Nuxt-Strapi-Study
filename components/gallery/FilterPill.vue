@@ -6,9 +6,9 @@
 			@click="handleClick"
 		>
 			<Icon v-if="icon" :icon="icon" class="icon"></Icon>
-			<p class="text">
+			<span class="text whitespace-nowrap">
 				<slot></slot>
-			</p>
+			</span>
 		</button>
 	</transition>
 </template>

@@ -34,7 +34,7 @@ export const mutations: MutationTree<RootState> = {
 	) => {
 		if (typeof sinceLastVisit === 'number') {
 			state.newProductsCount = sinceLastVisit
-			state.areNewProducts = true
+			if (sinceLastVisit > 0) state.areNewProducts = true
 		}
 		if (typeof sinceLastWeek === 'number' && sinceLastWeek > 0)
 			state.areNewProducts = true

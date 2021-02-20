@@ -1,15 +1,16 @@
 <template>
 	<div class="page gallery">
 		<header
-			class="gallery-header hide-me"
+			class="gallery-header hide-me py-4 bg-gray-100"
 			:class="{ hidden: showFullFilters || showLineFilters }"
 		>
-			<h2 class="gallery-title">Galeria</h2>
+			<h2 class="ml-6 mr-4 mt-1">Galeria</h2>
 			<!-- Side Group Filters -->
-			<div class="side-filters-group">
+			<div class="side-filters-group flex flex-wrap">
 				<FilterPill
 					v-for="(filter, index) in onSideFilters"
 					:key="filter.uid"
+					class="m-1"
 					:tag="filter.uid"
 					:icon="filter.icon"
 					:selected="selectedFilter"
@@ -22,11 +23,12 @@
 							: filter.name
 					}}</FilterPill
 				>
+				<!-- Skeleton -->
 				<template v-if="filters.length === 0">
-					<div class="pill pill--loading"></div>
-					<div class="pill pill--loading"></div>
-					<div class="pill pill--loading"></div>
-					<div class="pill pill--loading"></div>
+					<div class="pill m-2 pill--loading"></div>
+					<div class="pill m-2 pill--loading"></div>
+					<div class="pill m-2 pill--loading"></div>
+					<div class="pill m-2 pill--loading"></div>
 				</template>
 				<div
 					v-if="filters.length > 6"
@@ -65,7 +67,7 @@
 		<transition name="line-filters">
 			<div
 				v-if="showLineFilters"
-				class="line-filters-group hide-me"
+				class="line-filters-group hide-me bg-gray-100 w-screen flex space-x-2 py-3 px-4 overflow-x-scroll"
 				:class="{ hidden: showFullFilters }"
 			>
 				<FilterPill
@@ -276,13 +278,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.gallery {
-	padding-top: 10px;
-	min-height: 100vh;
-}
-.gallery-title {
-	margin-right: 10px;
-}
 .gallery-header {
 	display: flex;
 	position: relative;
@@ -301,11 +296,6 @@ export default Vue.extend({
 
 .side-filters-group {
 	position: relative;
-	display: flex;
-	flex-wrap: wrap;
-	> * {
-		margin: 6px;
-	}
 	.show-more {
 		position: absolute;
 		z-index: 10;
@@ -381,17 +371,8 @@ export default Vue.extend({
 	z-index: 30;
 	top: 0;
 	left: 0;
-	// right: 0;
-	min-width: 100vw;
-	display: flex;
-	$group-bg: rgba($gray9, 0.5);
-	background: $gray9;
-	// backdrop-filter: blur(20px);
 
-	padding: 10px;
-	> * {
-		margin: 6px;
-	}
+	@include hide-scrollbar;
 
 	.show-more {
 		position: absolute;

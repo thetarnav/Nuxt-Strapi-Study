@@ -14,9 +14,9 @@
 			v-if="directions.includes('down')"
 			class="swipe-space swipe-space--top"
 		>
-			<p>
-				{{ prevRouteTitle }}
-			</p>
+			<h6 class="m-auto">
+				{{ $t(`pages.${prevRoute}`) }}
+			</h6>
 		</div>
 		<GlobalEvents @scroll="debouncedHandleScroll"></GlobalEvents>
 
@@ -30,7 +30,7 @@
 import Vue from 'vue'
 import debounce from 'lodash.debounce'
 import { searchForSuitableParent } from '~/assets/js/helpers'
-import { SwipeDirection, PageTitles } from '~/types/types'
+import { SwipeDirection, PageTitles, PageOrder } from '~/types/types'
 
 let lastTouchMove = {
 	x: 0,
@@ -73,6 +73,12 @@ export default Vue.extend({
 			if (typeof prevRoute === 'string' && PageTitles[prevRoute])
 				title = PageTitles[prevRoute]
 			return title
+		},
+		prevRoute(): string {
+			const { prevRoute } = this.$route.query
+			if (typeof prevRoute === 'string' && PageOrder[prevRoute])
+				return prevRoute
+			return 'index'
 		},
 		verticalPadding() {
 			return this.$store.state.swipeVerticalPadding
@@ -262,15 +268,14 @@ $vertical-swipe-space: 100px;
 
 	&--top {
 		top: 0;
-		background: linear-gradient($gray7, transparent);
+		background: linear-gradient(
+			theme('colors.gray.300'),
+			theme('colors.gray.100')
+		);
 	}
 	&--bottom {
 		bottom: 0;
 		background: linear-gradient(transparent, $gray7);
-	}
-
-	p {
-		margin: auto;
 	}
 }
 

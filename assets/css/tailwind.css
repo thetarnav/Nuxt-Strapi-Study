@@ -13,14 +13,14 @@
 		@apply text-5xl uppercase font-extrabold text-black;
 	}
 	h2 {
-		@apply text-2xl text-black;
+		@apply text-2xl text-black font-semibold;
 	}
 	h3 {
 		@apply text-xl text-black;
 	}
 	h6 {
 		@apply text-lg font-medium;
-		white-space: pre-line;
+		/* white-space: pre-line; */
 		overflow-wrap: break-word;
 	}
 	p {
