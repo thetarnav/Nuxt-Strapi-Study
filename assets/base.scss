@@ -1,10 +1,10 @@
 @import 'variables/variables';
 
 html {
-	font-family: 'Poppins', sans-serif;
-	font-style: normal;
-	color: $black;
-	font-size: 13px;
+	// font-family: 'Poppins', sans-serif;
+	// font-style: normal;
+	// color: $black;
+	// font-size: 13px;
 
 	width: 100%;
 	// important for navigation and swiping:
@@ -16,7 +16,7 @@ html {
 	height: 100%;
 }
 body {
-	margin: 0;
+	// margin: 0;
 	background-color: $background;
 	color: $black;
 }

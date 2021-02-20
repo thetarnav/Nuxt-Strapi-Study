@@ -10,7 +10,7 @@
 		@apply text-primary;
 	}
 	h1 {
-		@apply text-6xl uppercase font-extrabold text-black;
+		@apply text-5xl uppercase font-extrabold text-black;
 	}
 	h2 {
 		@apply text-2xl text-black;
@@ -19,10 +19,14 @@
 		@apply text-xl text-black;
 	}
 	h6 {
-		@apply text-lg;
+		@apply text-lg font-medium;
+		white-space: pre-line;
+		overflow-wrap: break-word;
 	}
 	p {
 		@apply text-lg;
+		white-space: pre-line;
+		overflow-wrap: break-word;
 	}
 	svg {
 		@apply w-6;

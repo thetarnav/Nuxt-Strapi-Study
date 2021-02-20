@@ -2,12 +2,14 @@ export default {
 	home: {
 		project: 'Projekt',
 		about:
-			'Künstlerisches und hochwertiges Kunsthandwerk. Perfekt für die Inneneinrichtung und wird immer ein Geschenk sein.',
-		cta: {
-			incentive: 'Finde etwas für dich!',
-			button: 'Produkte verfügbar',
-		},
+			'Künstlerisches und hochwertiges Kunsthandwerk. Perfekt für die Inneneinrichtung und wird immer ein Geschenk sein.\nFinde etwas für dich!',
+		cta: 'Produkte verfügbar',
 		heroImgAlt: 'Foto von Lampofon im Morgenlicht.',
+		seeGallery: {
+			before: 'Scrollen Sie nach unten, um ',
+			gallery: 'die Galerie',
+			after: 'zu sehen!',
+		},
 	},
 	filter: {
 		lamps: 'Lampen',

@@ -11,6 +11,9 @@ module.exports = {
 				secondary: '#FF5F4B',
 				gray: colors.trueGray,
 			},
+			fontFamily: {
+				sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+			},
 		},
 	},
 	variants: {

@@ -1,21 +1,21 @@
 <template>
 	<div
-		class="lang-switch absolute top-0 right-0 m-4 bg-gray-100 rounded-lg shadow"
+		class="lang-switch absolute top-0 right-0 m-4 bg-gray-100 rounded-md shadow"
 	>
 		<i
 			v-show="!listVisible"
 			v-click-outside="outsideClick"
-			class="flex p-4"
+			class="flex p-3"
 			@click="click"
 		>
-			<LangIcon class="w-8 fill-current" />
+			<LangIcon class="w-6 fill-current" />
 		</i>
 		<div v-show="listVisible" class="flex flex-col divide-y divide-gray-300">
 			<nuxt-link
 				v-for="locale in availableLocales"
 				:key="locale.code"
 				:to="switchLocalePath(locale.code)"
-				class="px-4 py-3 link-text"
+				class="px-3 py-2 link-text"
 				>{{ locale.name }}</nuxt-link
 			>
 		</div>
@@ -63,7 +63,7 @@ export default Vue.extend({
 
 <style lang="postcss" scoped>
 .link-text {
-	@apply text-lg font-bold text-gray-900;
+	@apply font-semibold text-gray-900;
 	&:hover {
 		@apply text-primary;
 	}

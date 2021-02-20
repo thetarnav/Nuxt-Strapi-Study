@@ -18,7 +18,7 @@ module.exports = {
 		],
 		'declaration-block-trailing-semicolon': null,
 		'no-descending-specificity': null,
-		indentation: 'tab',
+		indentation: null,
 		'rule-empty-line-before': null,
 		'declaration-empty-line-before': null,
 		'at-rule-empty-line-before': null,

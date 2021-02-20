@@ -2,12 +2,14 @@ export default {
 	home: {
 		project: 'Projekt',
 		about:
-			'Artystyczne i wysokiej jakości rękodzieła. Idealne do wystroju wnętrz i zawsze sprawdzą się jako prezent.',
-		cta: {
-			incentive: 'Znajdź coś dla siebie!',
-			button: 'Dostępne produkty',
-		},
+			'Artystyczne i wysokiej jakości rękodzieła. Idealne do wystroju wnętrz i zawsze sprawdzą się jako prezent.\nZnajdź coś dla siebie!',
+		cta: 'Dostępne produkty',
 		heroImgAlt: 'Zdjęcie Lampy "Lampofon" w świetle poranka.',
+		seeGallery: {
+			before: 'Scrolluj dalej by przyjść do ',
+			gallery: 'Galerii!',
+			after: '',
+		},
 	},
 	filter: {
 		lamps: 'Lampy',

@@ -15,7 +15,7 @@
 	// overflow: hidden;
 	@apply flex flex-col;
 	// padding: 0 var(--page-margin);
-	padding-bottom: calc(var(--page-margin) + #{$mobile-nav-height});
+	// padding-bottom: calc(#{$mobile-nav-height} + 5rem);
 }
 
 .layout {

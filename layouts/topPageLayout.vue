@@ -1,7 +1,32 @@
 <template>
 	<div class="layout">
 		<SwipeAndScroll :directions="['up', 'left', 'right']" @swipe="swipe">
-			<Nuxt class="page" />
+			<Nuxt class="page px-6" />
+			<footer class="see-gallery pb-48 mt-20 px-6 text-center">
+				<h6 class="whitespace-normal inline">
+					{{ $t('home.seeGallery.before')
+					}}<nuxt-link :to="localePath('/gallery')"
+						><strong>{{
+							$t('home.seeGallery.gallery')
+						}}</strong></nuxt-link
+					>
+					{{ $t('home.seeGallery.after') }}
+				</h6>
+				<svg
+					class="w-6 h-6 mb-1 text-primary inline"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="3"
+						d="M19 14l-7 7m0 0l-7-7m7 7V3"
+					></path>
+				</svg>
+			</footer>
 		</SwipeAndScroll>
 		<MainNav :new-products="newProductsCount" :are-new="areNewProducts" />
 		<div v-if="newProductsCount > 0" class="new-products-notification">
@@ -69,5 +94,20 @@ export default Vue.extend({
 	right: 0;
 	display: flex;
 	justify-content: center;
+}
+
+.see-gallery {
+	position: relative;
+	&:after {
+		content: '';
+		position: absolute;
+		// z-index: -1;
+		pointer-events: none;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 120%;
+		background: linear-gradient(transparent, theme('colors.gray.300'));
+	}
 }
 </style>
