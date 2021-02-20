@@ -1,5 +1,6 @@
 export default {
 	home: {
+		project: 'Project',
 		about:
 			'Artistic and high-quality handicrafts. Perfect for interior design and will always be a gift.',
 		cta: {

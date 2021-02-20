@@ -1,5 +1,6 @@
 export default {
 	home: {
+		project: 'Projekt',
 		about:
 			'Artystyczne i wysokiej jakości rękodzieła. Idealne do wystroju wnętrz i zawsze sprawdzą się jako prezent.',
 		cta: {

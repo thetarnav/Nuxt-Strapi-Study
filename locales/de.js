@@ -1,5 +1,6 @@
 export default {
 	home: {
+		project: 'Projekt',
 		about:
 			'Künstlerisches und hochwertiges Kunsthandwerk. Perfekt für die Inneneinrichtung und wird immer ein Geschenk sein.',
 		cta: {

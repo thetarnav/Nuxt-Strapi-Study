@@ -9,9 +9,11 @@
 }
 
 .page {
-	min-height: 100vh;
-	overflow: hidden;
 	--page-margin: calc(var(--space-size) * 6);
+
+	min-height: 100vh;
+	// overflow: hidden;
+	@apply flex flex-col;
 	// padding: 0 var(--page-margin);
 	padding-bottom: calc(var(--page-margin) + #{$mobile-nav-height});
 }
@@ -31,6 +33,7 @@ $page-translate: 4rem;
 .page-leave-active {
 	transition: opacity 0.3s;
 }
+
 .page-enter,
 .page-leave-to {
 	opacity: 0;
@@ -51,6 +54,7 @@ $page-translate: 4rem;
 		opacity: 0;
 	}
 }
+
 .swipe-right {
 	&-enter {
 		transform: translateX(-$page-translate);
@@ -59,6 +63,7 @@ $page-translate: 4rem;
 		transform: translateX($page-translate);
 	}
 }
+
 .swipe-left {
 	&-enter {
 		transform: translateX($page-translate);

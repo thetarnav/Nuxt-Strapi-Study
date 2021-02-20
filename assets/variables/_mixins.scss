@@ -54,6 +54,7 @@
 	&::after {
 		content: '';
 		@include full-absolute;
+
 		background: linear-gradient(
 			90deg,
 			rgba($white, 0) 0,
@@ -62,6 +63,7 @@
 			rgba($white, 0.2) 80%,
 			rgba($white, 0)
 		);
+
 		transform: translateX(-100%);
 		animation: shimmer 3s infinite;
 	}

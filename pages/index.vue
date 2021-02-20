@@ -1,13 +1,13 @@
 <template>
-	<div class="page home px-6">
+	<div class="page px-6">
 		<figure class="banner" lazy-background="img/picek.jpg"></figure>
-		<h1 class="project-name">Renkidzieło</h1>
-		<span class="project-logo icon subtitle u-center" style="font-size: 28px">
+		<h1 class="mt-64 text-center">{{ $t('home.project') }} Renkidzieło</h1>
+		<span class="text-6xl text-center mt-4">
 			<Icon icon="image"></Icon>
 		</span>
-		<p>
+		<h6 class="mt-10 font-medium">
 			{{ $t('home.about') }}
-		</p>
+		</h6>
 		<p>{{ $t('home.cta.incentive') }}</p>
 		<nuxt-link
 			:to="localePath({ name: 'gallery', query: { filter: 'available' } })"
@@ -43,15 +43,7 @@ export default MainPageMixin.extend({
 
 <style lang="scss" scoped>
 .banner {
-	position: absolute;
-	z-index: -1;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 30rem;
-
-	// background: url('https://source.unsplash.com/featured/?workshop,artist,carpenter');
-	// background: url('~/static/img/picek.jpg');
+	@apply absolute inset-x-0 top-0 h-80 -z-1;
 	background-size: cover;
 	background-position-x: center;
 
@@ -61,18 +53,18 @@ export default MainPageMixin.extend({
 		left: 0;
 		right: 0;
 		bottom: 0;
-		height: 70%;
+		height: 80%;
 		background: linear-gradient(transparent, $background);
 	}
 }
-.project-name {
-	margin-top: 24rem;
+// .project-name {
+// 	margin-top: 24rem;
 
-	color: $black;
-	text-align: center;
-}
-.promo-photo {
-	width: 100%;
-	height: calc(100vw / 4 * 5 - var(--space-size) * 6 * 2);
-}
+// 	color: $black;
+// 	text-align: center;
+// }
+// .promo-photo {
+// 	width: 100%;
+// 	height: calc(100vw / 4 * 5 - var(--space-size) * 6 * 2);
+// }
 </style>

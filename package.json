@@ -20,13 +20,16 @@
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/svg": "^0.1.12",
     "core-js": "^3.8.3",
+    "i": "^0.3.6",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
     "lodash.remove": "^4.7.0",
+    "npm": "^7.5.4",
     "nuxt": "^2.14.12",
     "nuxt-i18n": "^6.20.1",
     "nuxt-lazy-load": "^1.2.4",
     "qs": "^6.9.6",
+    "stylelint-scss": "^3.19.0",
     "v-click-outside": "^3.1.2",
     "vue-global-events": "^1.2.1"
   },
@@ -52,6 +55,8 @@
     "prettier": "^2.2.1",
     "sass": "^1.32.7",
     "sass-loader": "^10.1.1",
+    "stylelint": "^13.10.0",
+    "stylelint-config-standard": "^20.0.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
   }
 }

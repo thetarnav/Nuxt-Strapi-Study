@@ -1,6 +1,7 @@
 {
-   "cSpell.words": [
-      "fontawesome",
-      "fortawesome"
-   ]
+	"cSpell.words": ["fontawesome", "fortawesome"],
+	"css.validate": false,
+	"less.validate": false,
+	"scss.validate": false,
+	"vetur.validation.style": false
 }

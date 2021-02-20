@@ -3,6 +3,9 @@ const colors = require('tailwindcss/colors')
 module.exports = {
 	theme: {
 		extend: {
+			zIndex: {
+				'-1': '-1',
+			},
 			colors: {
 				primary: '#5F4BFF',
 				secondary: '#FF5F4B',
