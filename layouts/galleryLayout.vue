@@ -1,7 +1,7 @@
 <template>
 	<div class="">
 		<SwipeAndScroll :directions="['down']" @swipe="swipe">
-			<Nuxt class="page" />
+			<Nuxt class="page gallery" />
 		</SwipeAndScroll>
 		<MainNav />
 	</div>
@@ -34,3 +34,9 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style lang="scss" scoped>
+.gallery {
+	padding-bottom: var(--nav-height);
+}
+</style>

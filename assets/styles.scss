@@ -16,6 +16,7 @@
 	@apply flex flex-col;
 	// padding: 0 var(--page-margin);
 	// padding-bottom: calc(#{$mobile-nav-height} + 5rem);
+	// padding-bottom: var(--nav-height);
 }
 
 .link-text {
