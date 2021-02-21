@@ -20,7 +20,7 @@
     "@nuxtjs/strapi": "^0.3.0",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/svg": "^0.1.12",
-    "core-js": "^3.8.3",
+    "core-js": "^3.9.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
     "lodash.remove": "^4.7.0",
