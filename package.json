@@ -27,7 +27,7 @@
     "npm": "^7.5.4",
     "nuxt": "^2.14.12",
     "nuxt-i18n": "^6.20.1",
-    "nuxt-lazy-load": "^1.2.4",
+    "nuxt-lazy-load": "^1.2.5",
     "qs": "^6.9.6",
     "stylelint-scss": "^3.19.0",
     "swiper": "^6.4.15",
