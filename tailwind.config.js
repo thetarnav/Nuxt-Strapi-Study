@@ -14,6 +14,9 @@ module.exports = {
 			fontFamily: {
 				sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
 			},
+			boxShadow: {
+				around: '0 0 40px 0 rgba(0, 0, 0, 0.4)',
+			},
 		},
 	},
 	variants: {

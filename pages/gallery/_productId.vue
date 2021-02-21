@@ -11,12 +11,18 @@
 					<img :src="singleImage" alt="product thumbnail" />
 				</figure>
 				<div class="content">
-					<button class="close-button btn-dark" @click="closeOverlay">
-						<Icon icon="times" class="icon"></Icon>
-					</button>
-					<button class="close-button share btn-dark" @click="copyLink">
-						<Icon icon="share" class="icon"></Icon>
-					</button>
+					<KeepInView classes="top-buttons-frame stick-top">
+						<Button
+							leading-icon="share"
+							class="circle sticky top-0 left-0"
+							:on-click="copyLink"
+						/>
+						<Button
+							leading-icon="times"
+							class="circle sticky top-0 left-0"
+							:on-click="closeOverlay"
+						/>
+					</KeepInView>
 					<header>
 						<h2>{{ data.title }}</h2>
 					</header>
@@ -32,9 +38,21 @@
 				{{ data.table }}
 			</pre
 					>
-					<a v-if="data.isAvailable" :href="data.shopLink" target="_blank"
-						>link do sklepu</a
-					>
+					<template v-if="data.isAvailable">
+						<p class="self-end">Product na stanie!</p>
+						<KeepInView
+							class="self-end"
+							classes="stick-bottom stick-right"
+						>
+							<Button
+								class="bg-primary"
+								leading-icon="shopping-bag"
+								:href="data.shopLink"
+							>
+								Zobacz w sklepie
+							</Button>
+						</KeepInView>
+					</template>
 				</div>
 				<h4>Podobne produkty:</h4>
 				<ul class="ties">
@@ -198,10 +216,10 @@ export default Vue.extend({
 .product-overlay {
 	@apply fixed -inset-20;
 	z-index: 3000;
-	backdrop-filter: blur(20px);
 }
 .cover {
-	@apply bg-gray-900 opacity-90 absolute -z-1 inset-0;
+	@apply bg-opacity-90 bg-gray-900 absolute -z-1 inset-0;
+	backdrop-filter: blur(20px);
 }
 .outer-wrapper {
 	@apply absolute inset-20 overflow-y-auto flex justify-center;
@@ -211,7 +229,7 @@ export default Vue.extend({
 	height: max-content;
 }
 .thumbnail {
-	@apply relative w-screen p-6 flex justify-center items-center;
+	@apply relative w-screen flex justify-center items-center;
 	max-height: 100vw;
 	img {
 		max-height: 100%;
@@ -219,8 +237,8 @@ export default Vue.extend({
 	}
 }
 .content {
-	@apply relative z-30 -mt-6 p-6 bg-white rounded-2xl;
-	@include shadow-around;
+	@apply relative z-30 -mt-4 p-6 bg-white rounded-2xl shadow-around flex flex-col;
+	// @include shadow-around;
 }
 
 .close-button {

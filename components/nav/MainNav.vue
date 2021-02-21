@@ -72,7 +72,7 @@ export default Vue.extend({
 .main-nav {
 	--link-width: 20vw;
 	@apply fixed inset-x-0 bottom-0;
-	@apply bg-gray-100 border-t-2;
+	@apply bg-gray-100 border-t-2 shadow-around;
 	z-index: 2000;
 	height: var(--nav-height);
 

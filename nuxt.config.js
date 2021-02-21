@@ -35,6 +35,7 @@ export default {
 	plugins: [
 		'~/plugins/fontawesome.js',
 		'~/plugins/vue-plugins.js',
+		'~/plugins/vue-plugins.client.js',
 		'~/plugins/localStorage.client.ts',
 		'~/plugins/toggleDocScroll.client.ts',
 		// '~/plugins/vue-awesome-swiper.client.ts',
