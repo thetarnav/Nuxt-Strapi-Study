@@ -1,33 +1,52 @@
 <template>
+	<!-- eslint-disable vue/no-v-html -->
 	<div class="product-overlay">
-		<div class="content-wrapper">
-			<button class="close-button btn-dark" @click="closeOverlay">
-				<Icon icon="times" class="icon"></Icon>
-			</button>
-			<button class="close-button share btn-dark" @click="copyLink">
-				<Icon icon="share" class="icon"></Icon>
-			</button>
-			<h2>{{ data.title }}</h2>
-			<h6 v-if="data.number">#{{ data.number }}</h6>
-			<pre class="desc">
-            {{ data.description }}
-         </pre>
-			<pre class="desc">
+		<div class="outer-wrapper">
+			<article :key="id" class="inner-wrapper">
+				<Slider
+					v-if="data.slides && data.slides.length > 1"
+					:images="data.slides"
+				/>
+				<figure v-else-if="data.thumbnail" class="thumbnail">
+					<img :src="singleImage" alt="product thumbnail" />
+				</figure>
+				<div class="content">
+					<button class="close-button btn-dark" @click="closeOverlay">
+						<Icon icon="times" class="icon"></Icon>
+					</button>
+					<button class="close-button share btn-dark" @click="copyLink">
+						<Icon icon="share" class="icon"></Icon>
+					</button>
+					<header>
+						<h2>{{ data.title }}</h2>
+					</header>
+					<h6 v-if="data.number">#{{ data.number }}</h6>
+					<main
+						v-if="data.description"
+						class="prose"
+						v-html="$md.render(data.description)"
+					>
+						{{ data.description }}
+					</main>
+					<pre class="desc">
 				{{ data.table }}
 			</pre
-			>
-			<a v-if="data.isAvailable" :href="data.shopLink" target="_blank"
-				>link do sklepu</a
-			>
-			<h4>Podobne produkty:</h4>
-			<ul class="ties">
-				<li v-for="tie in ties" :key="tie.products[0].id">
-					<a @click="goToProduct(tie.products[0].id)">
-						<h5>{{ tie.products[0].title }}</h5>
-					</a>
-				</li>
-			</ul>
+					>
+					<a v-if="data.isAvailable" :href="data.shopLink" target="_blank"
+						>link do sklepu</a
+					>
+				</div>
+				<h4>Podobne produkty:</h4>
+				<ul class="ties">
+					<li v-for="tie in ties" :key="tie.products[0].id">
+						<a @click="goToProduct(tie.products[0].id)">
+							<h5>{{ tie.products[0].title }}</h5>
+						</a>
+					</li>
+				</ul>
+			</article>
 		</div>
+		<div class="cover"></div>
 	</div>
 </template>
 
@@ -105,6 +124,15 @@ export default Vue.extend({
 			],
 		}
 	},
+	computed: {
+		singleImage(): string {
+			return (
+				this.data.slides?.[0]?.formats.large.url ||
+				this.data.thumbnail?.url ||
+				''
+			)
+		},
+	},
 	watch: {
 		id() {
 			this.fetchedTies = false
@@ -168,23 +196,33 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .product-overlay {
-	@include full-fixed(3000);
-	background-color: rgba($black, 0.9);
+	@apply fixed -inset-20;
+	z-index: 3000;
 	backdrop-filter: blur(20px);
-	display: flex;
-	flex-direction: column;
-	// justify-content: center;
-	align-items: center;
-	overflow: auto;
 }
-.content-wrapper {
-	position: relative;
-	width: 80vmin;
-	padding: 30px;
-	border-radius: 20px;
-	background: $white;
-	margin: 100px auto;
+.cover {
+	@apply bg-gray-900 opacity-90 absolute -z-1 inset-0;
 }
+.outer-wrapper {
+	@apply absolute inset-20 overflow-y-auto flex justify-center;
+}
+.inner-wrapper {
+	@apply flex flex-col w-screen max-w-md items-stretch overflow-hidden;
+	height: max-content;
+}
+.thumbnail {
+	@apply relative w-screen p-6 flex justify-center items-center;
+	max-height: 100vw;
+	img {
+		max-height: 100%;
+		max-width: 100%;
+	}
+}
+.content {
+	@apply relative z-30 -mt-6 p-6 bg-white rounded-2xl;
+	@include shadow-around;
+}
+
 .close-button {
 	$size: 50px;
 	border-radius: 50%;

@@ -37,6 +37,7 @@ export default {
 		'~/plugins/vue-plugins.js',
 		'~/plugins/localStorage.client.ts',
 		'~/plugins/toggleDocScroll.client.ts',
+		// '~/plugins/vue-awesome-swiper.client.ts',
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components
@@ -56,7 +57,12 @@ export default {
 		'@nuxtjs/style-resources',
 		'nuxt-lazy-load',
 		'nuxt-i18n',
+		'@nuxtjs/markdownit',
 	],
+
+	markdownit: {
+		runtime: true, // Support `$md()`
+	},
 
 	i18n: {
 		locales: [
@@ -131,20 +137,20 @@ export default {
 	},
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
-	build: {
-		postcss: {
-			syntax: 'postcss-scss',
-			plugins: {
-				'postcss-import': {},
-				'postcss-nested': {},
-				'postcss-preset-env': this.preset,
-				'postcss-custom-properties': {},
-			},
-			preset: {
-				stage: 1,
-			},
-		},
-	},
+	// build: {
+	// 	postcss: {
+	// 		syntax: 'postcss-scss',
+	// 		plugins: {
+	// 			'postcss-import': {},
+	// 			'postcss-nested': {},
+	// 			'postcss-preset-env': this.preset,
+	// 			'postcss-custom-properties': {},
+	// 		},
+	// 		preset: {
+	// 			stage: 1,
+	// 		},
+	// 	},
+	// },
 
 	server: {
 		host: process.env.BASE_URL,

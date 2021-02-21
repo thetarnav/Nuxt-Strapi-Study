@@ -106,3 +106,7 @@
 	-webkit-line-clamp: $n; /* number of lines to show */
 	-webkit-box-orient: vertical;
 }
+
+@mixin shadow-around {
+	filter: drop-shadow(0 0 1rem rgba($black, 0.4));
+}

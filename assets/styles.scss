@@ -37,3 +37,7 @@
 	height: 100vh;
 	overflow-y: auto;
 }
+
+.shadow-around {
+	@include shadow-around;
+}

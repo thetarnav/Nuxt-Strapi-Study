@@ -21,7 +21,8 @@
 			"@types/node",
 			"nuxt-graphql-request",
 			"@nuxtjs/axios",
-			"nuxt-i18n"
+			"nuxt-i18n",
+			"@nuxtjs/markdownit"
 		]
 	},
 	"exclude": ["node_modules", ".nuxt", "dist", "docs"]

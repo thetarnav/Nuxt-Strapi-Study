@@ -77,6 +77,7 @@ module.exports = {
 		'prettier/prettier': 'off',
 		'no-useless-escape': 'warn',
 		'import/newline-after-import': 'warn',
+		'import/order': 'warn',
 		'object-shorthand': 'warn',
 		'no-multiple-empty-lines': 'off',
 		'padded-blocks': 'warn',

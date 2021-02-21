@@ -19,24 +19,39 @@ export interface CategoriesResponse {
 
 export const countQuery = gql`
 	query Count($weekAgo: Float, $lastVisit: Float) {
-		sinceLastWeek: productsConnection(where: { timestamp_gte: $weekAgo }) {
+		sinceLastWeek: productsConnection(
+			where: { timestamp_gte: $weekAgo, _publicationState: "live" }
+		) {
 			aggregate {
 				count
 			}
 		}
-		sinceLastVisit: productsConnection(where: { timestamp_gte: $lastVisit }) {
+		sinceLastVisit: productsConnection(
+			where: { timestamp_gte: $lastVisit, _publicationState: "live" }
+		) {
 			aggregate {
 				count
 			}
 		}
-		available: productsConnection(where: { isAvailable: true }) {
+		available: productsConnection(
+			where: { isAvailable: true, _publicationState: "live" }
+		) {
 			aggregate {
 				count
 			}
 		}
-		other: productsConnection(where: { category_null: true }) {
+		other: productsConnection(
+			where: { category_null: true, _publicationState: "live" }
+		) {
 			aggregate {
 				count
+			}
+		}
+		views: productsConnection {
+			aggregate {
+				avg {
+					views
+				}
 			}
 		}
 	}
@@ -60,6 +75,13 @@ const countResponse = {
 	other: {
 		aggregate: {
 			count: 3,
+		},
+	},
+	views: {
+		aggregate: {
+			avg: {
+				views: 25.27777777777778,
+			},
 		},
 	},
 }
@@ -159,7 +181,7 @@ interface ImageFromat {
 	height: number
 	width: number
 }
-interface Image extends ImageFromat {
+export interface Image extends ImageFromat {
 	formats: {
 		thumbnail: ImageFromat
 		small: ImageFromat
@@ -224,6 +246,5 @@ export type ProductTies = { products: ProductThumbnail[] }[]
 export interface ProductTiesResponse {
 	product: {
 		ties: ProductTies
-
 	}
 }

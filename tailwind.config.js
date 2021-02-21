@@ -21,7 +21,7 @@ module.exports = {
 			borderWidth: ['last'],
 		},
 	},
-	plugins: [],
+	plugins: [require('@tailwindcss/typography')],
 	purge: {
 		mode: 'layers',
 		enabled: process.env.NODE_ENV === 'production',

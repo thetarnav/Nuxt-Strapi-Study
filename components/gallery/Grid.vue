@@ -8,61 +8,13 @@
 			class="gallery-grid overflow-hidden p-6 grid grid-cols-2 gap-4 items-start"
 			:class="{ 'hide-results': hideResults }"
 		>
-			<figure
+			<ProductThumbnail
 				v-for="(product, index) in products"
 				:key="`${index}`"
-				class="product-wrapper bg-gray-100 rounded-xl"
-			>
-				<transition name="fade" mode="out-in">
-					<!-- Product -->
-					<a
-						v-if="product.isLoaded && !hideResults"
-						:key="'product' + index"
-						class="product text-gray-900"
-						@click="openProduct(getData(product).id)"
-					>
-						<div class="thumbnail-wrapper relative">
-							<div
-								class="product-thumbnail rounded-xl"
-								:lazy-background="getData(product).thumbnail"
-							></div>
-							<div
-								class="product-badges absolute top-2 right-0 -mr-2 flex flex-col space-y-2"
-							>
-								<div
-									v-if="getData(product).isAvailable"
-									class="badge available bg-primary"
-								>
-									a
-								</div>
-								<div
-									v-if="getData(product).isNew"
-									class="badge new bg-secondary"
-								>
-									n
-								</div>
-								<div
-									v-if="getData(product).isPopular"
-									class="badge new bg-gray-800"
-								>
-									p
-								</div>
-							</div>
-						</div>
-						<caption class="product-title text-left mx-4 my-2">
-							{{
-								getData(product).title
-							}}
-						</caption>
-					</a>
-					<!-- Skeleton -->
-					<div v-else :key="'skeleton' + index" class="product skeleton">
-						<div class="product-thumbnail rounded-xl"></div>
-						<p class="product-title mx-4 my-2 mt-4"></p>
-						<p class="product-title mx-4 my-2 mb-4"></p>
-					</div>
-				</transition>
-			</figure>
+				:data="product.data"
+				:list-index="index"
+				:show-skeleton="!product.isLoaded || hideResults"
+			/>
 		</transition-group>
 		<GlobalEvents @scroll="debouncedScroll" />
 	</span>
@@ -73,7 +25,6 @@
 <script lang="ts">
 import debounce from 'lodash.debounce'
 import remove from 'lodash.remove'
-import qs from 'qs'
 import Vue from 'vue'
 import {
 	ProductThumbnail,
@@ -113,7 +64,6 @@ export default Vue.extend({
 			debouncedScroll: () => {},
 			reachedEnd: false,
 			paginationStart: 0,
-			// hash: random(0, 10000),
 		}
 	},
 	watch: {
@@ -137,35 +87,9 @@ export default Vue.extend({
 
 			if (fromBottom <= 100) this.fetchProducts()
 		},
-		getData(product: Product) {
-			const value = {
-				title: '',
-				id: '',
-				thumbnail: '',
-				isAvailable: false,
-				isNew: false,
-				isPopular: false,
-			}
-
-			if (product?.data) {
-				const {
-					data: { title, id, thumbnail, isAvailable, timestamp, views },
-				} = product
-				value.title = title
-				value.id = id
-				value.thumbnail =
-					thumbnail.formats?.large?.url ?? thumbnail?.url ?? ''
-				value.isAvailable = isAvailable ?? false
-				value.isNew =
-					Math.min(this.$lastVisit, Date.now() - 6.048e8) < timestamp
-				value.isPopular = views > 100
-			}
-			return value
-		},
 		filterChange() {
 			this.reachedEnd = false
 			this.paginationStart = 0
-			// this.hash = random(0, 10000)
 			this.fetchProducts(true)
 		},
 		async fetchProducts(replace: boolean = false): Promise<void> {
@@ -253,69 +177,6 @@ export default Vue.extend({
 
 			this.hideResults = false
 		},
-		openProduct(productId: ProductThumbnail['id']): void {
-			const query = qs.stringify(this.$route.query)
-			this.$router.push(this.localePath(`/gallery/${productId}?${query}`))
-		},
 	},
 })
 </script>
-
-<style lang="scss" scoped>
-.gallery-grid {
-	// background: $gray9;
-	// display: grid;
-	// grid-template-columns: repeat(2, 1fr);
-	// grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-	// grid-gap: 20px;
-}
-// .hide-results {
-// 	// background: $gray9;
-// 	.product:not(.skeleton) {
-// 		> * {
-// 			opacity: 0;
-// 		}
-// 	}
-// }
-// .product-wrapper {
-// 	overflow: hidden;
-// 	border-radius: 20px;
-// 	background-color: $gray9;
-// }
-// .product {
-// 	padding: 0;
-// 	}
-.product-thumbnail {
-	// border-radius: 20px;
-	aspect-ratio: 1/1;
-	padding-bottom: 100%;
-	background-size: cover;
-	background-position: center;
-	@include skeleton($before: true, $loaded-target: '.isLoaded');
-	// @apply overflow-visible;
-}
-.product-title {
-	@include limit-lines(2);
-}
-
-.skeleton {
-	.product-title {
-		width: 80%;
-		height: 10px;
-		border-radius: 20px;
-		@include skeleton;
-		&:first-of-type {
-			// margin-top: 16px;
-		}
-		&:last-of-type {
-			width: 40%;
-			// margin-bottom: 16px;
-		}
-	}
-}
-
-.badge {
-	@apply h-6 rounded text-white text-center;
-	min-width: theme('spacing.6');
-}
-</style>
