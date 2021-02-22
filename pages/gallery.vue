@@ -4,7 +4,7 @@
 			class="gallery-header hide-me py-4 bg-gray-100"
 			:class="{ hidden: showFullFilters || showLineFilters }"
 		>
-			<h2 class="ml-6 mr-4 mt-1">Galeria</h2>
+			<h3 class="ml-6 mr-4 mt-1">Galeria</h3>
 			<!-- Side Group Filters -->
 			<div class="side-filters-group flex flex-wrap">
 				<FilterPill

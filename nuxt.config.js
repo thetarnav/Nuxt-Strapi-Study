@@ -15,11 +15,19 @@ export default {
 		],
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
+			// Poppins from Google Fonts:
 			{ rel: 'preconnect', href: 'https://fonts.gstatic.com' },
 			{
 				rel: 'stylesheet',
 				href:
 					'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap',
+			},
+			// Bluu Next Webfont:
+			{
+				rel: 'stylesheet',
+				href: 'webfonts/stylesheet.css',
+				type: 'text/css',
+				charset: 'utf-8',
 			},
 		],
 	},
@@ -33,6 +41,7 @@ export default {
 
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
+		'~/plugins/filters.ts',
 		'~/plugins/fontawesome.js',
 		'~/plugins/vue-plugins.js',
 		'~/plugins/vue-plugins.client.js',
@@ -63,6 +72,9 @@ export default {
 
 	markdownit: {
 		runtime: true, // Support `$md()`
+		linkify: true,
+		breaks: true,
+		typographer: false,
 	},
 
 	i18n: {

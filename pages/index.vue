@@ -2,9 +2,9 @@
 	<div class="page">
 		<LangSwitch />
 		<figure class="banner" lazy-background="img/picek.jpg"></figure>
-		<h1 class="mt-52 text-center">
+		<h1 class="title mt-52 text-center font-serif-display">
 			<span class="text-lg">
-				{{ $t('home.project') }}
+				{{ $t('home.project') | Bluu }}
 			</span>
 			Renkidzieło
 		</h1>

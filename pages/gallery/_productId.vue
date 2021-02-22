@@ -10,7 +10,7 @@
 				<figure v-else-if="data.thumbnail" class="thumbnail">
 					<img :src="singleImage" alt="product thumbnail" />
 				</figure>
-				<div class="content">
+				<div class="card">
 					<KeepInView classes="top-buttons-frame stick-top">
 						<Button
 							leading-icon="share"
@@ -23,36 +23,61 @@
 							:on-click="closeOverlay"
 						/>
 					</KeepInView>
-					<header>
-						<h2>{{ data.title }}</h2>
-					</header>
-					<h6 v-if="data.number">#{{ data.number }}</h6>
-					<main
-						v-if="data.description"
-						class="prose"
-						v-html="$md.render(data.description)"
-					>
-						{{ data.description }}
-					</main>
-					<pre class="desc">
-				{{ data.table }}
-			</pre
-					>
-					<template v-if="data.isAvailable">
-						<p class="self-end">Product na stanie!</p>
-						<KeepInView
-							class="self-end"
-							classes="stick-bottom stick-right"
-						>
-							<Button
-								class="bg-primary"
-								leading-icon="shopping-bag"
-								:href="data.shopLink"
+					<main class="content">
+						<header class="header">
+							<h2
+								class="title"
+								:class="{ smaller: BluuTitle.length > 25 }"
 							>
-								Zobacz w sklepie
-							</Button>
-						</KeepInView>
-					</template>
+								{{ BluuTitle }}
+							</h2>
+							<h6 v-if="data.number" class="number">
+								#{{ data.number }}
+							</h6>
+						</header>
+						<div
+							v-if="data.description"
+							class="prose"
+							v-html="$md.render(data.description)"
+						>
+							{{ data.description }}
+						</div>
+						<figure
+							v-if="data.table && table.length > 0"
+							class="table-wrapper"
+						>
+							<table class="table">
+								<tbody class="table-body">
+									<tr
+										v-for="(pair, index) in table"
+										:key="pair[0] + index"
+										class="row"
+									>
+										<th class="key">{{ pair[0] }}</th>
+										<td class="value">{{ pair[1] }}</td>
+									</tr>
+								</tbody>
+							</table>
+							<caption>
+								Specyfikacja
+							</caption>
+						</figure>
+						<template v-if="data.isAvailable">
+							<p class="self-end">Product na stanie!</p>
+							<KeepInView
+								class="self-end"
+								classes="stick-bottom stick-right"
+							>
+								<Button
+									class="bg-primary"
+									leading-icon="shopping-bag"
+									:href="data.shopLink"
+								>
+									Zobacz w sklepie
+								</Button>
+							</KeepInView>
+						</template>
+					</main>
 				</div>
 				<h4>Podobne produkty:</h4>
 				<ul class="ties">
@@ -150,6 +175,28 @@ export default Vue.extend({
 				''
 			)
 		},
+		BluuTitle(): string {
+			const { title } = this.data
+
+			return title
+				? `${title}`
+						.replace(/ą/g, 'a')
+						.replace(/Ą/g, 'A')
+						.replace(/ę/g, 'e')
+						.replace(/Ę/g, 'E')
+				: ''
+		},
+		table(): string[][] {
+			const input = this.data.table
+			if (!input) return []
+
+			const rows = input.split('\n').filter(text => text.includes(':')),
+				table = rows
+					.map(text => text.split(':'))
+					.filter(pair => pair.length === 2)
+
+			return table
+		},
 	},
 	watch: {
 		id() {
@@ -236,9 +283,45 @@ export default Vue.extend({
 		max-width: 100%;
 	}
 }
+.card {
+	@apply relative z-30 -mt-4;
+}
 .content {
-	@apply relative z-30 -mt-4 p-6 bg-white rounded-2xl shadow-around flex flex-col;
-	// @include shadow-around;
+	@apply bg-white rounded-2xl overflow-hidden shadow-around flex flex-col;
+	> * {
+		@apply mb-6 last:mb-0;
+	}
+}
+.header {
+	@apply p-6 bg-gray-100;
+	.title {
+		&.smaller {
+			@apply text-4xl;
+		}
+	}
+	.number {
+		@apply text-gray-500;
+	}
+}
+.table-wrapper {
+	@apply relative p-6 mt-6 bg-gray-100;
+	caption {
+		@apply absolute bottom-full mb-1 text-xs text-gray-500;
+	}
+}
+.table {
+	@apply w-full;
+	.row {
+		@apply my-2 border-b-2 last:border-0;
+	}
+	.key,
+	.value {
+		@apply text-left py-1.5 leading-tight align-text-top;
+	}
+	.key {
+		@apply pr-4 font-semibold;
+		max-width: 8rem;
+	}
 }
 
 .close-button {

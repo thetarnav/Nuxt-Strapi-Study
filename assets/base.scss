@@ -35,3 +35,43 @@ body {
 	padding: 0;
 	box-sizing: border-box;
 }
+
+:root {
+	@apply text-gray-900;
+}
+a {
+	@apply text-primary;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	@apply leading-tight;
+}
+h1 {
+	@apply text-6xl font-serif-display uppercase text-black tracking-tight;
+}
+h2 {
+	@apply text-6xl font-serif-display text-black tracking-tight;
+}
+h1,
+h2 {
+	font-size: clamp(3rem, 13vw, 7rem);
+}
+h3 {
+	@apply text-3xl font-semibold text-black;
+}
+h6 {
+	@apply text-lg font-medium;
+	/* white-space: pre-line; */
+	overflow-wrap: break-word;
+}
+p {
+	// white-space: pre-line;
+	overflow-wrap: break-word;
+}
+svg {
+	@apply w-6;
+}
