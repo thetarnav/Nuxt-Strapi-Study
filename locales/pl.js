@@ -11,6 +11,13 @@ export default {
 			after: '',
 		},
 	},
+	product: {
+		available: {
+			info: 'Produkt jest na stanie!',
+			button: 'Zobacz w sklepie',
+		},
+		similar: 'Podobne produkty:',
+	},
 	filter: {
 		lamps: 'Lampy',
 		'belt-bags': 'Saszetki',

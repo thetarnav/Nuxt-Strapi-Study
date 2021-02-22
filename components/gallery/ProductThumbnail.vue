@@ -6,7 +6,7 @@
 				v-if="!showSkeleton"
 				:key="'product' + listIndex"
 				class="product text-gray-900"
-				@click="openProduct(product.id)"
+				@click="openProduct()"
 			>
 				<div class="thumbnail-wrapper relative">
 					<div
@@ -25,7 +25,7 @@
 						</div>
 					</div>
 				</div>
-				<caption class="product-title text-left mx-4 my-2">
+				<caption class="product-title text-left px-4 py-2">
 					{{
 						product.title
 					}}
@@ -89,9 +89,10 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-		openProduct(productId: ProductThumbnail['id']): void {
-			const query = qs.stringify(this.$route.query)
-			this.$router.push(this.localePath(`/gallery/${productId}?${query}`))
+		openProduct(): void {
+			const { id } = this.product,
+				query = qs.stringify(this.$route.query)
+			this.$router.push(this.localePath(`/gallery/${id}?${query}`))
 		},
 	},
 })
@@ -130,5 +131,12 @@ export default Vue.extend({
 .badge {
 	@apply h-6 rounded text-white text-center;
 	min-width: theme('spacing.6');
+}
+
+.dark {
+	@apply bg-gray-700;
+	.product-title {
+		@apply text-gray-100;
+	}
 }
 </style>

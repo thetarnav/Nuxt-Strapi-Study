@@ -63,6 +63,9 @@ h2 {
 h3 {
 	@apply text-3xl font-semibold text-black;
 }
+h4 {
+	@apply text-2xl font-semibold;
+}
 h6 {
 	@apply text-lg font-medium;
 	/* white-space: pre-line; */

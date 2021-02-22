@@ -1,6 +1,6 @@
 <template>
 	<button
-		class="flex items-center justify-center space-x-2 px-3 h-10 bg-gray-800 shadow-md rounded text-white"
+		class="flex items-center justify-center space-x-2 px-3 h-10 bg-gray-800 shadow-md rounded text-white whitespace-nowrap"
 		@click="click"
 	>
 		<Icon v-if="leadingIcon" :icon="leadingIcon" />

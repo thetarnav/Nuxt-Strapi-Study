@@ -1,8 +1,7 @@
 <template>
 	<div
 		v-waypoint="{ active: true, callback: onWaypoint }"
-		class="wrapper"
-		:style="{ '--height': height }"
+		:style="{ '--height': `${height}px`, '--width': `${width}px` }"
 	>
 		<div
 			ref="content"
@@ -29,10 +28,12 @@ export default Vue.extend({
 		return {
 			isVisible: false,
 			height: null as number | null,
+			width: null as number | null,
 		}
 	},
 	mounted() {
 		this.height = (this.$refs.content as HTMLElement).clientHeight
+		this.width = (this.$refs.content as HTMLElement).clientWidth
 	},
 	methods: {
 		onWaypoint(payload: any) {
@@ -43,19 +44,22 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
+.keep-height {
 	height: var(--height);
+}
+.keep-width {
+	width: var(--width);
 }
 .keep-in-view {
 	@apply fixed;
 	@keyframes from-top {
 		0% {
-			transform: translateY(-120%);
+			transform: translateY(calc(-100% - theme('spacing.2')));
 		}
 	}
 	@keyframes from-bottom {
 		0% {
-			transform: translateY(120%);
+			transform: translateY(calc(100% + theme('spacing.4')));
 		}
 	}
 

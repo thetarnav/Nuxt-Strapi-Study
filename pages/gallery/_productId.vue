@@ -58,35 +58,48 @@
 									</tr>
 								</tbody>
 							</table>
-							<caption>
-								Specyfikacja
-							</caption>
 						</figure>
-						<template v-if="data.isAvailable">
-							<p class="self-end">Product na stanie!</p>
+						<div v-if="data.isAvailable" class="pb-6 mx-6 mt-2 self-end">
+							<p class="text-sm mb-1">
+								{{ $t('product.available.info') }}
+							</p>
 							<KeepInView
-								class="self-end"
+								class="keep-height keep-width"
 								classes="stick-bottom stick-right"
 							>
 								<Button
-									class="bg-primary"
+									class="bg-primary primary"
 									leading-icon="shopping-bag"
 									:href="data.shopLink"
 								>
-									Zobacz w sklepie
+									{{ $t('product.available.button') }}
 								</Button>
 							</KeepInView>
-						</template>
+						</div>
 					</main>
 				</div>
-				<h4>Podobne produkty:</h4>
-				<ul class="ties">
-					<li v-for="tie in ties" :key="tie.products[0].id">
-						<a @click="goToProduct(tie.products[0].id)">
-							<h5>{{ tie.products[0].title }}</h5>
-						</a>
-					</li>
-				</ul>
+				<client-only>
+					<footer v-if="ties.length > 1" class="similar-products">
+						<h4 class="title">{{ $t('product.similar') }}</h4>
+						<div class="list-wrapper">
+							<ul class="list">
+								<li
+									v-for="(tie, index) in ties"
+									:key="`${index}`"
+									class="list-item"
+								>
+									<ProductThumbnail
+										class="dark"
+										:data="tie.products[0]"
+										:list-index="index"
+										:show-skeleton="false"
+									/>
+									<!-- :show-skeleton="!product.isLoaded || hideResults" -->
+								</li>
+							</ul>
+						</div>
+					</footer>
+				</client-only>
 			</article>
 		</div>
 		<div class="cover"></div>
@@ -112,7 +125,6 @@ export default Vue.extend({
 		return {
 			id: params.productId || '',
 			data: payload ?? {},
-			reload: true,
 		}
 	},
 	data() {
@@ -120,7 +132,6 @@ export default Vue.extend({
 			id: '',
 			data: {} as FullProduct,
 			ties: [] as ProductTies,
-			reload: false,
 			fetchedTies: false,
 		}
 	},
@@ -321,6 +332,22 @@ export default Vue.extend({
 	.key {
 		@apply pr-4 font-semibold;
 		max-width: 8rem;
+	}
+}
+.similar-products {
+	@apply mt-6 mb-10;
+	.title {
+		@apply ml-6 mb-4 text-gray-100;
+	}
+	.list-wrapper {
+		@apply overflow-x-auto;
+	}
+	.list {
+		@apply flex space-x-6 px-10;
+		width: max-content;
+	}
+	.list-item {
+		width: 40vmin;
 	}
 }
 

@@ -11,6 +11,13 @@ export default {
 			after: 'zu sehen!',
 		},
 	},
+	product: {
+		available: {
+			info: 'Dieses Produkt ist verfügbar!',
+			button: 'Siehe im Laden',
+		},
+		similar: 'Ähnliche Produkte:',
+	},
 	filter: {
 		lamps: 'Lampen',
 		'belt-bags': 'Gürteltaschen',

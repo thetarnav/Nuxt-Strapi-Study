@@ -11,6 +11,13 @@ export default {
 			after: '',
 		},
 	},
+	product: {
+		available: {
+			info: 'This product is available!',
+			button: 'See in shop',
+		},
+		similar: 'Similar products:',
+	},
 	filter: {
 		lamps: 'Lamps',
 		'belt-bags': 'Belt Bags',
