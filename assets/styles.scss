@@ -9,18 +9,14 @@
 }
 
 .page {
-	--page-margin: calc(var(--space-size) * 6);
+	--page-margin: theme('spacing.6');
 
 	min-height: 100vh;
 	overflow: hidden;
 	@apply flex flex-col;
-	// padding: 0 var(--page-margin);
-	// padding-bottom: calc(#{$mobile-nav-height} + 5rem);
-	// padding-bottom: var(--nav-height);
 }
 
 .prose {
-	// @apply p-6;
 	> * {
 		@apply mx-6;
 	}

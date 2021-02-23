@@ -1,109 +1,120 @@
 <template>
 	<!-- eslint-disable vue/no-v-html -->
-	<div class="product-overlay">
-		<div class="outer-wrapper">
-			<article :key="id" class="inner-wrapper">
-				<Slider
-					v-if="data.slides && data.slides.length > 1"
-					:images="data.slides"
-				/>
-				<figure v-else-if="data.thumbnail" class="thumbnail">
-					<img :src="singleImage" alt="product thumbnail" />
-				</figure>
-				<div class="card">
-					<KeepInView classes="top-buttons-frame stick-top">
-						<Button
-							leading-icon="share"
-							class="circle sticky top-0 left-0"
-							:on-click="copyLink"
+	<transition name="quick-fade" appear>
+		<div class="product-overlay">
+			<div ref="scrollingEl" class="outer-wrapper">
+				<transition name="fade">
+					<article
+						v-if="!$fetchState.pending"
+						:key="id"
+						class="inner-wrapper"
+					>
+						<Slider
+							v-if="data.slides && data.slides.length > 1"
+							:images="data.slides"
 						/>
-						<Button
-							leading-icon="times"
-							class="circle sticky top-0 left-0"
-							:on-click="closeOverlay"
-						/>
-					</KeepInView>
-					<main class="content">
-						<header class="header">
-							<h2
-								class="title"
-								:class="{ smaller: BluuTitle.length > 25 }"
-							>
-								{{ BluuTitle }}
-							</h2>
-							<h6 v-if="data.number" class="number">
-								#{{ data.number }}
-							</h6>
-						</header>
-						<div
-							v-if="data.description"
-							class="prose"
-							v-html="$md.render(data.description)"
-						>
-							{{ data.description }}
-						</div>
-						<figure
-							v-if="data.table && table.length > 0"
-							class="table-wrapper"
-						>
-							<table class="table">
-								<tbody class="table-body">
-									<tr
-										v-for="(pair, index) in table"
-										:key="pair[0] + index"
-										class="row"
-									>
-										<th class="key">{{ pair[0] }}</th>
-										<td class="value">{{ pair[1] }}</td>
-									</tr>
-								</tbody>
-							</table>
+						<figure v-else-if="data.thumbnail" class="thumbnail">
+							<img :src="singleImage" alt="product thumbnail" />
 						</figure>
-						<div v-if="data.isAvailable" class="pb-6 mx-6 mt-2 self-end">
-							<p class="text-sm mb-1">
-								{{ $t('product.available.info') }}
-							</p>
-							<KeepInView
-								class="keep-height keep-width"
-								classes="stick-bottom stick-right"
-							>
+						<div class="card">
+							<KeepInView classes="top-buttons-frame stick-top">
 								<Button
-									class="bg-primary primary"
-									leading-icon="shopping-bag"
-									:href="data.shopLink"
-								>
-									{{ $t('product.available.button') }}
-								</Button>
+									leading-icon="chain"
+									class="circle sticky top-0 left-0"
+									:on-click="copyLink"
+								/>
+								<Button
+									leading-icon="x"
+									class="circle sticky top-0 left-0"
+									:on-click="closeOverlay"
+								/>
 							</KeepInView>
-						</div>
-					</main>
-				</div>
-				<client-only>
-					<footer v-if="ties.length > 1" class="similar-products">
-						<h4 class="title">{{ $t('product.similar') }}</h4>
-						<div class="list-wrapper">
-							<ul class="list">
-								<li
-									v-for="(tie, index) in ties"
-									:key="`${index}`"
-									class="list-item"
+							<main class="content">
+								<header class="header">
+									<h2
+										class="title"
+										:class="{ smaller: BluuTitle.length > 25 }"
+									>
+										{{ BluuTitle }}
+									</h2>
+									<h6 v-if="data.number" class="number">
+										#{{ data.number }}
+									</h6>
+								</header>
+								<div
+									v-if="data.description"
+									class="prose"
+									v-html="$md.render(data.description)"
 								>
-									<ProductThumbnail
-										class="dark"
-										:data="tie.products[0]"
-										:list-index="index"
-										:show-skeleton="false"
-									/>
-									<!-- :show-skeleton="!product.isLoaded || hideResults" -->
-								</li>
-							</ul>
+									{{ data.description }}
+								</div>
+								<figure
+									v-if="data.table && table.length > 0"
+									class="table-wrapper"
+								>
+									<table class="table">
+										<tbody class="table-body">
+											<tr
+												v-for="(pair, index) in table"
+												:key="pair[0] + index"
+												class="row"
+											>
+												<th class="key">{{ pair[0] }}</th>
+												<td class="value">{{ pair[1] }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</figure>
+								<div
+									v-if="data.isAvailable"
+									class="pb-6 mx-6 mt-2 self-end"
+								>
+									<p class="text-sm mb-1">
+										{{ $t('product.available.info') }}
+									</p>
+									<KeepInView
+										class="keep-height keep-width"
+										classes="stick-bottom stick-right"
+									>
+										<Button
+											class="bg-primary primary"
+											leading-icon="shopping-bag-full"
+											:href="data.shopLink"
+										>
+											{{ $t('product.available.button') }}
+										</Button>
+									</KeepInView>
+								</div>
+							</main>
 						</div>
-					</footer>
-				</client-only>
-			</article>
+						<client-only>
+							<footer v-if="ties.length > 1" class="similar-products">
+								<h4 class="title">{{ $t('product.similar') }}</h4>
+								<div class="list-wrapper">
+									<ul class="list">
+										<li
+											v-for="(tie, index) in similarProducts"
+											:key="`${index}`"
+											class="list-item"
+										>
+											<ProductThumbnail
+												class="dark"
+												:data="tie.data"
+												:list-index="index"
+												:show-skeleton="!tie.isLoaded"
+											/>
+											<!-- :show-skeleton="!product.isLoaded || hideResults" -->
+										</li>
+									</ul>
+								</div>
+							</footer>
+						</client-only>
+					</article>
+				</transition>
+			</div>
+			<div class="cover"></div>
 		</div>
-		<div class="cover"></div>
-	</div>
+	</transition>
 </template>
 
 <script lang="ts">
@@ -117,6 +128,7 @@ import {
 	ProductTies,
 	productTiesQuery,
 	ProductTiesResponse,
+	ProductThumbnail,
 } from '~/assets/js/queries'
 
 export default Vue.extend({
@@ -208,11 +220,25 @@ export default Vue.extend({
 
 			return table
 		},
+		similarProducts(): { data?: ProductThumbnail; isLoaded: boolean }[] {
+			const { ties } = this
+
+			if (ties.length === 0) {
+				const skeleton = { isLoaded: false },
+					skeletonList = [...Array(4).keys()].map(() => skeleton)
+				return skeletonList
+			}
+			return ties.map(({ products }) => ({
+				data: products[0],
+				isLoaded: true,
+			}))
+		},
 	},
 	watch: {
 		id() {
 			this.fetchedTies = false
 			this.$fetch()
+			setTimeout(() => this.$refs.scrollingEl.scrollTo({ top: 0 }), 300)
 		},
 	},
 	mounted() {
@@ -277,7 +303,7 @@ export default Vue.extend({
 }
 .cover {
 	@apply bg-opacity-90 bg-gray-900 absolute -z-1 inset-0;
-	backdrop-filter: blur(20px);
+	backdrop-filter: blur(25px);
 }
 .outer-wrapper {
 	@apply absolute inset-20 overflow-y-auto flex justify-center;
@@ -288,6 +314,7 @@ export default Vue.extend({
 }
 .thumbnail {
 	@apply relative w-screen flex justify-center items-center;
+	height: 100vw;
 	max-height: 100vw;
 	img {
 		max-height: 100%;

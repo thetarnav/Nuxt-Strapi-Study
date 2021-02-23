@@ -79,7 +79,7 @@ export default Vue.extend({
 				value.title = title
 				value.id = id
 				value.thumbnail =
-					thumbnail.formats?.large?.url ?? thumbnail?.url ?? ''
+					thumbnail.formats?.medium?.url ?? thumbnail?.url ?? ''
 				value.isAvailable = isAvailable ?? false
 				value.isNew =
 					Math.min(this.$lastVisit, Date.now() - 6.048e8) < timestamp

@@ -51,10 +51,10 @@ h6 {
 	@apply leading-tight;
 }
 h1 {
-	@apply text-6xl font-serif-display uppercase text-black tracking-tight;
+	@apply text-6xl font-serif-display font-bold uppercase text-black tracking-tight;
 }
 h2 {
-	@apply text-6xl font-serif-display text-black tracking-tight;
+	@apply text-6xl font-serif-display font-bold text-black tracking-tight;
 }
 h1,
 h2 {

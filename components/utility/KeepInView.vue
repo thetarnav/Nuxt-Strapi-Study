@@ -5,6 +5,7 @@
 	>
 		<div
 			ref="content"
+			class="inner"
 			:class="`${classes} ${isVisible ? '' : 'keep-in-view'}`"
 		>
 			<slot></slot>
@@ -31,19 +32,26 @@ export default Vue.extend({
 			width: null as number | null,
 		}
 	},
-	mounted() {
-		this.height = (this.$refs.content as HTMLElement).clientHeight
-		this.width = (this.$refs.content as HTMLElement).clientWidth
-	},
 	methods: {
 		onWaypoint(payload: any) {
 			this.isVisible = payload?.going === 'in' || false
+
+			this.$nextTick(() => {
+				this.height =
+					(this.$refs.content as HTMLElement).clientHeight || this.height
+				this.width =
+					(this.$refs.content as HTMLElement).clientWidth || this.width
+			})
 		},
 	},
 })
 </script>
 
 <style lang="scss" scoped>
+.inner {
+	width: max-content;
+	height: max-content;
+}
 .keep-height {
 	height: var(--height);
 }

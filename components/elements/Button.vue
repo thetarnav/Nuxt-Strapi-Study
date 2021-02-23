@@ -3,11 +3,11 @@
 		class="flex items-center justify-center space-x-2 px-3 h-10 bg-gray-800 shadow-md rounded text-white whitespace-nowrap"
 		@click="click"
 	>
-		<Icon v-if="leadingIcon" :icon="leadingIcon" />
+		<MyIcon v-if="leadingIcon" :icon="leadingIcon" />
 		<span v-if="$slots.default">
 			<slot></slot>
 		</span>
-		<Icon v-if="trailingIcon" :icon="trailingIcon" />
+		<MyIcon v-if="trailingIcon" :icon="trailingIcon" />
 	</button>
 </template>
 
@@ -54,9 +54,9 @@ export default Vue.extend({
 	@apply bg-primary space-x-3 px-5 h-14 rounded-md shadow-lg text-lg font-semibold;
 }
 .circle {
-	@apply rounded-full h-12 w-12;
+	@apply rounded-full h-12 w-12 p-0;
 	svg {
-		@apply w-6 h-6;
+		@apply w-7 h-7 text-white;
 	}
 }
 </style>

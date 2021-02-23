@@ -16,7 +16,7 @@
 		<Button
 			class="mt-4 self-center primary"
 			:route="{ name: 'gallery', query: { filter: 'available' } }"
-			leading-icon="shopping-bag"
+			leading-icon="shopping-bag-full"
 		>
 			{{ $t('home.cta') }}
 		</Button>

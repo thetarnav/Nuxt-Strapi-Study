@@ -43,7 +43,7 @@ import { RootState } from '~/store'
 export default Vue.extend({
 	name: 'TopPageLayout',
 	head() {
-		return this.$nuxtI18nHead({
+		return (this as any).$nuxtI18nHead({
 			addSeoAttributes: true,
 			addDirAttribute: true,
 		})

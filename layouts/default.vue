@@ -10,7 +10,7 @@ import Vue from 'vue'
 export default Vue.extend({
 	name: 'DefaultLayout',
 	head() {
-		return this.$nuxtI18nHead({
+		return (this as any).$nuxtI18nHead({
 			addSeoAttributes: true,
 			addDirAttribute: true,
 		})

@@ -99,7 +99,9 @@
 		<!-- Gallery Grid -->
 		<Grid :id="selectedFilterID" :uid="selectedFilter" />
 
-		<nuxt-child v-if="showOverlay" />
+		<transition name="quick-fade" appear>
+			<nuxt-child v-if="showOverlay" />
+		</transition>
 	</div>
 </template>
 
@@ -281,8 +283,6 @@ export default Vue.extend({
 .gallery-header {
 	display: flex;
 	position: relative;
-	// margin-right: calc(var(--page-margin) * -1);
-	margin-left: var(--page-margin);
 }
 
 .hide-me {

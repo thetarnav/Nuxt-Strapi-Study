@@ -1,12 +1,31 @@
 {
-	"cSpell.words": [
-		"Bluu",
-		"Swiper",
-		"fontawesome",
-		"fortawesome"
-	],
+	"cSpell.words": ["Bluu", "Swiper", "fontawesome", "fortawesome"],
 	"css.validate": false,
 	"less.validate": false,
 	"scss.validate": false,
-	"vetur.validation.style": false
+	"vetur.validation.style": false,
+	"auto-close-tag.activationOnLanguage": [
+		"xml",
+		"php",
+		"blade",
+		"ejs",
+		"jinja",
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"plaintext",
+		"markdown",
+		"vue",
+		"liquid",
+		"erb",
+		"lang-cfml",
+		"cfml",
+		"HTML (EEx)",
+		"HTML (Eex)",
+		"plist"
+	],
+	"editor.quickSuggestions": {
+		"strings": true
+	}
 }

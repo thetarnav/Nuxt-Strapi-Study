@@ -1,5 +1,5 @@
 <template>
-	<figure ref="swiperEl" class="slider-container">
+	<figure ref="swiperEl" v-swiper="swiperOptions" class="slider-container">
 		<div class="swiper-wrapper">
 			<div
 				v-for="(url, slideIndex) in slides"
@@ -9,49 +9,23 @@
 				<img class="img" :src="url" :alt="slideIndex" data-not-lazy />
 			</div>
 		</div>
-		<button v-show="!isBeginning" class="navigation prev" @click="go(-1)">
-			<svg
-				class="mr-0.5"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M15 19l-7-7 7-7"
-				></path>
-			</svg>
-		</button>
-		<button v-show="!isEnd" class="navigation next" @click="go(1)">
-			<svg
-				class="ml-0.5"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M9 5l7 7-7 7"
-				></path>
-			</svg>
-		</button>
+		<Button class="swiper-button-prev circle" leading-icon="prev" />
+		<Button class="swiper-button-next circle" leading-icon="next" />
 	</figure>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Swiper } from 'swiper'
-import 'swiper/swiper-bundle.css'
+// import { Swiper } from 'swiper'
+import { directive as swiper } from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
 import { Image } from '~/assets/js/queries'
 
 export default Vue.extend({
 	name: 'Slider',
+	directives: {
+		swiper,
+	},
 	props: {
 		images: {
 			type: Array,
@@ -60,7 +34,17 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			swiper: null as Swiper | null,
+			// swiper: null as Swiper | null,
+			swiperOptions: {
+				grabCursor: true,
+				watchOverflow: true,
+				speed: 400,
+				spaceBetween: 30,
+				navigation: {
+					nextEl: '.swiper-button-next',
+					prevEl: '.swiper-button-prev',
+				},
+			},
 		}
 	},
 	computed: {
@@ -73,39 +57,40 @@ export default Vue.extend({
 
 			return slides
 		},
-		isBeginning(): boolean {
-			return this.swiper?.isBeginning || false
-		},
-		isEnd(): boolean {
-			return this.swiper?.isEnd || false
-		},
+		// isBeginning(): boolean {
+		// 	return this.swiper?.isBeginning || false
+		// },
+		// isEnd(): boolean {
+		// 	return this.swiper?.isEnd || false
+		// },
 	},
 	mounted() {
-		this.initSwiper()
+		// this.$nextTick(this.initSwiper)
 	},
 	beforeDestroy() {
-		this.swiper?.destroy()
+		// this.swiper?.destroy()
 	},
 	methods: {
-		initSwiper() {
-			if (this.swiper) {
-				this.swiper.update()
-				return
-			}
-			const el = this.$refs.swiperEl as HTMLElement | undefined,
-				swiperConfig = {
-					grabCursor: true,
-					watchOverflow: true,
-					speed: 400,
-					spaceBetween: 30,
-				}
-
-			if (!el) return
-			this.swiper = new Swiper(el, swiperConfig)
-		},
-		go(n: number) {
-			n > 0 ? this.swiper?.slideNext() : this.swiper?.slidePrev()
-		},
+		// initSwiper() {
+		// 	console.log('Slider init', this.swiper, this.images, this.$refs)
+		// 	if (this.swiper) {
+		// 		this.swiper.update()
+		// 		return
+		// 	}
+		// 	const el = this.$refs.swiperEl as HTMLElement | undefined,
+		// 		swiperConfig = {
+		// 			grabCursor: true,
+		// 			watchOverflow: true,
+		// 			speed: 400,
+		// 			spaceBetween: 30,
+		// 		}
+		// 	if (!el) return
+		// 	this.swiper = new Swiper(el, swiperConfig)
+		// 	console.log(this.swiper)
+		// },
+		// go(n: number) {
+		// 	n > 0 ? this.swiper?.slideNext() : this.swiper?.slidePrev()
+		// },
 	},
 })
 </script>
@@ -122,17 +107,11 @@ export default Vue.extend({
 	max-height: 100%;
 	max-width: 100%;
 }
-.navigation {
-	@apply absolute z-10 w-10 h-10 top-1/2 -mt-5 flex justify-center items-center bg-gray-700 text-white rounded-full;
-
-	&.prev {
-		@apply left-2;
-	}
-	&.next {
-		@apply right-2;
-	}
-	svg {
-		@apply w-full h-full;
+.swiper-button-prev,
+.swiper-button-next {
+	transition: opacity 0.2s;
+	&:after {
+		display: none;
 	}
 }
 </style>
