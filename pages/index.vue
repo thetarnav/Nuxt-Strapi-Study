@@ -25,6 +25,8 @@
 				<img
 					src="img/lampofon.jpg"
 					:alt="$t('home.heroImgAlt')"
+					width="1080"
+					height="1350"
 					class="promo-photo cover-img"
 				/>
 			</nuxt-link>
