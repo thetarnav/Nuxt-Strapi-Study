@@ -80,7 +80,15 @@ export default Vue.extend({
 	},
 	methods: {
 		scroll() {
-			if (this.reachedEnd || this.products.length === 0) return
+			/**
+			 * Fetch more products when user scrolls to the bottom of the Grid.
+			 */
+			if (
+				this.reachedEnd ||
+				this.products.filter(({ isLoaded }) => isLoaded).length === 0 ||
+				this.hideResults
+			)
+				return
 
 			const { scrollHeight } = document.scrollingElement || this.$el,
 				fromBottom = scrollHeight - window.scrollY - window.innerHeight
