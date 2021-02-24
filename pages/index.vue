@@ -1,7 +1,7 @@
 <template>
 	<div class="page">
 		<LangSwitch />
-		<figure class="banner" lazy-background="img/picek.jpg"></figure>
+		<figure class="banner"></figure>
 		<h1 class="title mt-52 text-center font-serif-display">
 			<span class="text-lg">
 				{{ $t('home.project') | Bluu }}
@@ -50,6 +50,7 @@ export default MainPageMixin.extend({
 <style lang="scss" scoped>
 .banner {
 	@apply absolute inset-x-0 top-0 h-80 -z-1;
+	background-image: url('../static/img/picek.jpg');
 	background-size: cover;
 	background-position-x: center;
 
