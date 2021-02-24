@@ -17,6 +17,7 @@ export default {
 			{ rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
 			// Poppins from Google Fonts:
 			{ rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+			{ rel: 'preconnect', href: process.env.STRAPI_URL },
 			{
 				rel: 'preload',
 				as: 'style',

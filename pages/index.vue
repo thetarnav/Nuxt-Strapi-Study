@@ -23,10 +23,10 @@
 		<div class="mt-20">
 			<nuxt-link :to="localePath('/gallery/6021bd9be541ac0015845c94')">
 				<img
-					src="img/lampofon.jpg"
+					src="img/lampofon.webp"
 					:alt="$t('home.heroImgAlt')"
-					width="1080"
-					height="1350"
+					width="1000"
+					height="1250"
 					class="promo-photo cover-img"
 				/>
 			</nuxt-link>
