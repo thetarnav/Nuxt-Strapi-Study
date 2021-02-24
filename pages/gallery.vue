@@ -25,10 +25,10 @@
 				>
 				<!-- Skeleton -->
 				<template v-if="filters.length === 0">
-					<div class="pill m-2 pill--loading"></div>
-					<div class="pill m-2 pill--loading"></div>
-					<div class="pill m-2 pill--loading"></div>
-					<div class="pill m-2 pill--loading"></div>
+					<div class="pill m-1 pill--loading"></div>
+					<div class="pill m-1 pill--loading"></div>
+					<div class="pill m-1 pill--loading"></div>
+					<div class="pill m-1 pill--loading"></div>
 				</template>
 				<div
 					v-if="filters.length > 6"
@@ -191,6 +191,9 @@ export default Vue.extend({
 
 		// Sets Last Visit Timestamp when the gallery is visited
 		localStorage.setItem('lastVisit', Date.now().toString())
+
+		// Select filters from Query if didn't on fetch
+		if (!this.$fetchState.pending) this.selectFilterFromQuery()
 	},
 	methods: {
 		async generateFilters(): Promise<Filter[]> {

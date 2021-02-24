@@ -6,7 +6,7 @@
 				:key="url"
 				class="swiper-slide"
 			>
-				<img class="img" :src="url" :alt="slideIndex" data-not-lazy />
+				<img class="img" :src="url" :alt="slideIndex" />
 			</div>
 		</div>
 		<Button class="swiper-button-prev circle" leading-icon="prev" />
@@ -34,7 +34,6 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			// swiper: null as Swiper | null,
 			swiperOptions: {
 				grabCursor: true,
 				watchOverflow: true,
@@ -53,44 +52,13 @@ export default Vue.extend({
 			let slides: string[] = []
 
 			if (images && images?.length > 1)
-				slides = images.map(({ formats }) => formats.large.url)
+				slides = images.map(
+					({ formats, url }) =>
+						formats.large?.url || formats.medium?.url || url || '',
+				)
 
 			return slides
 		},
-		// isBeginning(): boolean {
-		// 	return this.swiper?.isBeginning || false
-		// },
-		// isEnd(): boolean {
-		// 	return this.swiper?.isEnd || false
-		// },
-	},
-	mounted() {
-		// this.$nextTick(this.initSwiper)
-	},
-	beforeDestroy() {
-		// this.swiper?.destroy()
-	},
-	methods: {
-		// initSwiper() {
-		// 	console.log('Slider init', this.swiper, this.images, this.$refs)
-		// 	if (this.swiper) {
-		// 		this.swiper.update()
-		// 		return
-		// 	}
-		// 	const el = this.$refs.swiperEl as HTMLElement | undefined,
-		// 		swiperConfig = {
-		// 			grabCursor: true,
-		// 			watchOverflow: true,
-		// 			speed: 400,
-		// 			spaceBetween: 30,
-		// 		}
-		// 	if (!el) return
-		// 	this.swiper = new Swiper(el, swiperConfig)
-		// 	console.log(this.swiper)
-		// },
-		// go(n: number) {
-		// 	n > 0 ? this.swiper?.slideNext() : this.swiper?.slidePrev()
-		// },
 	},
 })
 </script>

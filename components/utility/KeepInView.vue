@@ -59,7 +59,7 @@ export default Vue.extend({
 	width: var(--width);
 }
 .keep-in-view {
-	@apply fixed;
+	@apply fixed z-10;
 	@keyframes from-top {
 		0% {
 			transform: translateY(calc(-100% - theme('spacing.2')));

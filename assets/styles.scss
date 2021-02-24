@@ -46,8 +46,18 @@
 }
 
 .top-buttons-frame {
-	@apply absolute right-6 top-0 transform -translate-y-1/2 flex space-x-3;
+	@apply absolute z-20 right-6 top-0 transform -translate-y-1/2 flex space-x-3;
 	&.keep-in-view {
 		@apply transform-none;
 	}
+}
+
+.skeleton {
+	@include skeleton();
+}
+p.skeleton {
+	@apply h-3 rounded-full;
+}
+h6.skeleton {
+	@apply h-4 rounded-full;
 }

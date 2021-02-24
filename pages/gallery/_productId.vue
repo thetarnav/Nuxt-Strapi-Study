@@ -3,114 +3,157 @@
 	<transition name="quick-fade" appear>
 		<div class="product-overlay">
 			<div ref="scrollingEl" class="outer-wrapper">
-				<transition name="fade">
-					<article
-						v-if="!$fetchState.pending"
-						:key="id"
-						class="inner-wrapper"
-					>
-						<Slider
-							v-if="data.slides && data.slides.length > 1"
-							:images="data.slides"
-						/>
-						<figure v-else-if="data.thumbnail" class="thumbnail">
-							<img :src="singleImage" alt="product thumbnail" />
-						</figure>
-						<div class="card">
-							<KeepInView classes="top-buttons-frame stick-top">
-								<Button
-									leading-icon="chain"
-									class="circle sticky top-0 left-0"
-									:on-click="copyLink"
-								/>
-								<Button
-									leading-icon="x"
-									class="circle sticky top-0 left-0"
-									:on-click="closeOverlay"
-								/>
-							</KeepInView>
-							<main class="content">
-								<header class="header">
-									<h2
-										class="title"
-										:class="{ smaller: BluuTitle.length > 25 }"
-									>
-										{{ BluuTitle }}
-									</h2>
-									<h6 v-if="data.number" class="number">
-										#{{ data.number }}
-									</h6>
-								</header>
-								<div
-									v-if="data.description"
-									class="prose"
-									v-html="$md.render(data.description)"
-								>
-									{{ data.description }}
-								</div>
-								<figure
-									v-if="data.table && table.length > 0"
-									class="table-wrapper"
-								>
-									<table class="table">
-										<tbody class="table-body">
-											<tr
-												v-for="(pair, index) in table"
-												:key="pair[0] + index"
-												class="row"
-											>
-												<th class="key">{{ pair[0] }}</th>
-												<td class="value">{{ pair[1] }}</td>
-											</tr>
-										</tbody>
-									</table>
-								</figure>
-								<div
-									v-if="data.isAvailable"
-									class="pb-6 mx-6 mt-2 self-end"
-								>
-									<p class="text-sm mb-1">
-										{{ $t('product.available.info') }}
-									</p>
-									<KeepInView
-										class="keep-height keep-width"
-										classes="stick-bottom stick-right"
-									>
-										<Button
-											class="bg-primary primary"
-											leading-icon="shopping-bag-full"
-											:href="data.shopLink"
-										>
-											{{ $t('product.available.button') }}
-										</Button>
-									</KeepInView>
-								</div>
-							</main>
+				<!-- <transition name="fade"> -->
+				<!-- v-if="!$fetchState.pending"
+						:key="id" -->
+				<article class="inner-wrapper">
+					<transition name="quick-fade" mode="out-in">
+						<!-- Slider / Image -->
+						<div v-if="!$fetchState.pending" :key="`${id}-Media`">
+							<Slider
+								v-if="data.slides && data.slides.length > 1"
+								:images="data.slides"
+							/>
+							<figure v-else-if="data.thumbnail" class="thumbnail">
+								<img :src="singleImage" alt="product thumbnail" />
+							</figure>
 						</div>
-						<client-only>
-							<footer v-if="ties.length > 1" class="similar-products">
-								<h4 class="title">{{ $t('product.similar') }}</h4>
-								<div class="list-wrapper">
-									<ul class="list">
-										<li
-											v-for="(tie, index) in similarProducts"
-											:key="`${index}`"
-											class="list-item"
+						<!-- Skeleton -->
+						<div
+							v-else
+							:key="`${id}-Media-Skeleton`"
+							class="thumbnail p-12"
+						>
+							<div
+								class="skeleton w-full h-full rounded-2xl opacity-20"
+							></div>
+						</div>
+					</transition>
+
+					<div class="card">
+						<!-- Card Buttons -->
+						<KeepInView classes="top-buttons-frame stick-top">
+							<Button
+								leading-icon="chain"
+								class="circle top-0 left-0"
+								:on-click="copyLink"
+							/>
+							<Button
+								leading-icon="x"
+								class="circle top-0 left-0"
+								:on-click="closeOverlay"
+							/>
+						</KeepInView>
+						<!-- <transition name="quick-fade" mode="out-in" appear> -->
+						<!-- The CONTENT -->
+						<main
+							v-if="!$fetchState.pending"
+							:key="`${id}-content`"
+							class="content"
+						>
+							<header class="header">
+								<h2
+									class="title"
+									:class="{ smaller: BluuTitle.length > 25 }"
+								>
+									{{ BluuTitle }}
+								</h2>
+								<h6 v-if="data.number" class="number">
+									#{{ data.number }}
+								</h6>
+							</header>
+							<div
+								v-if="data.description"
+								class="prose"
+								v-html="$md.render(data.description)"
+							>
+								{{ data.description }}
+							</div>
+							<figure
+								v-if="data.table && table.length > 0"
+								class="table-wrapper"
+							>
+								<table class="table">
+									<tbody class="table-body">
+										<tr
+											v-for="(pair, index) in table"
+											:key="pair[0] + index"
+											class="row"
 										>
-											<ProductThumbnail
-												class="dark"
-												:data="tie.data"
-												:list-index="index"
-												:show-skeleton="!tie.isLoaded"
-											/>
-											<!-- :show-skeleton="!product.isLoaded || hideResults" -->
-										</li>
-									</ul>
-								</div>
-							</footer>
-						</client-only>
-					</article>
-				</transition>
+											<th class="key">{{ pair[0] }}</th>
+											<td class="value">{{ pair[1] }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</figure>
+							<div
+								v-if="data.isAvailable"
+								class="pb-6 mx-6 mt-2 self-end"
+							>
+								<p class="text-sm mb-1">
+									{{ $t('product.available.info') }}
+								</p>
+								<KeepInView
+									class="keep-height keep-width"
+									classes="stick-bottom stick-right"
+								>
+									<Button
+										class="bg-primary primary"
+										leading-icon="shopping-bag-full"
+										:href="data.shopLink"
+									>
+										{{ $t('product.available.button') }}
+									</Button>
+								</KeepInView>
+							</div>
+						</main>
+						<!-- Skeleton Content -->
+						<div v-else key="skeleton-content" class="content">
+							<div class="header">
+								<h6 class="title skeleton mb-4"></h6>
+								<h6 class="title skeleton w-4/12"></h6>
+							</div>
+							<div class="prose pb-6">
+								<p class="skeleton"></p>
+								<p class="skeleton"></p>
+								<p class="skeleton w-9/12"></p>
+								<br />
+								<p class="skeleton"></p>
+								<p class="skeleton"></p>
+								<p class="skeleton"></p>
+								<p class="skeleton w-4/12"></p>
+								<br />
+								<p class="skeleton"></p>
+								<p class="skeleton"></p>
+								<p class="skeleton w-4/12"></p>
+							</div>
+						</div>
+						<!-- </transition> -->
+					</div>
+					<client-only>
+						<footer v-if="ties.length > 1" class="similar-products">
+							<h4 class="title">{{ $t('product.similar') }}</h4>
+							<div class="list-wrapper">
+								<ul class="list">
+									<li
+										v-for="(tie, index) in similarProducts"
+										:key="`${index}`"
+										class="list-item"
+									>
+										<ProductThumbnail
+											class="dark"
+											:data="tie.data"
+											:list-index="index"
+											:show-skeleton="!tie.isLoaded"
+										/>
+										<!-- :show-skeleton="!product.isLoaded || hideResults" -->
+									</li>
+								</ul>
+							</div>
+						</footer>
+					</client-only>
+				</article>
+				<!-- </transition> -->
 			</div>
 			<div class="cover"></div>
 		</div>
@@ -238,7 +281,7 @@ export default Vue.extend({
 		id() {
 			this.fetchedTies = false
 			this.$fetch()
-			setTimeout(() => this.$refs.scrollingEl.scrollTo({ top: 0 }), 300)
+			this.$refs.scrollingEl.scrollTo({ top: 0, behavior: 'smooth' })
 		},
 	},
 	mounted() {
@@ -333,6 +376,7 @@ export default Vue.extend({
 .header {
 	@apply p-6 bg-gray-100;
 	.title {
+		@apply break-words;
 		&.smaller {
 			@apply text-4xl;
 		}
@@ -342,7 +386,7 @@ export default Vue.extend({
 	}
 }
 .table-wrapper {
-	@apply relative p-6 mt-6 bg-gray-100;
+	@apply relative p-6 bg-gray-100;
 	caption {
 		@apply absolute bottom-full mb-1 text-xs text-gray-500;
 	}

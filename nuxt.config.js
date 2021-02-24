@@ -112,11 +112,21 @@ export default {
 				${fullProduct}
 			`
 			return request(`${process.env.STRAPI_URL}/graphql`, query).then(
-				({ products }) =>
-					products.map(({ id, ...data }) => ({
-						route: `/gallery/${id}`,
-						payload: data,
-					})),
+				({ products }) => {
+					const routes = [],
+						locales = [null, 'en', 'de']
+					products.forEach(({ id, ...data }) =>
+						routes.push(
+							...locales.map(locale => ({
+								route: locale
+									? `/${locale}/gallery/${id}`
+									: `/gallery/${id}`,
+								payload: data,
+							})),
+						),
+					)
+					return routes
+				},
 			)
 		},
 	},

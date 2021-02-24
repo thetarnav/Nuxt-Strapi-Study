@@ -32,7 +32,11 @@
 				</caption>
 			</a>
 			<!-- Skeleton -->
-			<div v-else :key="'skeleton' + listIndex" class="product skeleton">
+			<div
+				v-else
+				:key="'skeleton' + listIndex"
+				class="product skeleton-product"
+			>
 				<div class="product-thumbnail rounded-xl"></div>
 				<p class="product-title mx-4 my-2 mt-4"></p>
 				<p class="product-title mx-4 my-2 mb-4"></p>
@@ -112,7 +116,7 @@ export default Vue.extend({
 	@include limit-lines(2);
 }
 
-.skeleton {
+.skeleton-product {
 	.product-title {
 		width: 80%;
 		height: 10px;
