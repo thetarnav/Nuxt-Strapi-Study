@@ -2,8 +2,6 @@
 
 [![Mobile Mockup](https://user-images.githubusercontent.com/24491503/109354518-36785400-787e-11eb-9545-05c442e1c445.jpg)](https://thetarnav.github.io/Nuxt-Strapi-Study/)
 
-Nuxt & Strapi Study
-
 ## About
 
 Purpose of this project was to learn how to use **Strapi** as headless CMS, along with **Nuxt.js** frontend framework, and to create prototype with key functionalities of _static + dynamic Gallery website_ for hand crafting artist: [Thea Simulakra](https://renkidzielo.pl).
