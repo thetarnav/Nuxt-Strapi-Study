@@ -1,5 +1,6 @@
 {
-  "name": "nuxt-strapi-prototyping",
+  "name": "nuxt-strapi-study",
+  "author": "Damian Tarnawski @thetarnav <gthetarnav@gmail.com>",
   "version": "1.0.0",
   "private": true,
   "scripts": {

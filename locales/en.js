@@ -14,7 +14,7 @@ export default {
 	product: {
 		available: {
 			info: 'This product is available!',
-			button: 'See in shop',
+			button: 'See in the shop',
 		},
 		similar: 'Similar products:',
 	},

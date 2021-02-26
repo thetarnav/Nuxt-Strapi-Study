@@ -1,20 +1,23 @@
-# nuxt-contentful
+# [Nuxt & Strapi Study](https://thetarnav.github.io/nuxt-strapi-prototyping/)
 
-## Build Setup
+[![Mobile Mockup](https://user-images.githubusercontent.com/24491503/109354518-36785400-787e-11eb-9545-05c442e1c445.jpg)](https://thetarnav.github.io/nuxt-strapi-prototyping/)
 
-```bash
-# install dependencies
-$ npm install
+Nuxt & Strapi Study
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+## About
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+Purpose of this project was to learn how to use **Strapi** as headless CMS, along with **Nuxt.js** frontend framework, and to create prototype with key functionalities of _static + dynamic Gallery website_ for hand crafting artist: [Thea Simulakra](https://renkidzielo.pl).
 
-# generate static project
-$ npm run generate
-```
+## Achieved Features
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+-  **Nuxt.js** Frontend, with Static **SSR**
+-  Written in **Typescript**
+-  Multilanguage with **i18n** module
+-  **Strapi** backend, with **GraphQL** queries
+-  Hosted on **Heroku**
+-  **MongoDB** database
+-  **TailwindCSS** & **SCSS** Styling
+
+## Disclaimer
+
+The available prototype contains only MOBILE view of the application, and is missing much content and some additional planned features. Later, here You will find a link to finished project, once it is compleated and published.
