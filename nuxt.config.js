@@ -138,7 +138,7 @@ export default {
 		},
 	},
 	router: {
-		base: '/nuxt-strapi-prototyping/',
+		base: '/Nuxt-Strapi-Study/',
 	},
 
 	vue: {

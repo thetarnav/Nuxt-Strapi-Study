@@ -1,6 +1,6 @@
-# [Nuxt & Strapi Study](https://thetarnav.github.io/nuxt-strapi-prototyping/)
+# [Nuxt & Strapi Study](https://thetarnav.github.io/Nuxt-Strapi-Study/)
 
-[![Mobile Mockup](https://user-images.githubusercontent.com/24491503/109354518-36785400-787e-11eb-9545-05c442e1c445.jpg)](https://thetarnav.github.io/nuxt-strapi-prototyping/)
+[![Mobile Mockup](https://user-images.githubusercontent.com/24491503/109354518-36785400-787e-11eb-9545-05c442e1c445.jpg)](https://thetarnav.github.io/Nuxt-Strapi-Study/)
 
 Nuxt & Strapi Study
 
