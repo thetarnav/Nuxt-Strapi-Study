@@ -19,11 +19,9 @@ export default {
 			{ rel: 'preconnect', href: 'https://fonts.gstatic.com' },
 			{ rel: 'preconnect', href: process.env.STRAPI_URL },
 			{
-				rel: 'preload',
-				as: 'style',
+				rel: 'stylesheet',
 				href:
 					'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
-				onload: "this.onload=null;this.rel='stylesheet'",
 			},
 			// Bluu Next Webfont:
 			{
@@ -32,15 +30,6 @@ export default {
 				type: 'text/css',
 				charset: 'utf-8',
 			},
-		],
-		noscript: [
-			[
-				{
-					rel: 'stylesheet',
-					href:
-						'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
-				},
-			],
 		],
 	},
 	// Global CSS: https://go.nuxtjs.dev/config-css
