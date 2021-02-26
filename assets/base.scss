@@ -19,6 +19,7 @@ body {
 	// margin: 0;
 	background-color: $background;
 	color: $black;
+	@apply font-sans;
 }
 * {
 	-webkit-font-smoothing: antialiased;

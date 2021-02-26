@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/de/lamps", {data:[{}],fetch:[],mutations:[]});

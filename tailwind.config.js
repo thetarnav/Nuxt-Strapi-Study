@@ -13,7 +13,7 @@ module.exports = {
 			},
 			fontFamily: {
 				sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-				'serif-display': ['Bluu Next', 'ui-serif', 'serif'],
+				'serif-display': ['"Bluu Next"', 'ui-serif', 'serif'],
 			},
 			boxShadow: {
 				around: '0 0 40px 0 rgba(0, 0, 0, 0.3)',

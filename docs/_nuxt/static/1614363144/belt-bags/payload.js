@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/belt-bags", {data:[{}],fetch:{},mutations:[]});
