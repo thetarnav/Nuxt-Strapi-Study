@@ -9,10 +9,7 @@
 			Renkidzieło
 		</h1>
 		<span class="text-6xl text-center mt-4">
-			<Icon
-				icon="image"
-				alt="Renkidzieło Hand-crafts, Wrocław, Poland"
-			></Icon>
+			<Icon icon="image"></Icon>
 		</span>
 		<!-- eslint-disable-next-line vue/no-v-html -->
 		<h6 class="mt-8 whitespace-pre-line" v-html="$t('home.about')"></h6>
