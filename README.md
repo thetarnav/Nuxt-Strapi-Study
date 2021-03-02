@@ -17,7 +17,7 @@ Purpose of this project was to learn how to use **Strapi** as headless CMS, alon
 
 ## Project Architecture
 
-- **Nuxt.js** Frontend hosted on GitHub Pages (for the actual producton website I will be switching to Netlify)
+- **Nuxt.js** Frontend hosted on GitHub Pages *(for the actual producton website I will be switching to Netlify)*
 - **Strapi backend** hosted on **Heroku**
 - **MongoDB** cloud database
 
