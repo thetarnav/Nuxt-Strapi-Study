@@ -8,13 +8,18 @@ Purpose of this project was to learn how to use **Strapi** as headless CMS, alon
 
 ## Achieved Features
 
--  **Nuxt.js** Frontend, with Static **SSR**
+-  Static **SSR** for both static and dynamic pages.
 -  Written in **Typescript**
 -  Multilanguage with **i18n** module
--  **Strapi** backend, with **GraphQL** queries
--  Hosted on **Heroku**
--  **MongoDB** database
+-  Data fetched through **GraphQL** queries
 -  **TailwindCSS** & **SCSS** Styling
+-  Mobile app-like swiping gesture for smooth changing pages
+
+## Project Architecture
+
+- **Nuxt.js** Frontend hosted on GitHub Pages (for the actual producton website I will be switching to Netlify)
+- **Strapi backend** hosted on **Heroku**
+- **MongoDB** cloud database
 
 ## Disclaimer
 
