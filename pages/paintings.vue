@@ -43,7 +43,7 @@ export default MainPageMixin.extend({
 	name: 'Paintings',
 	head() {
 		return {
-			title: 'Renkidzieło - Obrazy',
+			title: 'Nuxt & Strapi Study - Obrazy',
 		}
 	},
 })

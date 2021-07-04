@@ -6,7 +6,7 @@
 			<span class="text-lg">
 				{{ $t('home.project') | Bluu }}
 			</span>
-			Renkidzieło
+			Nuxt & Strapi Study
 		</h1>
 		<span class="text-6xl text-center mt-4">
 			<Icon icon="image"></Icon>
@@ -39,11 +39,6 @@ import MainPageMixin from '~/plugins/mainPageMixin'
 
 export default MainPageMixin.extend({
 	name: 'Home',
-	head() {
-		return {
-			title: 'Renkidzieło',
-		}
-	},
 })
 </script>
 

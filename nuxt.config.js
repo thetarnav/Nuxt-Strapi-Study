@@ -7,11 +7,16 @@ import { fullProduct } from './assets/js/queries'
 export default {
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
-		title: 'Renkidzieło',
+		title: 'Nuxt & Strapi Study',
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ hid: 'description', name: 'description', content: '' },
+			{
+				hid: 'description',
+				name: 'description',
+				content:
+					"Prototype project: I'm learning Strapi to use it later in a commercial project. This is a repository where I prototype the project and test Nuxt.js + Strapi functionalities.",
+			},
 		],
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
@@ -183,14 +188,11 @@ export default {
 	// },
 
 	server: {
-		host: process.env.BASE_URL,
-		port: process.env.BASE_PORT, // default: 3000
+		host: '0.0.0.0',
 	},
 
 	env: {
-		baseUrl:
-			`http://${process.env.BASE_URL}:${process.env.BASE_PORT}` ||
-			'http://localhost:3000',
+		baseUrl: 'http://localhost:3000',
 		strapiUrl: process.env.STRAPI_URL,
 	},
 }

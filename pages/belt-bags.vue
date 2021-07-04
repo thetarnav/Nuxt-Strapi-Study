@@ -43,7 +43,7 @@ export default MainPageMixin.extend({
 	name: 'Belt-bags',
 	head() {
 		return {
-			title: 'Renkidzieło - Saszetki',
+			title: 'Nuxt & Strapi Study - Saszetki',
 		}
 	},
 })

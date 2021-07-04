@@ -43,7 +43,7 @@ export default MainPageMixin.extend({
 	name: 'Lamps',
 	head() {
 		return {
-			title: 'Renkidzieło - Lampy',
+			title: 'Nuxt & Strapi Study - Lampy',
 		}
 	},
 })

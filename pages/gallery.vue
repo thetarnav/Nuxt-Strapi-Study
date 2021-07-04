@@ -149,7 +149,7 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: 'Renkidzieło - Galeria',
+			title: 'Nuxt & Strapi Study - Galeria',
 		}
 	},
 	computed: {
